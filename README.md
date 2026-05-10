@@ -14,7 +14,7 @@ Systems engineering SaaS proof of concept for hardware products—requirements, 
 | Path | Purpose |
 |------|---------|
 | `packages/domain` | Shared domain model (requirements, system elements, traceability) |
-| `apps/` | Future API, web UI, and workers |
+| `apps/` | Reserved for future API, workers, and human-facing clients |
 | `.cursor/skills/` | Project skills for domain + human review workflows |
 
 ## Prerequisites
