@@ -1,6 +1,13 @@
 # one-piece
 
-Systems engineering SaaS proof of concept for hardware products—requirements, architecture, interfaces, verification, and agent-assisted workflows.
+Systems engineering SaaS proof of concept for hardware products—requirements, architecture, interfaces, verification, and agent-assisted workflows. Built for **teams of any size**; **small teams first** on the roadmap, with scale-specific touchpoints to follow.
+
+## Agent orchestration & docs
+
+| Path | Purpose |
+|------|---------|
+| [AGENT.md](./AGENT.md) | Multi-agent roles, workflows, human-in-the-loop gates |
+| [docs/](./docs/) | Living plan, information architecture, progress log |
 
 ## Layout
 
@@ -8,6 +15,7 @@ Systems engineering SaaS proof of concept for hardware products—requirements, 
 |------|---------|
 | `packages/domain` | Shared domain model (requirements, system elements, traceability) |
 | `apps/` | Future API, web UI, and workers |
+| `.cursor/skills/` | Project skills for domain + human review workflows |
 
 ## Prerequisites
 
