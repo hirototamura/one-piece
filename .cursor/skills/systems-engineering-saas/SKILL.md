@@ -22,6 +22,15 @@ Apply when working on domain types, APIs, UX, or agent prompts that touch **requ
 
 **System requirements** drive **both** operational and subsystem requirements. Represent branching with explicit trace links, not implicit ordering alone.
 
+## Stable intent vs derived trades
+
+Keep **user / mission / customer-facing** intent verified end-to-end. **Derived** lower-level reqs and specs may change when test or analysis informs better trades—always attach **traceable rationale** (decision, analysis ID, test ID, or waiver). See [AGENT.md](../../AGENT.md) engineering philosophy.
+
+## Test rigor and integration
+
+- Prefer **testable** designs; integrated runs (e.g. HITL-style) map to verification activities + **verification platform** artifacts.  
+- Where useful, tag tests with **purpose**: development (learn margins) → qualification (bounded worst-case) → acceptance (workmanship)—formality ramps with lifecycle.
+
 ## Subsystem requirements outputs
 
 Subsystem requirements must connect to:

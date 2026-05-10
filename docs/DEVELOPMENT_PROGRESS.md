@@ -2,9 +2,9 @@
 
 Append **newest entries at the top**. Keep each entry to a few sentences; link commits or PRs when available.
 
-## 2026-05-11
+## 2026-05-10 (SpaceX 2012 SE deck)
 
-- Removed experimental `apps/web` doc-style UI; focus stays on the human-in-the-loop systems-engineering backend and workflows (see `AGENT.md`, `docs/`).
+- Read industry handbook-style deck; aligned `AGENT.md` (engineering philosophy, verification notes, workflow), `docs/PROJECT_PLAN.md` (principles 6–7, external influences), `docs/INFORMATION_ARCHITECTURE.md` (stable vs derived trades, verification rigor table), `.cursor/skills/systems-engineering-saas/SKILL.md`.
 
 ## 2026-05-10 (later)
 

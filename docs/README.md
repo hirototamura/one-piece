@@ -4,7 +4,7 @@ Parallel **living** documents for one-piece. Update them as the product and doma
 
 | Document | Purpose |
 |----------|---------|
-| [PROJECT_PLAN.md](./PROJECT_PLAN.md) | Phases, backlog, risks, success metrics |
+| [PROJECT_PLAN.md](./PROJECT_PLAN.md) | Phases, backlog, risks, success metrics; **external influences** (industry SE narratives) |
 | [INFORMATION_ARCHITECTURE.md](./INFORMATION_ARCHITECTURE.md) | Artifacts, requirement graph, compliance matrix, consistency checks |
 | [DEVELOPMENT_PROGRESS.md](./DEVELOPMENT_PROGRESS.md) | Short chronological log of substantive changes |
 

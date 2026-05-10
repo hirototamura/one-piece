@@ -18,6 +18,24 @@ Enable **every scale** of builder—individuals, startups, labs, and large progr
 
 Same underlying artifact model; **different emphasis in UX, permissions, and integrations**—design so those layers can evolve without rewriting the core graph.
 
+## Engineering philosophy (informed practice)
+
+Ideas below are **adapted from common industry practice**, including the widely circulated 2012 SpaceX slide deck *System Engineering: A Traditional Discipline in a Non-traditional Organization* (often labeled a “systems engineering handbook”). one-piece is **vendor-neutral**; we take the patterns that transfer to SaaS, not any single company’s org chart.
+
+1. **Premise** — Systems engineering exists to catch integration issues early, yet new systems always surprise you. The platform should support **learning from integration and test**, not only from upfront decomposition.
+
+2. **Responsibility over checkbox process** — Process cannot replace engineering judgment. Prefer **visible traceability, reviews, and tools** over opaque rule walls.
+
+3. **Stable intent vs derived trades** — Treat **mission / customer / user-level intent** as **tracked and verified**. **Derived** specifications and lower-level requirements may be **traded and optimized during design**; every material trade must leave an **audit trail** (link to rationale, analysis, decision, or waiver)—never silent drift.
+
+4. **Iteration and formality** — Early cycles favor speed and evidence from **build–test** (or analysis) feedback; **documentation and gate weight increase** as artifacts move toward baseline and production-like maturity.
+
+5. **Test what you fly** — Design for **testability**; plan integrated verification (hardware–software, multi-subsystem) and **service-like** conditions where program risk warrants it. Verification platform requirements should reflect **real environments** and integration rigs, not only bench checks.
+
+6. **Test purpose taxonomy** — Where useful, classify test activities (e.g. **development** — explore margins / find weaknesses; **qualification** — demonstrate performance to bounded environments and margins; **acceptance** — workmanship and repeatability). Formality and repeat expectations can rise with maturity. This complements analysis and inspection.
+
+7. **Tools, not bureaucracy** — Discussion, integration status, and evidence should live in **modern collaborative tools** (this product), analogous to “forums that behave more like networks than static control boards”—still under human ownership of baselines.
+
 ## Repository map
 
 | Area | Path | Notes |
@@ -77,7 +95,7 @@ Subsystem designs are **tightly coupled**. Agents must:
 
 ## Verification and compliance
 
-Subsystem verification activities include **analysis**, **test**, and **inspection**. Each activity produces a **report** artifact.
+Subsystem verification activities include **analysis**, **test**, and **inspection**. Each activity produces a **report** artifact. Tests may optionally carry a **purpose** (development / qualification / acceptance) to match how rigor ramps with lifecycle; integrated **HITL**-style runs are modeled via verification activities plus **verification platform** specs.
 
 **Compliance checks** are modeled as a **matrix**: rows = requirements (or verification objectives), columns = evidence (test case, analysis ID, inspection record), cells = status (e.g. planned / passed / failed / waived) + link to artifact. The UX target: **Excel-simple**; the data model can be normalized underneath.
 
@@ -107,8 +125,9 @@ Use these roles when spawning subagents or parallel tasks. One “orchestrator�
 2. Attach **AIV** at system level; ensure operational and subsystem sets both trace to system.  
 3. For each subsystem: design package + verification activity plan + platform needs.  
 4. Run **consistency pass** across subsystems and upward to system/mission.  
-5. Generate / update **compliance matrix** from traces + verification state.  
-6. **Human review** at design baselines and before “verified” claims.
+5. **Short-loop feedback** — where iteration is cheap, use development tests and analysis to update derived specs and trades; record trace deltas.  
+6. Generate / update **compliance matrix** from traces + verification state.  
+7. **Human review** at design baselines and before “verified” claims.
 
 ## Documentation duty
 
@@ -132,4 +151,4 @@ Any agent completing meaningful work must:
 
 ---
 
-*Version: 0.1 — align with `docs/PROJECT_PLAN.md` as the project matures.*
+*Version: 0.2 — see `docs/PROJECT_PLAN.md` (external influences) and `docs/INFORMATION_ARCHITECTURE.md`.*

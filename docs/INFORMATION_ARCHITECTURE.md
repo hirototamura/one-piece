@@ -42,7 +42,13 @@ flowchart TD
   OR --> SubR
 ```
 
-**Branching from system (explicit product rule):**
+## Stable intent vs derived trades
+
+- **Mission / customer / user-facing intent** should remain **explicit, traced, and verified** to closure (matrix + evidence).  
+- **Derived** requirements, budgets, and interface details may **change** during design when analysis or test shows a better allocation—each change should record **why** (rationale artifact, link to test/analysis ID, or engineering decision entry).  
+- This mirrors the useful distinction: *verify what you promised users; optimize and learn how you implement it.*
+
+## Branching from system (explicit product rule)
 
 System requirements **also** drive subsystem requirements directly when allocation skips operational elaboration, or when operational and subsystem concerns must be traced in parallel. The **data model** should allow multiple parents or explicit `derives_from` links from one system requirement to **both** operational and subsystem children—never “lose” the system rationale.
 
@@ -84,6 +90,20 @@ flowchart TD
 
 Failing checks become **review tasks** for humans or fixes for agents—never silent overrides.
 
+## Verification rigor (lifecycle ramp)
+
+Hardware programs often distinguish **why** a test exists, not only **what** it checks. Optional metadata on test-oriented activities:
+
+| Purpose (typical) | Intent |
+|-------------------|--------|
+| Development | Explore margins, flush out weaknesses, inform trades |
+| Qualification | Demonstrate performance in bounded worst-case / margin conditions |
+| Acceptance | Workmanship and repeatability on delivered units |
+
+**Integrated verification** (e.g. hardware-in-the-loop, system rigs, “service-like” integrated runs) is expressed as **verification activities** plus **verification platform requirements/specifications**—supporting a **test what you fly** mindset without mandating a single physical lab layout.
+
+Analysis and inspection remain first-class; they may close matrix cells where tests are impractical.
+
 ## Compliance matrix (Excel-simple)
 
 **Rows:** requirements (or derived verification objectives).  
@@ -100,9 +120,10 @@ Today’s PoC types (`Requirement`, `SystemElement`, `TraceLink`) are intentiona
 - Artifacts for plans, test cases, reports, platform specs  
 - Richer `TraceLink.relation` vocabulary for verification and evidence  
 - **Compliance matrix** as a query/view, not necessarily a single monolithic table type  
+- Optional **test purpose** / rig class on test activities; **trade / decision** links on derived requirement edits  
 
 Document migrations here when enums or relations change.
 
 ---
 
-*Last updated: 2026-05-10 — initial skeleton.*
+*Last updated: 2026-05-10 — added stable-vs-derived and verification rigor sections.*

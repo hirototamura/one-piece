@@ -12,7 +12,13 @@ Deliver a SaaS that lets **teams of any size**—from individuals and startups t
 2. **Human authority for judgment** — agents accelerate drafting and consistency; experts own baselines.  
 3. **Scale-appropriate experience** — the same core graph serves solo builders and enterprise programs; **touchpoints differ by team size** (self-serve and low ceremony vs. governance, audit, supplier packages). **Initial wedge: small teams**—prove depth there before expanding enterprise surface area.  
 4. **Normalized data, simple exports** — matrices and supplier packages are projections.  
-5. **Interconnected design** — first-class cross-subsystem checks, not an afterthought.
+5. **Interconnected design** — first-class cross-subsystem checks, not an afterthought.  
+6. **Tools over bureaucracy** — prefer shared visibility, traceability, and evidence in the product over heavyweight implicit process.  
+7. **Iteration with evidence** — allow rapid learn–adjust cycles at derived levels while **customer/mission intent** stays explicit and verified; tighten formality as baselines mature.
+
+## External influences
+
+Industry narratives on **fast hardware iteration with serious V&V** help shape our principles—for example the 2012 SpaceX slide deck *System Engineering: A Traditional Discipline in a Non-traditional Organization* (themes: integration risk is partly experiential; **test what you fly**; **user-level requirements** verified while **lower tiers trade** with test feedback; **development vs qualification vs acceptance** test roles; **tools not rules**). We **do not** copy a specific org structure; we encode patterns that any customer can adopt.
 
 ## Phases (suggested)
 
@@ -29,7 +35,7 @@ Phases are **sequential in dependency** but can overlap in staffing (e.g. UI moc
 ## Near-term backlog (starter)
 
 - [ ] Extend domain model: requirement level, lifecycle, AIV artifact attachment to system level  
-- [ ] Define verification activity types (analysis / test / inspection) + report references  
+- [ ] Define verification activity types (analysis / test / inspection) + report references; optional **test purpose** (development / qualification / acceptance) for lifecycle ramp  
 - [ ] Sketch compliance matrix query (rows/columns/status) against normalized traces  
 - [ ] Add persistence PoC (SQLite or Postgres) behind a thin repository layer  
 - [ ] Document human review states (draft → under_review → baseline) in UI/API terms  
@@ -50,4 +56,4 @@ Phases are **sequential in dependency** but can overlap in staffing (e.g. UI moc
 
 ---
 
-*Last updated: 2026-05-10 — initial plan.*
+*Last updated: 2026-05-10 — principles extended (SpaceX 2012 deck–informed themes).*
