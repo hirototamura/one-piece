@@ -4,7 +4,128 @@ Living document. **Update when** domain types, workflows, or UX decisions change
 
 ## Mission
 
-Model hardware systems engineering so **teams at any scale** can maintain **one coherent graph**: requirements, design, verification, and evidence—with human experts signing off where judgment matters. **Touchpoints** (permissions, ceremony, audit, integrations) should vary by organization size without forking the underlying artifact model. **First customers:** small teams, where speed and clarity matter most.
+Model hardware systems engineering so **teams at any scale** can maintain **one coherent graph**: requirements, design, verification, and evidence—with human experts signing off where judgment matters.
+
+## Single source of truth (SSOT)
+
+**The first architectural question:** where does truth live, and what is only a projection?
+
+### What is SSOT (authoritative)
+
+The **program engineering graph** in a normalized store (database), scoped by **program** and **configuration** (e.g. V1 / V2):
+
+| Layer | SSOT holds | Notes |
+|-------|----------|--------|
+| **Structure** | `SystemElement` tree (GNC, mechanical, electrical, thermal, comms, software, …) | One graph; disciplines are tags and allocations, not separate databases. |
+| **Intent** | Versioned **requirements** (mission → subsystem) + lifecycle (`draft` → `baseline`) | Stable customer/mission intent vs derived trades (see below). |
+| **ICD** | **Interface Control Documents** per subsystem interface (provider ↔ consumer) + **interface parameters** (signals, limits, units) | Authoritative cross-team agreement; lateral consistency checks compare ICD pairs. |
+| **Parameters** | **Design parameters** (value, unit, bounds, discipline, element) | Linked to requirements, ICD lines, and CAD-extracted values. |
+| **Design constraints** | Limiting conditions from detailed design | When `actsAsFunctionalRequirement` is set, they **participate in allocation and V&V** like functional requirements—not “second class” metadata. |
+| **CAD** | **CAD model** nodes (revision, checksum, sync status, element link) | SSOT treats the model as part of the program graph; geometry files live in PLM/object storage but **revision and extracted parameters update in SSOT on every design change** (see CAD sync). |
+| **Trace graph** | Typed **edges** (`derives_from`, `satisfies`, `constrains`, `documents`, `represents`, `verifies`, …) | Req hierarchy, req↔param, req↔constraint, ICD↔elements, CAD↔element, verification bindings. |
+| **Verification** | Plans, activities, **bindings**, **evidence** (pass/fail, revision, waiver) | Matrix is a **view** over these links. |
+| **Decisions** | Trades, waivers, rationale artifacts | Every material derived change links here. |
+
+Simulation decks and raw test recordings stay in **object storage** with SSOT **references**; **CAD is not “off-graph”** once detailed design begins.
+
+### What is not SSOT (projections / tools)
+
+| Not SSOT | Role |
+|----------|------|
+| Excel / compliance matrix export | Read model for humans, suppliers, auditors |
+| Discipline-native authoring UIs (Simulink, spice, flight software IDE, bench scripts) | **Authoritative for authoring**; **sync into** SSOT via connectors—CAD follows the live-sync rule below |
+| Agent drafts | Proposals until human baseline |
+| UI graph/tree views | Queries over SSOT |
+
+### Integration pattern (multi-discipline)
+
+```mermaid
+flowchart TB
+  subgraph tools [Discipline tools]
+    GNC[GNC / controls]
+    ME[Mechanical]
+    EE[Electrical]
+    TH[Thermal]
+    COM[Comms]
+    SW[Software]
+  end
+
+  subgraph ssot [SSOT graph database]
+    EL[Elements]
+    ICD[ICDs and interface parameters]
+    REQ[Requirements constraints parameters]
+    CAD[CAD models live sync]
+    TR[Trace edges]
+    VV[Verification and evidence]
+  end
+
+  subgraph consumers [Consumers]
+    UI[Web UI graph and matrix]
+    CI[Automated checks and test runners]
+    EXP[Exports and supplier packages]
+  end
+
+  tools -->|connectors webhooks| ssot
+  ssot --> UI
+  ssot --> CI
+  ssot --> EXP
+  CI -->|evidence results| ssot
+```
+
+**Flexibility** comes from a small kernel (nodes, typed edges, revisions, configurations) plus **extensible attributes** per artifact kind—not from one table per discipline.
+
+### ICD (Interface Control Document)
+
+Each **subsystem interface** is an ICD node in SSOT:
+
+- **Provider** and **consumer** `SystemElement` IDs (both must exist in the graph).  
+- **Interface parameters** (name, direction, type, unit, min/max/nominal) optionally linked to shared **design parameters**.  
+- Lifecycle and baseline like requirements; changes drive **lateral** consistency checks against the partner subsystem.
+
+Exports to PDF/Excel for suppliers are **projections** of ICD + parameters.
+
+### Design constraints as functional requirements
+
+**Design constraints** express limits discovered or enforced during detailed design (envelope, clearance, max loss, etc.). Product rule:
+
+- `actsAsFunctionalRequirement: true` → included in **verification closure**, compliance matrix rows, and up-trace to system/mission where linked.  
+- `false` → recorded engineering fact, still traced, but does not block baseline alone.
+
+This avoids a split between “requirements doc” and “unverifiable” CAD-side rules.
+
+### CAD live sync
+
+When design matures, **CAD models are SSOT nodes**, not passive attachments:
+
+1. **Connector** (PLM webhook, CAD API, or agent watcher) fires on save/check-in.  
+2. SSOT updates `CadModel.revision`, `checksum`, `syncStatus`, `lastSyncedAt`.  
+3. **Extracted parameters** (mass, CG, envelope dimensions, etc.) update linked `DesignParameter` nodes in the same transaction.  
+4. Downstream **checks** (budget closure, constraint violation, stale matrix evidence) run immediately.
+
+If sync fails, `syncStatus: stale | error` blocks baseline of dependent constraints until resolved.
+
+```mermaid
+sequenceDiagram
+  participant CAD as CAD / PLM
+  participant Conn as Connector
+  participant SSOT as SSOT graph
+  participant VV as V and V runners
+
+  CAD->>Conn: model saved rev N
+  Conn->>SSOT: upsert CadModel plus parameters
+  SSOT->>SSOT: consistency checks
+  SSOT->>VV: optional re run affected tests
+```
+
+### Verification and test automation
+
+1. **Pull** — API/query returns the **closure** for a requirement or baseline tag: parameters, ICDs, linked activities, platform needs, last evidence.  
+2. **Push** — Test/analysis runners write **evidence nodes** (status, run ID, artifact URI, timestamp); SSOT updates matrix projections and consistency checks.  
+3. **Automate** — On `baseline` or config change, enqueue checks (coverage gaps, orphaned params, ICD mismatch, stale evidence). Humans remain authority for pass/waive judgment.
+
+PoC UI (`apps/web`) demonstrates projections; **P1 persistence** should implement this graph store, not spreadsheet-shaped tables as the primary schema.
+
+**Touchpoints** (permissions, ceremony, audit, integrations) vary by organization size without forking the graph. **First customers:** small teams, where speed and clarity matter most.
 
 ## Artifact inventory
 
@@ -15,8 +136,12 @@ Model hardware systems engineering so **teams at any scale** can maintain **one 
 | AIV plan (with system reqs) | Plan to verify the **integrated** system | Systems + integration + V&V |
 | Operational requirements | Use, logistics, maintenance, training | Ops + systems |
 | Subsystem requirements | Allocated requirements per subsystem | Subsystem leads + systems |
-| Specifications | Quantified / interface detail | Engineering |
-| Subsystem design packages | Architecture, budgets, ICD references | Design engineers |
+| Interface Control Document (ICD) | Cross-subsystem interface agreement (provider/consumer, parameters) | Systems + interface owners |
+| Design parameters | Budgets, setpoints, tolerances (may sync from CAD) | Discipline leads |
+| Design constraints | Detailed-design limits; may act as functional requirements | Design engineering |
+| CAD model (SSOT node) | Revision-linked geometry authority with live sync | Mechanical / design |
+| Specifications | Quantified detail supporting requirements | Engineering |
+| Subsystem design packages | Architecture, budgets, analysis summaries | Design engineers |
 | Analysis results | Models, simulations, calculations | Analysts |
 | Verification plan | Scope, methods, success criteria | V&V lead |
 | Verification activities | Analysis / test / inspection instances | V&V + labs |
@@ -83,8 +208,10 @@ flowchart TD
 | Check | Question |
 |-------|----------|
 | Up-trace | Does every subsystem requirement trace to system (and ultimately mission)? |
-| Lateral | Do interface definitions match between subsystems (ICD, loads, environments)? |
+| Lateral | Do **ICD** parameter sets match between provider and consumer? |
 | Budgets | Mass, power, thermal, link margin—closed with no orphan assumptions? |
+| CAD freshness | Are `CadModel` revisions synced and parameters current? |
+| Constraint closure | Do **design constraints** acting as functional reqs have verification paths? |
 | Verification | Is every critical requirement covered by at least one planned method with an owner? |
 | Platform | Do planned tests have the facilities and equipment they assume? |
 
@@ -114,16 +241,24 @@ Implementation note: store normalized relations in the backend; **project** or *
 
 ## Mapping to code (`packages/domain`)
 
-Today’s PoC types (`Requirement`, `SystemElement`, `TraceLink`) are intentionally minimal. Expected extensions (non-exhaustive):
+`EngineeringGraph` (SSOT shape per configuration) includes:
 
-- Requirement **kind** or **level** enum mirroring mission / system / operational / subsystem  
-- Artifacts for plans, test cases, reports, platform specs  
-- Richer `TraceLink.relation` vocabulary for verification and evidence  
-- **Compliance matrix** as a query/view, not necessarily a single monolithic table type  
-- Optional **test purpose** / rig class on test activities; **trade / decision** links on derived requirement edits  
+| Type | Role |
+|------|------|
+| `Requirement` | Intent; `kind`: `stakeholder` \| `functional` \| `design_constraint` |
+| `InterfaceControlDocument` + `InterfaceParameter` | ICD and interface lines |
+| `DesignParameter` | Named parameters |
+| `DesignConstraint` | Detailed limits; `actsAsFunctionalRequirement` for V&V |
+| `CadModel` | Live-synced CAD node (`syncStatus`, `revision`, extracted params) |
+| `TraceLink` | `TraceRelation` vocabulary |
+| `Program` | Configuration-scoped graph + verification projection |
+
+Helpers: `isVerificationSubject`, `isVerificationSubjectConstraint`.
+
+Still expected: evidence artifacts, platform specs, decision records, P1 persistence/API, CAD/PLM connectors.
 
 Document migrations here when enums or relations change.
 
 ---
 
-*Last updated: 2026-05-10 — added stable-vs-derived and verification rigor sections.*
+*Last updated: 2026-05-19 — SSOT: ICD, parameters, design constraints, CAD live sync.*

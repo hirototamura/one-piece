@@ -14,7 +14,7 @@ Systems engineering SaaS proof of concept for hardware products—requirements, 
 | Path | Purpose |
 |------|---------|
 | `packages/domain` | Shared domain model (requirements, system elements, traceability) |
-| `apps/` | Reserved for future API, workers, and human-facing clients |
+| `apps/web` | Web UI PoC — requirements tree, compliance matrix, review queue |
 | `.cursor/skills/` | Project skills for domain + human review workflows |
 
 ## Prerequisites
@@ -26,6 +26,7 @@ Systems engineering SaaS proof of concept for hardware products—requirements, 
 ```bash
 npm install
 npm run build -w @one-piece/domain
+npm run dev          # web UI at http://localhost:5173
 ```
 
 ## License
