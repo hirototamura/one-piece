@@ -4,17 +4,23 @@ Living document. **Revise after** each milestone or major scope decision.
 
 ## Vision
 
-Deliver a SaaS that lets **teams of any size**—from individuals and startups through large programs—run disciplined systems engineering for hardware: structured requirements, traceable design, credible verification, and compliance views that stay as approachable as a spreadsheet where that helps.
+Deliver a product that **accelerates hardware engineering** for **teams of any size**—from individuals and startups through large programs—through disciplined systems engineering: structured requirements, traceable design, credible verification, and compliance views that stay as approachable as a spreadsheet where that helps.
 
 ## Principles
 
-1. **Traceability first** — if it isn’t linked, it didn’t happen.  
-2. **Human authority for judgment** — agents accelerate drafting and consistency; experts own baselines.  
-3. **Scale-appropriate experience** — the same core graph serves solo builders and enterprise programs; **touchpoints differ by team size** (self-serve and low ceremony vs. governance, audit, supplier packages). **Initial wedge: small teams**—prove depth there before expanding enterprise surface area.  
-4. **Normalized data, simple exports** — matrices and supplier packages are projections.  
-5. **Interconnected design** — first-class cross-subsystem checks, not an afterthought.  
-6. **Tools over bureaucracy** — prefer shared visibility, traceability, and evidence in the product over heavyweight implicit process.  
-7. **Iteration with evidence** — allow rapid learn–adjust cycles at derived levels while **customer/mission intent** stays explicit and verified; tighten formality as baselines mature.
+Hardware systems engineering principles that one-piece is built to reinforce:
+
+1. **Traceability and records first** — Traceability and a durable record of what mattered (decisions, requirements, evidence, waivers) are the foundation for everything else. If it isn’t linked and recorded, it didn’t happen.
+
+2. **Iteration dwarfs perfection** — Learn fast from build, test, and integration; refine derived design and lower-level requirements with evidence. Mission and customer intent stay explicit; formality ramps as baselines mature.
+
+3. **Make requirements less dumb** — Requirements should be clear, testable, and worth verifying—not placeholders or process theater. The product (and agents) should push clarity, challenge ambiguity, and keep intent tied to real verification.
+
+4. **Cross-functional, multidisciplinary design** — Interfaces, budgets, and integration risks are first-class across mechanical, electrical, thermal, software, operations, and test—not siloed subsystems reconciled at the end.
+
+5. **Test early; automate tests** — Plan verification from the start; run development tests early and often. Prefer repeatable, automated checks where they buy signal; reserve human judgment for baselines, anomalies, and pass/waive.
+
+**How we build the product (delivery):** experts **baseline** what agents draft; the **same core graph** serves solo builders and large programs (**touchpoints differ by team size**—**small teams first** on the roadmap); compliance matrices and supplier packages are **projections** of normalized traces, not a parallel truth; prefer **tools and visible evidence** over heavyweight implicit process.
 
 ## External influences
 
@@ -56,4 +62,4 @@ Phases are **sequential in dependency** but can overlap in staffing (e.g. UI moc
 
 ---
 
-*Last updated: 2026-05-10 — principles extended (SpaceX 2012 deck–informed themes).*
+*Last updated: 2026-05-19 — hardware SE principles (traceability, iteration, smart requirements, cross-discipline, test early).*

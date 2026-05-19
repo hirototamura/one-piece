@@ -2,6 +2,11 @@
 
 Append **newest entries at the top**. Keep each entry to a few sentences; link commits or PRs when available.
 
+## 2026-05-19
+
+- `docs/PROJECT_PLAN.md` **Principles** rewritten around five hardware SE tenets: traceability/records, iteration over perfection, smarter requirements, cross-functional design, test early + automate; prior product-delivery items folded into a short delivery subsection.
+- Vision reframed: **accelerate hardware engineering** for all team scales (individual → startup → large program).
+
 ## 2026-05-10 (SpaceX 2012 SE deck)
 
 - Read industry handbook-style deck; aligned `AGENT.md` (engineering philosophy, verification notes, workflow), `docs/PROJECT_PLAN.md` (principles 6–7, external influences), `docs/INFORMATION_ARCHITECTURE.md` (stable vs derived trades, verification rigor table), `.cursor/skills/systems-engineering-saas/SKILL.md`.
