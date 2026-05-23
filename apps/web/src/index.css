@@ -1,0 +1,60 @@
+:root {
+  --bg-app: #f4f5f7;
+  --bg-panel: #ffffff;
+  --bg-sidebar: #0f1419;
+  --bg-sidebar-hover: #1a2332;
+  --text-primary: #0f1419;
+  --text-secondary: #5c6573;
+  --text-on-dark: #e8ecf1;
+  --text-muted-dark: #8b95a5;
+  --border: #dde1e8;
+  --accent: #0066cc;
+  --accent-soft: #e8f2fc;
+  --pass: #0d7a4a;
+  --pass-bg: #e6f5ee;
+  --fail: #b42318;
+  --fail-bg: #fdecea;
+  --planned: #5c6573;
+  --planned-bg: #f0f2f5;
+  --gap: #b54708;
+  --gap-bg: #fff4e5;
+  --waived: #6941c6;
+  --waived-bg: #f4f0ff;
+  --draft: #b54708;
+  --review: #0066cc;
+  --baseline: #0d7a4a;
+  --radius: 8px;
+  --font: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--text-primary);
+  background: var(--bg-app);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+a {
+  color: var(--accent);
+}

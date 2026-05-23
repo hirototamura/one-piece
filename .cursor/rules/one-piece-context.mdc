@@ -1,0 +1,15 @@
+---
+description: one-piece systems-engineering SaaS — load AGENT.md and docs for context
+alwaysApply: true
+---
+
+# one-piece context
+
+For systems engineering, requirements, verification, or domain modeling work:
+
+1. Follow [AGENT.md](../../AGENT.md) for roles, workflows, and documentation duty.  
+2. Keep [docs/INFORMATION_ARCHITECTURE.md](../../docs/INFORMATION_ARCHITECTURE.md) aligned with code changes to the domain model.  
+3. Append substantive work to [docs/DEVELOPMENT_PROGRESS.md](../../docs/DEVELOPMENT_PROGRESS.md).  
+4. Load project skills `systems-engineering-saas` and `human-design-review` when editing requirements, design, or V&V flows.
+
+Human experts own baselines and engineering judgment; agents draft and cross-check.
