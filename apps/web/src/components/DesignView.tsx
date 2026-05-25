@@ -1,10 +1,12 @@
-import type { EngineeringGraph, EntityId } from "@one-piece/domain";
+import type { EngineeringGraph, EntityId, SsotProvenanceRecord } from "@one-piece/domain";
+import { ProvenancePanel } from "./AgentPolicyView";
 import { GraphLinksPanel } from "./GraphLinksPanel";
 import { StateBadge } from "./StateBadge";
 import type { SsotNodeKind } from "../lib/graph";
 
 interface DesignViewProps {
   model: EngineeringGraph;
+  provenanceRecords: SsotProvenanceRecord[];
   tab: "parameters" | "constraints";
   onTabChange: (tab: "parameters" | "constraints") => void;
   selectedId: EntityId | null;
@@ -14,6 +16,7 @@ interface DesignViewProps {
 
 export function DesignView({
   model,
+  provenanceRecords,
   tab,
   onTabChange,
   selectedId,
@@ -102,6 +105,10 @@ export function DesignView({
                 {selectedParam.unit ? ` ${selectedParam.unit}` : ""}
               </p>
             </section>
+            <ProvenancePanel
+              records={provenanceRecords}
+              nodeId={selectedParam.id}
+            />
             <GraphLinksPanel
               model={model}
               nodeId={selectedParam.id}

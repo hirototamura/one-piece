@@ -1,16 +1,20 @@
 import { useMemo, useState } from "react";
 import type {
+  AgentScopePolicy,
   EntityId,
   LifecycleState,
   Program,
   Requirement,
   RequirementLevel,
 } from "@one-piece/domain";
+import { aiTouchesInHumanDomain } from "@one-piece/domain";
 import "./App.css";
 import { demoProgram } from "./data/demoProgram";
+import { AgentPolicyView, ProvenancePanel } from "./components/AgentPolicyView";
 import { AppShell, type AppView } from "./components/AppShell";
 import { CadView } from "./components/CadView";
 import { ComplianceMatrix } from "./components/ComplianceMatrix";
+import { DesignIntegrationView } from "./components/DesignIntegrationView";
 import { DesignView } from "./components/DesignView";
 import { GraphLinksPanel } from "./components/GraphLinksPanel";
 import { InterfaceView } from "./components/InterfaceView";
@@ -40,6 +44,9 @@ export function App() {
   }>({ kind: "requirement", id: "req-s1" });
   const [designTab, setDesignTab] = useState<"parameters" | "constraints">(
     "parameters",
+  );
+  const [selectedBindingId, setSelectedBindingId] = useState<EntityId | null>(
+    "bind-vbus",
   );
   const [levelFilter, setLevelFilter] = useState<RequirementLevel | "all">(
     "all",
@@ -83,6 +90,12 @@ export function App() {
   const linkedConstraints = selectedRequirement
     ? linkedConstraintsForRequirement(model, selectedRequirement.id)
     : [];
+
+  const aiWarningCount = aiTouchesInHumanDomain(program.provenanceRecords).length;
+
+  function setAgentScopePolicy(policy: AgentScopePolicy) {
+    setProgram((p) => ({ ...p, agentScopePolicy: policy }));
+  }
 
   function navigate(kind: SsotNodeKind, id: EntityId) {
     setSelection({ kind, id });
@@ -145,6 +158,7 @@ export function App() {
       activeConfigurationLabel={activeConfig?.name ?? "—"}
       view={view}
       reviewCount={reviewItems.length}
+      aiWarningCount={aiWarningCount}
       onViewChange={setView}
       onConfigurationChange={setActiveConfiguration}
     >
@@ -200,6 +214,10 @@ export function App() {
                   )}
                   onAdvanceLifecycle={advanceRequirementLifecycle}
                 />
+                <ProvenancePanel
+                  records={program.provenanceRecords}
+                  nodeId={selectedRequirement.id}
+                />
                 {linkedConstraints.length > 0 && (
                   <div className="detail-block">
                     <h3>Design constraints</h3>
@@ -247,6 +265,7 @@ export function App() {
       {view === "design" && (
         <DesignView
           model={model}
+          provenanceRecords={program.provenanceRecords}
           tab={designTab}
           onTabChange={setDesignTab}
           selectedId={
@@ -270,6 +289,23 @@ export function App() {
           selectedId={selection.kind === "cad" ? selectedId : null}
           onSelect={(id) => setSelection({ kind: "cad", id })}
           onNavigate={navigate}
+        />
+      )}
+
+      {view === "integration" && (
+        <DesignIntegrationView
+          model={model}
+          integrationRuns={program.integrationRuns}
+          selectedBindingId={selectedBindingId}
+          onSelectBinding={setSelectedBindingId}
+        />
+      )}
+
+      {view === "policy" && (
+        <AgentPolicyView
+          policy={program.agentScopePolicy}
+          provenanceRecords={program.provenanceRecords}
+          onPolicyChange={setAgentScopePolicy}
         />
       )}
 

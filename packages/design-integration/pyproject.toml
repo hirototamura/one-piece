@@ -1,0 +1,25 @@
+[project]
+name = "one-piece-design-integration"
+version = "0.1.0"
+description = "Excel ↔ Python SSOT bindings and logic-automation runner for one-piece"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "openpyxl>=3.1.0",
+]
+
+[project.scripts]
+one-piece-sync = "one_piece_design.cli:main"
+
+[build-system]
+requires = ["hatchling>=1.18.0"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["one_piece_design"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100

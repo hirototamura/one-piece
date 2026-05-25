@@ -32,10 +32,40 @@ Simulation decks and raw test recordings stay in **object storage** with SSOT **
 
 | Not SSOT | Role |
 |----------|------|
-| Excel / compliance matrix export | Read model for humans, suppliers, auditors |
+| Excel / compliance matrix export | Read model for humans, suppliers, auditors — **unless registered** as a versioned `DesignArtifact` with cell bindings (see below) |
 | Discipline-native authoring UIs (Simulink, spice, flight software IDE, bench scripts) | **Authoritative for authoring**; **sync into** SSOT via connectors—CAD follows the live-sync rule below |
 | Agent drafts | Proposals until human baseline |
 | UI graph/tree views | Queries over SSOT |
+
+### SSOT mutation actors (human · logic · AI)
+
+Every change to authoritative graph data records **who** mutated it. Three actor kinds:
+
+| Actor | Role | Typical examples |
+|-------|------|------------------|
+| **Human engineer** | Interfaces with the real world; owns critical rationale and baselines | Requirement edits, baseline sign-off, accepting trades |
+| **Logic automation** | Deterministic, repeatable — no LLM | Excel→Python sync, CI test runners, CAD connector webhooks |
+| **AI agent** | Drafts within admin-configured scope (~20% default) | Suggested parameter updates, draft requirement text |
+
+**Policy (`AgentScopePolicy`):** administrators configure the fraction of non-critical mutations AI may perform, blocked criticality tiers (`critical` stays human-only by default), and allowed node kinds. Helpers: `canActorMutate`, `DEFAULT_AGENT_SCOPE_POLICY` in `packages/domain`.
+
+**Provenance:** each mutation is an immutable `SsotProvenanceRecord` (actor, field, before/after, criticality). When `aiTouchInHumanDomain` is true, the UI **must** surface a warning so AI suggestions do not silently infect human design judgment. See **Actor boundaries** view in `apps/web`.
+
+**Out of scope for AI:** critical-tier artifacts, real-world test execution, baseline authority, and any loop where deterministic rules suffice — use logic automation instead.
+
+### Design artifacts — Excel + Python (PoC integration)
+
+Engineers keep using familiar tools; SSOT registers them as `DesignArtifact` nodes (`excel_workbook`, `python_script`) with revision and discipline tags.
+
+**Minimum integration unit:** `CellCodeBinding` — one Excel cell ↔ one Python `SSOT:PARAM:KEY` marker ↔ one `DesignParameter`. Flow:
+
+1. Human or connector updates Excel cell (or SSOT parameter).  
+2. **Logic automation** (`packages/design-integration`) propagates cell value into the Python marker and re-runs the script.  
+3. `IntegrationRun` records stdout / status — no AI in this loop.
+
+CLI: `one-piece-sync --workbook … --script … --bind "Inputs!B2:P-VBUS:P-VBUS"`.
+
+Future: central orchestrator chooses which scripts to run across a multi-agent design pipeline; not required for this PoC.
 
 ### Integration pattern (multi-discipline)
 
@@ -250,8 +280,11 @@ Implementation note: store normalized relations in the backend; **project** or *
 | `DesignParameter` | Named parameters |
 | `DesignConstraint` | Detailed limits; `actsAsFunctionalRequirement` for V&V |
 | `CadModel` | Live-synced CAD node (`syncStatus`, `revision`, extracted params) |
+| `DesignArtifact` | Versioned Excel workbook or Python script in SSOT |
+| `CellCodeBinding` | Excel cell ↔ Python marker ↔ design parameter |
+| `AgentScopePolicy` | Admin AI scope (~20% default); `SsotProvenanceRecord` audit trail |
 | `TraceLink` | `TraceRelation` vocabulary |
-| `Program` | Configuration-scoped graph + verification projection |
+| `Program` | Configuration-scoped graph + verification projection + provenance |
 
 Helpers: `isVerificationSubject`, `isVerificationSubjectConstraint`.
 
@@ -261,4 +294,4 @@ Document migrations here when enums or relations change.
 
 ---
 
-*Last updated: 2026-05-19 — SSOT: ICD, parameters, design constraints, CAD live sync.*
+*Last updated: 2026-05-23 — actor boundaries, provenance, Excel/Python design integration.*
