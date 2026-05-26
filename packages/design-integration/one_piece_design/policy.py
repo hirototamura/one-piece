@@ -35,6 +35,8 @@ def can_actor_mutate(
     if actor == "logic_automation":
         return criticality != "critical" or node_kind == "design_parameter"
     if actor == "ai_agent":
+        if ai_allowed_fraction <= 0:
+            return False
         if criticality in ai_blocked_tiers:
             return False
         if node_kind not in ai_allowed_kinds:

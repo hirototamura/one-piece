@@ -38,13 +38,19 @@ def test_can_actor_mutate_defaults():
     assert can_actor_mutate("human_engineer", "requirement", "critical")
     assert not can_actor_mutate("ai_agent", "requirement", "critical")
     assert can_actor_mutate("ai_agent", "design_parameter", "standard")
+    assert not can_actor_mutate(
+        "ai_agent",
+        "design_parameter",
+        "standard",
+        ai_allowed_fraction=0,
+    )
     assert can_actor_mutate("logic_automation", "design_parameter", "derived")
 
 
 def test_sync_python_from_excel(workbook, script_copy):
     bindings = [
-        BindingSpec("Inputs!B2", "SSOT:PARAM:P-VBUS", "P-VBUS"),
-        BindingSpec("Inputs!B3", "SSOT:PARAM:P-M-MOTOR", "P-M-MOTOR"),
+        BindingSpec("Inputs!B2", "SSOT:PARAM:P-VBUS", "P-VBUS", "VBUS"),
+        BindingSpec("Inputs!B3", "SSOT:PARAM:P-M-MOTOR", "P-M-MOTOR", "MOTOR_MASS_KG"),
     ]
     changes = sync_python_from_excel(workbook, script_copy, bindings)
     assert changes == []  # values already match
@@ -59,6 +65,11 @@ def test_sync_python_from_excel(workbook, script_copy):
     assert any("410" in c for c in changes)
     text = script_copy.read_text(encoding="utf-8")
     assert "SSOT:PARAM:P-VBUS = 410" in text
+    assert "VBUS = 410" in text
+
+    result = run_python_script(script_copy)
+    assert result.success
+    assert "nominal bus 410 V" in result.stdout
 
 
 def test_run_python_script(script_copy):

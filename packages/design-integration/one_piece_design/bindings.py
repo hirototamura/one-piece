@@ -19,6 +19,8 @@ class BindingSpec:
     excel_cell_ref: str
     python_marker: str
     design_parameter_key: str
+    """Executable variable name synced alongside the SSOT marker comment."""
+    python_assignment_name: str | None = None
 
 
 def read_excel_cell(workbook_path: Path, cell_ref: str) -> str | float | bool:
@@ -66,13 +68,50 @@ def _literals_equivalent(old: str, new: str) -> bool:
         return False
 
 
+def _marker_pattern(marker_key: str) -> re.Pattern[str]:
+    return re.compile(
+        rf"^(\s*#\s*SSOT:PARAM:{re.escape(marker_key)}\s*=\s*).+$",
+        re.MULTILINE,
+    )
+
+
+def _assignment_pattern(var_name: str) -> re.Pattern[str]:
+    return re.compile(
+        rf"^(\s*{re.escape(var_name)}\s*=\s*).+$",
+        re.MULTILINE,
+    )
+
+
+def _literal_from_match(match: re.Match[str]) -> str:
+    return match.group(0).split("=", 1)[1].strip()
+
+
+def _binding_targets_in_sync(
+    text: str,
+    marker_key: str,
+    new_literal: str,
+    assignment_name: str | None,
+) -> bool:
+    marker_match = _marker_pattern(marker_key).search(text)
+    if marker_match is None:
+        return False
+    if not _literals_equivalent(_literal_from_match(marker_match), new_literal):
+        return False
+    if assignment_name is None:
+        return True
+    assignment_match = _assignment_pattern(assignment_name).search(text)
+    if assignment_match is None:
+        return False
+    return _literals_equivalent(_literal_from_match(assignment_match), new_literal)
+
+
 def sync_python_from_excel(
     workbook_path: Path,
     script_path: Path,
     bindings: list[BindingSpec],
 ) -> list[str]:
     """
-    Propagate Excel cell values into Python SSOT markers.
+    Propagate Excel cell values into Python SSOT markers and executable assignments.
     Returns list of human-readable change summaries.
     """
     text = script_path.read_text(encoding="utf-8")
@@ -81,29 +120,53 @@ def sync_python_from_excel(
     for binding in bindings:
         raw = read_excel_cell(workbook_path, binding.excel_cell_ref)
         new_literal = _format_literal(raw)
-
         marker_key = binding.design_parameter_key
-        pattern = re.compile(
-            rf"^(\s*#?\s*SSOT:PARAM:{re.escape(marker_key)}\s*=\s*).+$",
-            re.MULTILINE,
-        )
-        match = pattern.search(text)
-        if not match:
+
+        if _binding_targets_in_sync(
+            text,
+            marker_key,
+            new_literal,
+            binding.python_assignment_name,
+        ):
+            continue
+
+        marker = _marker_pattern(marker_key)
+        marker_match = marker.search(text)
+        if marker_match is None:
             raise ValueError(
                 f"Marker SSOT:PARAM:{marker_key} not found in {script_path}",
             )
 
-        old = match.group(0).split("=", 1)[1].strip()
-        if _literals_equivalent(old, new_literal):
-            continue
+        old_marker = _literal_from_match(marker_match)
 
-        def replacer(m: re.Match[str]) -> str:
+        def marker_replacer(m: re.Match[str]) -> str:
             return f"{m.group(1)}{new_literal}"
 
-        text = pattern.sub(replacer, text, count=1)
-        changes.append(
-            f"{binding.excel_cell_ref} → SSOT:PARAM:{marker_key}: {old} → {new_literal}",
+        text = marker.sub(marker_replacer, text, count=1)
+        summary = (
+            f"{binding.excel_cell_ref} → SSOT:PARAM:{marker_key}: "
+            f"{old_marker} → {new_literal}"
         )
+
+        if binding.python_assignment_name:
+            assignment = _assignment_pattern(binding.python_assignment_name)
+            assignment_match = assignment.search(text)
+            if assignment_match is None:
+                raise ValueError(
+                    f"Assignment {binding.python_assignment_name} not found in {script_path}",
+                )
+            old_assignment = _literal_from_match(assignment_match)
+
+            def assignment_replacer(m: re.Match[str]) -> str:
+                return f"{m.group(1)}{new_literal}"
+
+            text = assignment.sub(assignment_replacer, text, count=1)
+            summary += (
+                f"; {binding.python_assignment_name}: "
+                f"{old_assignment} → {new_literal}"
+            )
+
+        changes.append(summary)
 
     if changes:
         script_path.write_text(text, encoding="utf-8")

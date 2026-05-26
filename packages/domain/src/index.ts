@@ -267,6 +267,8 @@ export interface CellCodeBinding {
   pythonArtifactId: EntityId;
   /** Marker in Python, e.g. "SSOT:PARAM:P-VBUS" */
   pythonMarker: string;
+  /** Executable variable updated alongside the marker, e.g. "VBUS" */
+  pythonAssignmentName?: string;
   /** SSOT design parameter this binding keeps in sync */
   designParameterId: EntityId;
 }
@@ -337,6 +339,7 @@ export function canActorMutate(
     return criticality !== "critical" || nodeKind === "design_parameter";
   }
   if (actor === "ai_agent") {
+    if (policy.allowedFraction <= 0) return false;
     if (policy.blockedCriticalityTiers.includes(criticality)) return false;
     if (!policy.allowedNodeKinds.includes(nodeKind)) return false;
     return true;

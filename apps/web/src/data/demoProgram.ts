@@ -275,6 +275,7 @@ export const demoProgram: Program = {
         excelArtifactId: "art-excel-prop",
         pythonArtifactId: "art-py-thrust",
         pythonMarker: "SSOT:PARAM:P-VBUS",
+        pythonAssignmentName: "VBUS",
         designParameterId: "param-vbus",
       },
       {
@@ -283,6 +284,7 @@ export const demoProgram: Program = {
         excelArtifactId: "art-excel-prop",
         pythonArtifactId: "art-py-thrust",
         pythonMarker: "SSOT:PARAM:P-M-MOTOR",
+        pythonAssignmentName: "MOTOR_MASS_KG",
         designParameterId: "param-mass-motor",
       },
     ],

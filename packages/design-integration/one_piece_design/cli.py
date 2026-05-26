@@ -19,20 +19,25 @@ def main() -> None:
         "--bind",
         action="append",
         default=[],
-        metavar="CELL:MARKER:KEY",
-        help="Binding e.g. Inputs!B4:P-VBUS:P-VBUS",
+        metavar="CELL:MARKER:KEY[:VAR]",
+        help="Binding e.g. Inputs!B4:P-VBUS:P-VBUS:VBUS",
     )
     parser.add_argument("--no-run", action="store_true", help="Sync only, do not execute")
     args = parser.parse_args()
 
     bindings: list[BindingSpec] = []
     for raw in args.bind:
-        cell, marker, key = raw.split(":", 2)
+        parts = raw.split(":")
+        if len(parts) not in (3, 4):
+            raise SystemExit(f"Invalid --bind format: {raw}")
+        cell, marker, key = parts[0], parts[1], parts[2]
+        assignment = parts[3] if len(parts) == 4 else None
         bindings.append(
             BindingSpec(
                 excel_cell_ref=cell,
                 python_marker=f"SSOT:PARAM:{marker}",
                 design_parameter_key=key,
+                python_assignment_name=assignment,
             ),
         )
 

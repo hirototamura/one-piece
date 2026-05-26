@@ -145,6 +145,12 @@ function BindingDetail({
         <dd>{excel?.name ?? binding.excelArtifactId}</dd>
         <dt>Python marker</dt>
         <dd className="mono">{binding.pythonMarker}</dd>
+        {binding.pythonAssignmentName && (
+          <>
+            <dt>Executable variable</dt>
+            <dd className="mono">{binding.pythonAssignmentName}</dd>
+          </>
+        )}
         <dt>Script</dt>
         <dd>{python?.name ?? binding.pythonArtifactId}</dd>
         <dt>SSOT parameter</dt>
