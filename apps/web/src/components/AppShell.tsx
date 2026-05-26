@@ -7,6 +7,8 @@ export type AppView =
   | "interfaces"
   | "design"
   | "cad"
+  | "integration"
+  | "policy"
   | "matrix"
   | "review";
 
@@ -17,6 +19,7 @@ interface AppShellProps {
   activeConfigurationLabel: string;
   view: AppView;
   reviewCount: number;
+  aiWarningCount?: number;
   onViewChange: (view: AppView) => void;
   onConfigurationChange: (id: EntityId) => void;
   children: ReactNode;
@@ -28,6 +31,8 @@ const NAV: { id: AppView; label: string }[] = [
   { id: "interfaces", label: "Interfaces (ICD)" },
   { id: "design", label: "Design" },
   { id: "cad", label: "CAD" },
+  { id: "integration", label: "Design integration" },
+  { id: "policy", label: "Actor boundaries" },
   { id: "matrix", label: "Compliance matrix" },
   { id: "review", label: "Review queue" },
 ];
@@ -39,6 +44,7 @@ export function AppShell({
   activeConfigurationLabel,
   view,
   reviewCount,
+  aiWarningCount = 0,
   onViewChange,
   onConfigurationChange,
   children,
@@ -81,6 +87,9 @@ export function AppShell({
               {item.label}
               {item.id === "review" && reviewCount > 0 && (
                 <span className="badge">{reviewCount}</span>
+              )}
+              {item.id === "policy" && aiWarningCount > 0 && (
+                <span className="badge badge-warn">{aiWarningCount}</span>
               )}
             </button>
           ))}

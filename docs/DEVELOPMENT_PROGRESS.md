@@ -2,6 +2,12 @@
 
 Append **newest entries at the top**. Keep each entry to a few sentences; link commits or PRs when available.
 
+## 2026-05-23 (actor boundaries + Excel/Python integration)
+
+- Branch `feature/actor-boundaries-design-integration`: SSOT mutations attributed to **human engineer**, **logic automation**, or **AI agent**; `AgentScopePolicy` (~20% AI default), `SsotProvenanceRecord` with `aiTouchInHumanDomain` warnings.
+- Extended `packages/domain` (`DesignArtifact`, `CellCodeBinding`, `IntegrationRun`, policy helpers); new `packages/design-integration` Python package (Excel→Python sync + script runner).
+- Web: **Actor boundaries**, **Design integration** views; provenance panels on requirements and parameters.
+
 ## 2026-05-19 (web — full SSOT UI)
 
 - `apps/web` reflects graph SSOT: **SSOT graph** explorer, **ICD**, **Design** (parameters + constraints), **CAD** (sync status), cross-node **graph links**, matrix includes constraints as V&amp;V subjects, review queue includes constraints.
