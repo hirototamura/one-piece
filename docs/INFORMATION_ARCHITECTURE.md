@@ -53,6 +53,8 @@ Every change to authoritative graph data records **who** mutated it. Three actor
 
 **Out of scope for AI:** critical-tier artifacts, real-world test execution, baseline authority, and any loop where deterministic rules suffice — use logic automation instead.
 
+**Autonomous co-design mode (`autonomousCoDesign`):** for bounded PoC loops, administrators may set AI scope to 100% so a running `CoDesignRun` can apply **derived** and **standard-tier** changes directly to SSOT without waiting in the review queue. This mode is for **exploratory iteration speed**, not human certification: provenance stays mandatory, simulation execution remains `logic_automation`, and the resulting state is **not** equivalent to external human sign-off or a released “verified” claim.
+
 ### Design artifacts — Excel + Python (PoC integration)
 
 Engineers keep using familiar tools; SSOT registers them as `DesignArtifact` nodes (`excel_workbook`, `python_script`) with revision and discipline tags.
@@ -65,7 +67,36 @@ Engineers keep using familiar tools; SSOT registers them as `DesignArtifact` nod
 
 CLI: `one-piece-sync --workbook … --script … --bind "Inputs!B2:P-VBUS:P-VBUS"`.
 
-Future: central orchestrator chooses which scripts to run across a multi-agent design pipeline; not required for this PoC.
+The current PoC also includes a **thermal rejection stand-in** script that autonomous co-design runs can call between parameter mutations. Script execution still sits on the deterministic side of the boundary: AI proposes deltas; `logic_automation` runs the analysis and writes `IntegrationRun` evidence back to SSOT.
+
+### Autonomous co-design loop (PoC)
+
+`CoDesignRun` is a bounded orchestration object for **goal-driven design iteration**. It holds:
+
+- A `CoDesignGoal` (natural-language objective + numeric target metrics)  
+- Ordered `CoDesignIteration` records (mutations, metrics, requirement checks, linked `IntegrationRun`s)  
+- Run lifecycle (`running`, `converged`, `max_iterations`, `failed`, `stopped`)  
+
+```mermaid
+flowchart LR
+  Goal[CoDesignGoal]
+  ReqA[RequirementsAgent]
+  DesA[DesignAgent]
+  SimA[LogicAutomationAnalysis]
+  Graph[EngineeringGraph]
+
+  Goal --> ReqA
+  Graph --> ReqA
+  ReqA -->|\"gaps and checks\"| DesA
+  DesA -->|\"parameter deltas\"| Graph
+  DesA --> SimA
+  SimA -->|\"IntegrationRun evidence\"| Graph
+  Graph --> ReqA
+```
+
+**Product rule:** only the **active** autonomous run may bypass the human review queue, and only for node kinds/tiers that current `AgentScopePolicy` allows. Mission intent remains read-only in this mode; lower-tier design trades can move fast, but the stable-intent rule still holds.
+
+**Deferred beyond this PoC:** PDF / handbook reverse-ingestion, native SimScale / OpenMDAO adapters, SysML v2 serialization/export, and organization-scale collaboration workflows.
 
 ### Integration pattern (multi-discipline)
 
@@ -260,6 +291,8 @@ Hardware programs often distinguish **why** a test exists, not only **what** it 
 **Integrated verification** (e.g. hardware-in-the-loop, system rigs, “service-like” integrated runs) is expressed as **verification activities** plus **verification platform requirements/specifications**—supporting a **test what you fly** mindset without mandating a single physical lab layout.
 
 Analysis and inspection remain first-class; they may close matrix cells where tests are impractical.
+
+For the autonomous co-design PoC, analysis evidence is still **simulation-backed** rather than “AI declared”. The loop can update matrix projections and local exploration state, but humans remain authority for baselines, waivers, and any externally-facing “requirements met” claim.
 
 ## Compliance matrix (Excel-simple)
 

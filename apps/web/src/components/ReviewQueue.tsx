@@ -14,6 +14,7 @@ type ReviewItem =
 interface ReviewQueueProps {
   requirements: Requirement[];
   constraints: DesignConstraint[];
+  bypassed?: boolean;
   selectedId: EntityId | null;
   onSelect: (id: EntityId, kind: SsotNodeKind) => void;
   onAdvanceRequirement: (id: EntityId, next: LifecycleState) => void;
@@ -23,6 +24,7 @@ interface ReviewQueueProps {
 export function ReviewQueue({
   requirements,
   constraints,
+  bypassed = false,
   selectedId,
   onSelect,
   onAdvanceRequirement,
@@ -45,10 +47,17 @@ export function ReviewQueue({
         <header className="panel-header">
           <h2>Review queue</h2>
           <p className="panel-subtitle">
-            Human gate — baseline after review (agents draft only).
+            {bypassed
+              ? "Autonomous co-design is active — this queue is temporarily bypassed."
+              : "Human gate — baseline after review (agents draft only)."}
           </p>
         </header>
-        {items.length === 0 ? (
+        {bypassed ? (
+          <p className="empty-state">
+            Review is bypassed while the autonomous run is active. Provenance is still
+            recorded for later inspection.
+          </p>
+        ) : items.length === 0 ? (
           <p className="empty-state">Nothing awaiting review.</p>
         ) : (
           <ul className="review-list">

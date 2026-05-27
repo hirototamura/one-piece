@@ -8,6 +8,7 @@ export type AppView =
   | "design"
   | "cad"
   | "integration"
+  | "coDesign"
   | "policy"
   | "matrix"
   | "review";
@@ -32,6 +33,7 @@ const NAV: { id: AppView; label: string }[] = [
   { id: "design", label: "Design" },
   { id: "cad", label: "CAD" },
   { id: "integration", label: "Design integration" },
+  { id: "coDesign", label: "Co-Design" },
   { id: "policy", label: "Actor boundaries" },
   { id: "matrix", label: "Compliance matrix" },
   { id: "review", label: "Review queue" },

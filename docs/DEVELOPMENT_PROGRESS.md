@@ -2,6 +2,12 @@
 
 Append **newest entries at the top**. Keep each entry to a few sentences; link commits or PRs when available.
 
+## 2026-05-26 (autonomous co-design MVP scaffold)
+
+- Added autonomous co-design domain support: `CoDesignGoal`, `CoDesignIteration`, `CoDesignRun`, `AgentScopePolicy.autonomousCoDesign`, and helpers for review-queue bypass semantics in bounded AI-100 runs.
+- Web: new **Co-Design** view with goal input, iteration timeline, live SSOT graph, provenance tail, and replay of autonomous thermal-loop iterations; actor-policy view now surfaces autonomous mode explicitly.
+- Python: new `packages/co-design` orchestrator + SQLite persistence, `packages/connectors` SSOS/ROS2 bootstrap ingest CLI, and thermal rejection stand-in analysis in `packages/design-integration` with direct SSOT parameter sync.
+
 ## 2026-05-23 (actor boundaries + Excel/Python integration)
 
 - Branch `feature/actor-boundaries-design-integration`: SSOT mutations attributed to **human engineer**, **logic automation**, or **AI agent**; `AgentScopePolicy` (~20% AI default), `SsotProvenanceRecord` with `aiTouchInHumanDomain` warnings.

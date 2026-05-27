@@ -4,7 +4,12 @@ from pathlib import Path
 
 import pytest
 
-from one_piece_design.bindings import BindingSpec, sync_python_from_excel
+from one_piece_design.bindings import (
+    BindingSpec,
+    ValueBindingSpec,
+    sync_python_from_excel,
+    sync_python_from_values,
+)
 from one_piece_design.policy import can_actor_mutate
 from one_piece_design.runner import run_python_script
 
@@ -30,6 +35,14 @@ def workbook(tmp_path_factory):
 def script_copy(tmp_path):
     src = EXAMPLES / "thrust_margin.py"
     dest = tmp_path / "thrust_margin.py"
+    dest.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+    return dest
+
+
+@pytest.fixture
+def thermal_script_copy(tmp_path):
+    src = EXAMPLES / "thermal_rejection.py"
+    dest = tmp_path / "thermal_rejection.py"
     dest.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
     return dest
 
@@ -76,3 +89,24 @@ def test_run_python_script(script_copy):
     result = run_python_script(script_copy)
     assert result.success
     assert "Thrust margin check" in result.stdout
+
+
+def test_sync_python_from_values(thermal_script_copy):
+    changes = sync_python_from_values(
+        thermal_script_copy,
+        [
+            ValueBindingSpec("P-RAD-AREA", 5.9, "RADIATOR_AREA_M2"),
+            ValueBindingSpec("P-RAD-MASS", 15.9, "RADIATOR_MASS_KG"),
+            ValueBindingSpec("P-COOLANT-FLOW", 0.87, "COOLANT_FLOW_KGPS"),
+        ],
+    )
+    assert len(changes) == 3
+
+    text = thermal_script_copy.read_text(encoding="utf-8")
+    assert "SSOT:PARAM:P-RAD-AREA = 5.9" in text
+    assert "RADIATOR_MASS_KG = 15.9" in text
+
+    result = run_python_script(thermal_script_copy)
+    assert result.success
+    assert "Thermal rejection check" in result.stdout
+    assert "METRICS:" in result.stdout
