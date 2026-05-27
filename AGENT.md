@@ -105,10 +105,10 @@ Use these roles when spawning subagents or parallel tasks. One “orchestrator�
 
 | Role | Responsibility |
 |------|----------------|
-| **Orchestrator** | Breaks work into slices, enforces traceability rules, updates `docs/DEVELOPMENT_PROGRESS.md`, resolves conflicts between agents |
+| **Orchestrator** | Breaks work into slices, enforces traceability rules, updates `docs/DEVELOPMENT_PROGRESS.md`, resolves conflicts between agents, and may run bounded `CoDesignRun` loops in AI-100 mode for derived/standard-tier exploration |
 | **Requirements agent** | Mission→system→operational→subsystem flow; AIV plan content at system level; trace graph health |
 | **Architecture / ICD agent** | System elements, interfaces, design packages; consistency checks across subsystems |
-| **Verification agent** | Plans, test cases, platform needs, evidence matrix, report templates |
+| **Verification agent** | Plans, test cases, platform needs, evidence matrix, report templates; in co-design loops, reads analysis results and updates closure status without claiming human certification |
 | **Domain model agent** | TypeScript domain types, invariants, migration notes in domain package |
 | **Human gatekeeper** | Not an LLM—checklist for when to stop and require human sign-off (design baselines, waiver authority) |
 
@@ -126,8 +126,11 @@ Use these roles when spawning subagents or parallel tasks. One “orchestrator�
 3. For each subsystem: design package + verification activity plan + platform needs.  
 4. Run **consistency pass** across subsystems and upward to system/mission.  
 5. **Short-loop feedback** — where iteration is cheap, use development tests and analysis to update derived specs and trades; record trace deltas.  
-6. Generate / update **compliance matrix** from traces + verification state.  
-7. **Human review** at design baselines and before “verified” claims.
+6. For cheap, bounded design trades, the orchestrator may enter **autonomous co-design** mode: AI mutates allowed derived/standard nodes, `logic_automation` executes analysis, and each iteration records provenance plus evidence links.  
+7. Generate / update **compliance matrix** from traces + verification state.  
+8. **Human review** at design baselines and before “verified” claims.
+
+**Autonomous co-design caveat:** a fast loop can bypass the review queue for active exploratory iterations, but it does **not** replace the human gatekeeper for released baselines, waived checks, or external “verified” statements.
 
 ## Documentation duty
 

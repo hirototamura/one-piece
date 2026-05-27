@@ -4,7 +4,11 @@ import type {
   SsotMutableNodeKind,
   SsotProvenanceRecord,
 } from "@one-piece/domain";
-import { aiTouchesInHumanDomain } from "@one-piece/domain";
+import {
+  aiTouchesInHumanDomain,
+  isAutonomousCoDesign,
+  ALL_SSOT_MUTABLE_NODE_KINDS as ALL_NODE_KINDS,
+} from "@one-piece/domain";
 import { ActorBadge } from "./ActorBadge";
 
 interface AgentPolicyViewProps {
@@ -21,20 +25,23 @@ const NODE_KIND_LABELS: Record<SsotMutableNodeKind, string> = {
   icd: "ICDs",
 };
 
-const ALL_NODE_KINDS: SsotMutableNodeKind[] = [
-  "requirement",
-  "design_parameter",
-  "design_constraint",
-  "interface_parameter",
-  "icd",
-];
-
 export function AgentPolicyView({
   policy,
   provenanceRecords,
   onPolicyChange,
 }: AgentPolicyViewProps) {
   const aiWarnings = aiTouchesInHumanDomain(provenanceRecords);
+  const autonomousMode = isAutonomousCoDesign(policy);
+
+  function updateAllowedFraction(nextFraction: number) {
+    const autonomous = nextFraction >= 1;
+    onPolicyChange({
+      ...policy,
+      allowedFraction: nextFraction,
+      autonomousCoDesign: autonomous,
+      allowedNodeKinds: autonomous ? [...ALL_NODE_KINDS] : policy.allowedNodeKinds,
+    });
+  }
 
   function toggleNodeKind(kind: SsotMutableNodeKind) {
     const allowed = policy.allowedNodeKinds.includes(kind)
@@ -68,12 +75,7 @@ export function AgentPolicyView({
               min={0}
               max={100}
               value={Math.round(policy.allowedFraction * 100)}
-              onChange={(e) =>
-                onPolicyChange({
-                  ...policy,
-                  allowedFraction: Number(e.target.value) / 100,
-                })
-              }
+              onChange={(e) => updateAllowedFraction(Number(e.target.value) / 100)}
             />
             <span className="fraction-value">
               {Math.round(policy.allowedFraction * 100)}%
@@ -83,6 +85,13 @@ export function AgentPolicyView({
             Default ~20%. AI may not mutate critical-tier artifacts or kinds outside
             this list.
           </p>
+          {autonomousMode && (
+            <p className="hint">
+              Autonomous co-design mode is active. During a running loop, derived and
+              standard-tier updates can bypass the review queue, but provenance remains
+              mandatory.
+            </p>
+          )}
 
           <h4>Allowed node kinds for AI</h4>
           <ul className="checkbox-list">

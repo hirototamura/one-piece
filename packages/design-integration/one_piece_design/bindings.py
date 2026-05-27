@@ -6,8 +6,6 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-from openpyxl import load_workbook
-
 MARKER_PATTERN = re.compile(
     r"^(?P<prefix>#?\s*)SSOT:(?P<kind>PARAM|REQ):(?P<key>[A-Z0-9_-]+)\s*=\s*(?P<value>.+)$",
     re.MULTILINE,
@@ -23,8 +21,17 @@ class BindingSpec:
     python_assignment_name: str | None = None
 
 
+@dataclass(frozen=True)
+class ValueBindingSpec:
+    design_parameter_key: str
+    value: str | float | bool | int
+    python_assignment_name: str | None = None
+
+
 def read_excel_cell(workbook_path: Path, cell_ref: str) -> str | float | bool:
     """Read a single cell value from an Excel workbook (e.g. 'Inputs!B4')."""
+    from openpyxl import load_workbook
+
     if "!" in cell_ref:
         sheet_name, coord = cell_ref.split("!", 1)
     else:
@@ -147,6 +154,70 @@ def sync_python_from_excel(
             f"{binding.excel_cell_ref} → SSOT:PARAM:{marker_key}: "
             f"{old_marker} → {new_literal}"
         )
+
+        if binding.python_assignment_name:
+            assignment = _assignment_pattern(binding.python_assignment_name)
+            assignment_match = assignment.search(text)
+            if assignment_match is None:
+                raise ValueError(
+                    f"Assignment {binding.python_assignment_name} not found in {script_path}",
+                )
+            old_assignment = _literal_from_match(assignment_match)
+
+            def assignment_replacer(m: re.Match[str]) -> str:
+                return f"{m.group(1)}{new_literal}"
+
+            text = assignment.sub(assignment_replacer, text, count=1)
+            summary += (
+                f"; {binding.python_assignment_name}: "
+                f"{old_assignment} → {new_literal}"
+            )
+
+        changes.append(summary)
+
+    if changes:
+        script_path.write_text(text, encoding="utf-8")
+
+    return changes
+
+
+def sync_python_from_values(
+    script_path: Path,
+    bindings: list[ValueBindingSpec],
+) -> list[str]:
+    """
+    Propagate SSOT parameter values directly into Python markers and assignments.
+    Useful for autonomous design loops that do not use an Excel workbook.
+    """
+    text = script_path.read_text(encoding="utf-8")
+    changes: list[str] = []
+
+    for binding in bindings:
+        new_literal = _format_literal(binding.value)
+        marker_key = binding.design_parameter_key
+
+        if _binding_targets_in_sync(
+            text,
+            marker_key,
+            new_literal,
+            binding.python_assignment_name,
+        ):
+            continue
+
+        marker = _marker_pattern(marker_key)
+        marker_match = marker.search(text)
+        if marker_match is None:
+            raise ValueError(
+                f"Marker SSOT:PARAM:{marker_key} not found in {script_path}",
+            )
+
+        old_marker = _literal_from_match(marker_match)
+
+        def marker_replacer(m: re.Match[str]) -> str:
+            return f"{m.group(1)}{new_literal}"
+
+        text = marker.sub(marker_replacer, text, count=1)
+        summary = f"SSOT:PARAM:{marker_key}: {old_marker} → {new_literal}"
 
         if binding.python_assignment_name:
             assignment = _assignment_pattern(binding.python_assignment_name)

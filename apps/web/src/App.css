@@ -981,6 +981,11 @@
   color: var(--accent);
 }
 
+.kind-source_repo {
+  background: #eef2ff;
+  color: #3538cd;
+}
+
 .artifact-path {
   font-size: 11px;
   color: var(--text-secondary);
@@ -1045,6 +1050,11 @@
   color: var(--pass);
 }
 
+.run-status-pending {
+  background: var(--planned-bg);
+  color: var(--planned);
+}
+
 .run-output {
   margin: 8px 0 0;
   padding: 8px;
@@ -1053,4 +1063,173 @@
   font-family: var(--mono);
   font-size: 12px;
   white-space: pre-wrap;
+}
+
+.codesign-view {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  background: var(--bg-app);
+}
+
+.codesign-toolbar,
+.codesign-layout {
+  padding: 16px 24px 24px;
+}
+
+.codesign-toolbar {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 16px;
+}
+
+.codesign-layout {
+  display: grid;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 16px;
+  min-height: 0;
+  overflow: auto;
+}
+
+.codesign-sidebar,
+.codesign-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 0;
+}
+
+.codesign-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+
+.codesign-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.codesign-card-header h3 {
+  margin: 0;
+  font-size: 14px;
+}
+
+.codesign-label {
+  display: block;
+  color: var(--text-secondary);
+}
+
+.codesign-textarea,
+.codesign-number {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  font: inherit;
+  background: #fff;
+}
+
+.codesign-textarea {
+  resize: vertical;
+  min-height: 86px;
+}
+
+.codesign-number {
+  max-width: 140px;
+}
+
+.codesign-timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.codesign-summary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.codesign-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-app);
+}
+
+.codesign-iteration {
+  width: 100%;
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.codesign-iteration.selected {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.codesign-score {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.codesign-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.codesign-metric {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: var(--bg-app);
+}
+
+.codesign-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.codesign-graph-card {
+  min-height: 520px;
+}
+
+.codesign-graph {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  min-height: 420px;
+}
+
+@media (max-width: 1100px) {
+  .codesign-toolbar,
+  .codesign-layout,
+  .codesign-columns {
+    grid-template-columns: 1fr;
+  }
 }

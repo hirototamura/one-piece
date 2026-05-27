@@ -207,6 +207,14 @@ export type SsotMutableNodeKind =
   | "interface_parameter"
   | "icd";
 
+export const ALL_SSOT_MUTABLE_NODE_KINDS: SsotMutableNodeKind[] = [
+  "requirement",
+  "design_parameter",
+  "design_constraint",
+  "interface_parameter",
+  "icd",
+];
+
 /** Admin-configurable scope for AI agents (default ~20% of non-critical surface). */
 export interface AgentScopePolicy {
   /** Fraction of non-critical SSOT mutations AI may perform (0–1). Default 0.2. */
@@ -217,6 +225,11 @@ export interface AgentScopePolicy {
   allowedNodeKinds: SsotMutableNodeKind[];
   /** When true, AI touches in human-dominated areas require visible provenance. */
   requireProvenanceDisclosure: boolean;
+  /**
+   * Demo/PoC mode: bounded autonomous co-design loops may apply derived and standard-tier
+   * updates without waiting in the human review queue. This does not equal human sign-off.
+   */
+  autonomousCoDesign?: boolean;
 }
 
 /** Immutable audit record for every SSOT mutation. */
@@ -238,8 +251,11 @@ export interface SsotProvenanceRecord {
   rationale?: string;
 }
 
-/** Design artifact registered in SSOT (Excel workbook or Python script). */
-export type DesignArtifactKind = "excel_workbook" | "python_script";
+/** Design artifact registered in SSOT (Excel workbook, Python script, or source repo). */
+export type DesignArtifactKind =
+  | "excel_workbook"
+  | "python_script"
+  | "source_repo";
 
 export interface DesignArtifact {
   id: EntityId;
@@ -286,6 +302,98 @@ export interface IntegrationRun {
   bindingIds: EntityId[];
   /** Summary output from script stdout or error message */
   outputSummary?: string;
+  /** Optional structured metrics extracted from the script output. */
+  metrics?: Record<string, number>;
+  /** Optional evidence or report identifier linked into the matrix. */
+  evidenceRef?: string;
+}
+
+export type CoDesignMetricDirection =
+  | "minimize"
+  | "maximize"
+  | "at_least"
+  | "at_most";
+
+export interface CoDesignTargetMetric {
+  key: string;
+  label: string;
+  direction: CoDesignMetricDirection;
+  targetValue?: number;
+  baselineValue?: number;
+  unit?: string;
+}
+
+export interface CoDesignGoal {
+  id: EntityId;
+  title: string;
+  objective: string;
+  sourceRequirementIds?: EntityId[];
+  targetMetrics: CoDesignTargetMetric[];
+  maxIterations: number;
+}
+
+export interface CoDesignMutation {
+  nodeKind: SsotMutableNodeKind;
+  nodeId: EntityId;
+  nodeKey: string;
+  fieldPath: string;
+  previousValue?: string;
+  newValue: string;
+  criticalityTier: SsotCriticalityTier;
+  rationale?: string;
+}
+
+export type CoDesignMetricStatus = "improved" | "regressed" | "met" | "unmet";
+
+export interface CoDesignIterationMetric {
+  key: string;
+  label: string;
+  value: number;
+  unit?: string;
+  status?: CoDesignMetricStatus;
+}
+
+export interface CoDesignRequirementCheck {
+  requirementId: EntityId;
+  requirementKey: string;
+  status: "pass" | "fail" | "improving" | "blocked";
+  note?: string;
+}
+
+export interface CoDesignIteration {
+  id: EntityId;
+  index: number;
+  startedAt: string;
+  completedAt?: string;
+  summary: string;
+  objectiveScore: number;
+  mutations: CoDesignMutation[];
+  metrics: CoDesignIterationMetric[];
+  requirementChecks: CoDesignRequirementCheck[];
+  integrationRunIds: EntityId[];
+  generatedIntegrationRuns?: IntegrationRun[];
+  generatedProvenanceRecords?: SsotProvenanceRecord[];
+}
+
+export type CoDesignRunStatus =
+  | "ready"
+  | "running"
+  | "converged"
+  | "max_iterations"
+  | "failed"
+  | "stopped";
+
+export interface CoDesignRun {
+  id: EntityId;
+  title: string;
+  status: CoDesignRunStatus;
+  actorMode: "human_gated" | "autonomous_ai";
+  goal: CoDesignGoal;
+  startedAt: string;
+  completedAt?: string;
+  selectedIterationId?: EntityId;
+  latestSummary?: string;
+  iterations: CoDesignIteration[];
 }
 
 /** Normalized SSOT engineering graph for one configuration */
@@ -317,6 +425,7 @@ export interface Program {
   agentScopePolicy: AgentScopePolicy;
   provenanceRecords: SsotProvenanceRecord[];
   integrationRuns: IntegrationRun[];
+  coDesignRuns: CoDesignRun[];
 }
 
 /** Default agent scope: ~20% of non-critical SSOT; critical stays human-only. */
@@ -325,6 +434,7 @@ export const DEFAULT_AGENT_SCOPE_POLICY: AgentScopePolicy = {
   blockedCriticalityTiers: ["critical"],
   allowedNodeKinds: ["design_parameter"],
   requireProvenanceDisclosure: true,
+  autonomousCoDesign: false,
 };
 
 /** Returns whether an actor may mutate a node under current policy. */
@@ -345,6 +455,17 @@ export function canActorMutate(
     return true;
   }
   return false;
+}
+
+export function isAutonomousCoDesign(policy: AgentScopePolicy): boolean {
+  return Boolean(policy.autonomousCoDesign || policy.allowedFraction >= 1);
+}
+
+export function shouldBypassHumanReview(
+  policy: AgentScopePolicy,
+  runActive: boolean,
+): boolean {
+  return runActive && isAutonomousCoDesign(policy);
 }
 
 /** Latest provenance for a node, if any. */
