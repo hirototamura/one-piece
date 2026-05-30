@@ -1,44 +1,44 @@
 ---
 name: human-design-review
 description: >-
-  Routes subsystem design and analysis credibility to human engineering judgment for
-  the one-piece SaaS. Use when baselining design packages, accepting analysis results,
-  waiving verification, or when agents lack domain-specific safety or performance context.
+  one-piece SaaS でサブシステム設計と分析の信頼性を人間のエンジニアリング判断に委ねる。
+  設計パッケージのベースライン化、分析結果の受理、検証の免除、
+  エージェントが安全・性能のドメイン文脈を欠くときに使う。
 ---
 
-# Human design review (one-piece)
+# 人間による設計レビュー（one-piece）
 
-## When humans must be in the loop
+## 人間がループに入るべきとき
 
-Agents draft; **humans baseline**. Require explicit human review before:
+エージェントが起草；**人間がベースライン**。次の前に明示的な人間レビューを要求する:
 
-- **Baselining** a subsystem design package or ICD-affecting change  
-- Marking **analysis results** as authoritative for load, safety, EMC, thermal, or mission-critical margins  
-- **Waiving** or **deferring** verification  
-- Overriding a **failed** compliance matrix cell  
-- Shipping claims like “verified” or “requirements met” externally  
+- サブシステム設計パッケージまたは ICD に影響する変更の**ベースライン化**
+- 荷重・安全・EMC・熱・ミッションクリティカルなマージンについて**分析結果**を権威あるものとしてマーク
+- 検証の**免除**または**延期**
+- 失敗したコンプライアンスマトリクスセルの**上書き**
+- 外部向けの「検証済み」「要件充足」などの主張
 
-## What to surface for reviewers
+## レビュアーに渡すパケット
 
-Provide a tight packet:
+簡潔なパケットを提供する:
 
-1. **Delta summary** — what changed vs last baseline  
-2. **Trace impact** — which requirements / interfaces are touched  
-3. **Assumptions & sensitivities** — numbers, models, environmental bounds  
-4. **Open consistency findings** — cross-subsystem checks passed/failed/pending  
-5. **Residual risks** — explicit, with proposed mitigations or waivers  
+1. **差分要約** — 前回ベースラインからの変更
+2. **トレース影響** — 触れた要件／インターフェース
+3. **仮定と感度** — 数値、モデル、環境境界
+4. **未解決の整合性所見** — サブシステム横断チェックの pass/fail/pending
+5. **残存リスク** — 明示し、緩和または免除案を添える
 
-## Agent behavior
+## エージェントの振る舞い
 
-- Never present agent synthesis as **certified** engineering sign-off  
-- Prefer **questions** and **options** when domain physics or safety is uncertain  
-- If the user is not the right expert, label the task **needs_domain_expert** with suggested role (structures, thermal, RF, safety, etc.)  
+- エージェントの統合を**認定済み**エンジニアリングサインオフとして提示しない
+- ドメイン物理や安全が不確かなときは**質問**と**選択肢**を優先する
+- ユーザーが適切な専門家でなければ、タスクに **needs_domain_expert** と推奨役割（構造、熱、RF、安全など）を付ける
 
-## Product direction
+## プロダクトの方向性
 
-Favor UI/API patterns: review queues, electronic signatures later, immutable baseline snapshots—without blocking early PoCs on full workflow engines.
+UI/API パターンを優先: レビューキュー、将来の電子署名、不変のベースラインスナップショット—早期 PoC をフルワークフローエンジンで塞がない。
 
-## References
+## 参照
 
-- [AGENT.md](../../AGENT.md) — orchestration and roles  
-- [docs/INFORMATION_ARCHITECTURE.md](../../docs/INFORMATION_ARCHITECTURE.md) — artifact graph  
+- [AGENT.md](../../AGENT.md) — オーケストレーションと役割
+- [docs/INFORMATION_ARCHITECTURE.md](../../docs/INFORMATION_ARCHITECTURE.md) — アーティファクトグラフ

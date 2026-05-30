@@ -1,81 +1,81 @@
-# Information architecture — artifacts and traceability
+# 情報アーキテクチャ — アーティファクトとトレーサビリティ
 
-Living document. **Update when** domain types, workflows, or UX decisions change.
+ライブ文書。**ドメイン型、ワークフロー、UX 判断が変わったら更新**する。
 
-## Mission
+## ミッション
 
-Model hardware systems engineering so **teams at any scale** can maintain **one coherent graph**: requirements, design, verification, and evidence—with human experts signing off where judgment matters.
+ハードウェアのシステムエンジニアリングをモデル化し、**あらゆる規模のチーム**が**一貫したグラフ**—要件、設計、検証、証拠—を維持できるようにする。判断が要るところは人間専門家がサインオフする。
 
-## Single source of truth (SSOT)
+## 単一の真実の源泉（SSOT）
 
-**The first architectural question:** where does truth live, and what is only a projection?
+**最初のアーキテクチャ上の問い:** 真実はどこにあり、何が投影にすぎないか？
 
-### What is SSOT (authoritative)
+### SSOT であるもの（権威ある）
 
-The **program engineering graph** in a normalized store (database), scoped by **program** and **configuration** (e.g. V1 / V2):
+**プログラムエンジニアリンググラフ**が正規化ストア（データベース）にあり、**プログラム**と**構成**（例: V1 / V2）でスコープされる:
 
-| Layer | SSOT holds | Notes |
+| 層 | SSOT が保持するもの | メモ |
 |-------|----------|--------|
-| **Structure** | `SystemElement` tree (GNC, mechanical, electrical, thermal, comms, software, …) | One graph; disciplines are tags and allocations, not separate databases. |
-| **Intent** | Versioned **requirements** (mission → subsystem) + lifecycle (`draft` → `baseline`) | Stable customer/mission intent vs derived trades (see below). |
-| **ICD** | **Interface Control Documents** per subsystem interface (provider ↔ consumer) + **interface parameters** (signals, limits, units) | Authoritative cross-team agreement; lateral consistency checks compare ICD pairs. |
-| **Parameters** | **Design parameters** (value, unit, bounds, discipline, element) | Linked to requirements, ICD lines, and CAD-extracted values. |
-| **Design constraints** | Limiting conditions from detailed design | When `actsAsFunctionalRequirement` is set, they **participate in allocation and V&V** like functional requirements—not “second class” metadata. |
-| **CAD** | **CAD model** nodes (revision, checksum, sync status, element link) | SSOT treats the model as part of the program graph; geometry files live in PLM/object storage but **revision and extracted parameters update in SSOT on every design change** (see CAD sync). |
-| **Trace graph** | Typed **edges** (`derives_from`, `satisfies`, `constrains`, `documents`, `represents`, `verifies`, …) | Req hierarchy, req↔param, req↔constraint, ICD↔elements, CAD↔element, verification bindings. |
-| **Verification** | Plans, activities, **bindings**, **evidence** (pass/fail, revision, waiver) | Matrix is a **view** over these links. |
-| **Decisions** | Trades, waivers, rationale artifacts | Every material derived change links here. |
+| **構造** | `SystemElement` ツリー（GNC、機械、電気、熱、通信、ソフトウェア…） | 1 グラフ；学問はタグと配分であり、別 DB ではない。 |
+| **意図** | バージョン管理された**要件**（ミッション → サブシステム）+ ライフサイクル（`draft` → `baseline`） | 安定した顧客／ミッション意図 vs 派生トレード（下記）。 |
+| **ICD** | サブシステムインターフェースごとの **Interface Control Document**（提供者 ↔ 消費者）+ **インターフェースパラメータ** | チーム横断合意の権威；横整合は ICD ペアを比較。 |
+| **パラメータ** | **設計パラメータ**（値、単位、境界、学問、要素） | 要件、ICD 行、CAD 抽出値にリンク。 |
+| **設計制約** | 詳細設計からの制限条件 | `actsAsFunctionalRequirement` が true のとき、機能要件と同様に**配分と V&V**に参加—「二級」メタデータではない。 |
+| **CAD** | **CAD モデル**ノード（リビジョン、チェックサム、同期状態、要素リンク） | SSOT はモデルをプログラムグラフの一部とみなす；ジオメトリファイルは PLM／オブジェクトストレージだが、**設計変更のたびにリビジョンと抽出パラメータが SSOT で更新**（CAD 同期参照）。 |
+| **トレースグラフ** | 型付き**エッジ**（`derives_from`、`satisfies`、`constrains`、`documents`、`represents`、`verifies` 等） | 要件階層、req↔param、req↔constraint、ICD↔要素、CAD↔要素、検証バインディング。 |
+| **検証** | 計画、活動、**バインディング**、**証拠**（pass/fail、リビジョン、免除） | マトリクスはこれらリンクの**ビュー**。 |
+| **決定** | トレード、免除、根拠アーティファクト | 重要な派生変更はすべてここにリンク。 |
 
-Simulation decks and raw test recordings stay in **object storage** with SSOT **references**; **CAD is not “off-graph”** once detailed design begins.
+シミュレーションデッキや生の試験記録は**オブジェクトストレージ**に置き、SSOT は**参照**のみ；詳細設計が始まれば **CAD はグラフ外ではない**。
 
-### What is not SSOT (projections / tools)
+### SSOT ではないもの（投影／ツール）
 
-| Not SSOT | Role |
+| SSOT ではない | 役割 |
 |----------|------|
-| Excel / compliance matrix export | Read model for humans, suppliers, auditors — **unless registered** as a versioned `DesignArtifact` with cell bindings (see below) |
-| Discipline-native authoring UIs (Simulink, spice, flight software IDE, bench scripts) | **Authoritative for authoring**; **sync into** SSOT via connectors—CAD follows the live-sync rule below |
-| Agent drafts | Proposals until human baseline |
-| UI graph/tree views | Queries over SSOT |
+| Excel／コンプライアンスマトリクスエクスポート | 人間・サプライヤー・監査向けの読み取りモデル—**セルバインディング付きでバージョン管理された `DesignArtifact` として登録されない限り** |
+| 学問ネイティブの著作用 UI（Simulink、spice、フライトソフト IDE、ベンチスクリプト） | **著作の権威**；コネクタ経由で SSOT に**同期**—CAD は下記のライブ同期ルールに従う |
+| エージェントの起草 | 人間がベースラインするまで提案 |
+| UI のグラフ／ツリービュー | SSOT へのクエリ |
 
-### SSOT mutation actors (human · logic · AI)
+### SSOT 変更アクター（人間・ロジック・AI）
 
-Every change to authoritative graph data records **who** mutated it. Three actor kinds:
+権威あるグラフデータの変更はすべて**誰が**変更したかを記録する。3 種のアクター:
 
-| Actor | Role | Typical examples |
+| アクター | 役割 | 典型例 |
 |-------|------|------------------|
-| **Human engineer** | Interfaces with the real world; owns critical rationale and baselines | Requirement edits, baseline sign-off, accepting trades |
-| **Logic automation** | Deterministic, repeatable — no LLM | Excel→Python sync, CI test runners, CAD connector webhooks |
-| **AI agent** | Drafts within admin-configured scope (~20% default) | Suggested parameter updates, draft requirement text |
+| **人間エンジニア** | 現実世界との接点；重要な根拠とベースラインを所有 | 要件編集、ベースラインサインオフ、トレード受理 |
+| **ロジック自動化** | 決定的・反復可能—LLM なし | Excel→Python 同期、CI 試験ランナー、CAD コネクタ Webhook |
+| **AI エージェント** | 管理者設定スコープ内で起草（デフォルト約 20%） | パラメータ更新提案、要件文のドラフト |
 
-**Policy (`AgentScopePolicy`):** administrators configure the fraction of non-critical mutations AI may perform, blocked criticality tiers (`critical` stays human-only by default), and allowed node kinds. Helpers: `canActorMutate`, `DEFAULT_AGENT_SCOPE_POLICY` in `packages/domain`.
+**ポリシー（`AgentScopePolicy`）:** 管理者が AI が行える非クリティカル変更の割合、ブロックするクリティカルティア（デフォルトで `critical` は人間のみ）、許可ノード種別を設定。ヘルパー: `packages/domain` の `canActorMutate`、`DEFAULT_AGENT_SCOPE_POLICY`。
 
-**Provenance:** each mutation is an immutable `SsotProvenanceRecord` (actor, field, before/after, criticality). When `aiTouchInHumanDomain` is true, the UI **must** surface a warning so AI suggestions do not silently infect human design judgment. See **Actor boundaries** view in `apps/web`.
+**来歴:** 各変更は不変の `SsotProvenanceRecord`（アクター、フィールド、前後、クリティカルティ）。`aiTouchInHumanDomain` が true のとき UI は**警告**を出し、AI 提案が人間の設計判断に静かに染み込まないようにする。`apps/web` の **Actor boundaries** ビューを参照。
 
-**Out of scope for AI:** critical-tier artifacts, real-world test execution, baseline authority, and any loop where deterministic rules suffice — use logic automation instead.
+**AI の対象外:** クリティカルティアのアーティファクト、現実世界の試験実行、ベースライン権限、決定的ルールで足りるループ—代わりにロジック自動化を使う。
 
-**Autonomous co-design mode (`autonomousCoDesign`):** for bounded PoC loops, administrators may set AI scope to 100% so a running `CoDesignRun` can apply **derived** and **standard-tier** changes directly to SSOT without waiting in the review queue. This mode is for **exploratory iteration speed**, not human certification: provenance stays mandatory, simulation execution remains `logic_automation`, and the resulting state is **not** equivalent to external human sign-off or a released “verified” claim.
+**自律 co-design モード（`autonomousCoDesign`）:** 有界な PoC ループでは、管理者が AI スコープを 100% に設定し、実行中の `CoDesignRun` がレビューキューを待たずに **derived** および **standard-tier** の変更を SSOT に直接適用できる。本モードは**探索反復の速度**用であり、人間の認定ではない: 来歴は必須、シミュレーション実行は `logic_automation` のまま、結果状態は外部の人間サインオフやリリース済み「検証済み」主張と**同等ではない**。
 
-### Design artifacts — Excel + Python (PoC integration)
+### 設計アーティファクト — Excel + Python（PoC 連携）
 
-Engineers keep using familiar tools; SSOT registers them as `DesignArtifact` nodes (`excel_workbook`, `python_script`) with revision and discipline tags.
+エンジニアは慣れたツールを使い続け、SSOT は `DesignArtifact` ノード（`excel_workbook`、`python_script`）として登録し、リビジョンと学問タグを付ける。
 
-**Minimum integration unit:** `CellCodeBinding` — one Excel cell ↔ one Python `SSOT:PARAM:KEY` marker ↔ one `DesignParameter`. Flow:
+**最小連携単位:** `CellCodeBinding` — 1 Excel セル ↔ 1 Python `SSOT:PARAM:KEY` マーカー ↔ 1 `DesignParameter`。フロー:
 
-1. Human or connector updates Excel cell (or SSOT parameter).  
-2. **Logic automation** (`packages/design-integration`) propagates cell value into the Python marker and re-runs the script.  
-3. `IntegrationRun` records stdout / status — no AI in this loop.
+1. 人間またはコネクタが Excel セル（または SSOT パラメータ）を更新。
+2. **ロジック自動化**（`packages/design-integration`）がセル値を Python マーカーに伝播しスクリプトを再実行。
+3. `IntegrationRun` が stdout／ステータスを記録—このループに AI は入らない。
 
-CLI: `one-piece-sync --workbook … --script … --bind "Inputs!B2:P-VBUS:P-VBUS"`.
+CLI: `one-piece-sync --workbook … --script … --bind "Inputs!B2:P-VBUS:P-VBUS"`。
 
-The current PoC also includes a **thermal rejection stand-in** script that autonomous co-design runs can call between parameter mutations. Script execution still sits on the deterministic side of the boundary: AI proposes deltas; `logic_automation` runs the analysis and writes `IntegrationRun` evidence back to SSOT.
+現在の PoC には、パラメータ変更の間に自律 co-design 実行が呼び出せる**熱排出スタンドイン**スクリプトも含まれる。スクリプト実行は境界の決定的側に留まる: AI が差分を提案し、`logic_automation` が分析を実行して `IntegrationRun` 証拠を SSOT に書き戻す。
 
-### Autonomous co-design loop (PoC)
+### 自律 co-design ループ（PoC）
 
-`CoDesignRun` is a bounded orchestration object for **goal-driven design iteration**. It holds:
+`CoDesignRun` は**目標駆動の設計反復**用の有界オーケストレーションオブジェクト。保持するもの:
 
-- A `CoDesignGoal` (natural-language objective + numeric target metrics)  
-- Ordered `CoDesignIteration` records (mutations, metrics, requirement checks, linked `IntegrationRun`s)  
-- Run lifecycle (`running`, `converged`, `max_iterations`, `failed`, `stopped`)  
+- `CoDesignGoal`（自然言語の目的 + 数値目標メトリクス）
+- 順序付き `CoDesignIteration` 記録（変更、メトリクス、要件チェック、リンクされた `IntegrationRun`）
+- 実行ライフサイクル（`running`、`converged`、`max_iterations`、`failed`、`stopped`）
 
 ```mermaid
 flowchart LR
@@ -87,176 +87,176 @@ flowchart LR
 
   Goal --> ReqA
   Graph --> ReqA
-  ReqA -->|\"gaps and checks\"| DesA
-  DesA -->|\"parameter deltas\"| Graph
+  ReqA -->|"gaps and checks"| DesA
+  DesA -->|"parameter deltas"| Graph
   DesA --> SimA
-  SimA -->|\"IntegrationRun evidence\"| Graph
+  SimA -->|"IntegrationRun evidence"| Graph
   Graph --> ReqA
 ```
 
-**Product rule:** only the **active** autonomous run may bypass the human review queue, and only for node kinds/tiers that current `AgentScopePolicy` allows. Mission intent remains read-only in this mode; lower-tier design trades can move fast, but the stable-intent rule still holds.
+**プロダクトルール:** **アクティブ**な自律実行のみが人間レビューキューをバイパスでき、かつ現在の `AgentScopePolicy` が許すノード種別／ティアに限る。本モードではミッション意図は読み取り専用；下位設計トレードは速く進められるが、安定意図ルールは維持する。
 
-**Deferred beyond this PoC:** PDF / handbook reverse-ingestion, native SimScale / OpenMDAO adapters, SysML v2 serialization/export, and organization-scale collaboration workflows.
+**本 PoC 以降に延期:** PDF／ハンドブックの逆取り込み、ネイティブ SimScale／OpenMDAO アダプタ、SysML v2 シリアライズ／エクスポート、組織規模の協働ワークフロー。将来: 中央オーケストレータがマルチエージェント設計パイプラインでどのスクリプトを走らすか選択。
 
-### Integration pattern (multi-discipline)
+### 連携パターン（マルチ学問）
 
 ```mermaid
 flowchart TB
-  subgraph tools [Discipline tools]
-    GNC[GNC / controls]
-    ME[Mechanical]
-    EE[Electrical]
-    TH[Thermal]
-    COM[Comms]
-    SW[Software]
+  subgraph tools [学問ツール]
+    GNC[GNC / 制御]
+    ME[機械]
+    EE[電気]
+    TH[熱]
+    COM[通信]
+    SW[ソフトウェア]
   end
 
-  subgraph ssot [SSOT graph database]
-    EL[Elements]
-    ICD[ICDs and interface parameters]
-    REQ[Requirements constraints parameters]
-    CAD[CAD models live sync]
-    TR[Trace edges]
-    VV[Verification and evidence]
+  subgraph ssot [SSOT グラフ DB]
+    EL[要素]
+    ICD[ICD とインターフェースパラメータ]
+    REQ[要件 制約 パラメータ]
+    CAD[CAD モデル ライブ同期]
+    TR[トレースエッジ]
+    VV[検証と証拠]
   end
 
-  subgraph consumers [Consumers]
-    UI[Web UI graph and matrix]
-    CI[Automated checks and test runners]
-    EXP[Exports and supplier packages]
+  subgraph consumers [利用者]
+    UI[Web UI グラフとマトリクス]
+    CI[自動チェックと試験ランナー]
+    EXP[エクスポートとサプライヤーパッケージ]
   end
 
-  tools -->|connectors webhooks| ssot
+  tools -->|コネクタ webhook| ssot
   ssot --> UI
   ssot --> CI
   ssot --> EXP
-  CI -->|evidence results| ssot
+  CI -->|証拠結果| ssot
 ```
 
-**Flexibility** comes from a small kernel (nodes, typed edges, revisions, configurations) plus **extensible attributes** per artifact kind—not from one table per discipline.
+**柔軟性**は小さなカーネル（ノード、型付きエッジ、リビジョン、構成）+ アーティファクト種別ごとの**拡張属性**から—学問ごとに 1 テーブルではない。
 
-### ICD (Interface Control Document)
+### ICD（Interface Control Document）
 
-Each **subsystem interface** is an ICD node in SSOT:
+各**サブシステムインターフェース**は SSOT 内の ICD ノード:
 
-- **Provider** and **consumer** `SystemElement` IDs (both must exist in the graph).  
-- **Interface parameters** (name, direction, type, unit, min/max/nominal) optionally linked to shared **design parameters**.  
-- Lifecycle and baseline like requirements; changes drive **lateral** consistency checks against the partner subsystem.
+- **提供者**と**消費者**の `SystemElement` ID（両方グラフに存在すること）。
+- **インターフェースパラメータ**（名前、方向、型、単位、min/max/nominal）、任意で共有**設計パラメータ**にリンク。
+- 要件と同様のライフサイクルとベースライン；変更はパートナーサブシステムに対する**横**整合チェックを駆動。
 
-Exports to PDF/Excel for suppliers are **projections** of ICD + parameters.
+サプライヤー向け PDF/Excel は ICD + パラメータの**投影**。
 
-### Design constraints as functional requirements
+### 機能要件としての設計制約
 
-**Design constraints** express limits discovered or enforced during detailed design (envelope, clearance, max loss, etc.). Product rule:
+**設計制約**は詳細設計で発見・強制される制限（エンベロープ、クリアランス、最大損失など）。プロダクトルール:
 
-- `actsAsFunctionalRequirement: true` → included in **verification closure**, compliance matrix rows, and up-trace to system/mission where linked.  
-- `false` → recorded engineering fact, still traced, but does not block baseline alone.
+- `actsAsFunctionalRequirement: true` → **検証クロージャ**、コンプライアンスマトリクス行、リンク先への上トレースに含める。
+- `false` → 記録された工学的事実、依然トレースするが、単独ではベースラインをブロックしない。
 
-This avoids a split between “requirements doc” and “unverifiable” CAD-side rules.
+「要件文書」と「検証不能な」CAD 側ルールの分裂を避ける。
 
-### CAD live sync
+### CAD ライブ同期
 
-When design matures, **CAD models are SSOT nodes**, not passive attachments:
+設計が成熟すると **CAD モデルは SSOT ノード**であり、受動的添付ではない:
 
-1. **Connector** (PLM webhook, CAD API, or agent watcher) fires on save/check-in.  
-2. SSOT updates `CadModel.revision`, `checksum`, `syncStatus`, `lastSyncedAt`.  
-3. **Extracted parameters** (mass, CG, envelope dimensions, etc.) update linked `DesignParameter` nodes in the same transaction.  
-4. Downstream **checks** (budget closure, constraint violation, stale matrix evidence) run immediately.
+1. **コネクタ**（PLM Webhook、CAD API、エージェントウォッチャー）が保存／チェックインで発火。
+2. SSOT が `CadModel.revision`、`checksum`、`syncStatus`、`lastSyncedAt` を更新。
+3. **抽出パラメータ**（質量、重心、エンベロープ寸法など）が同一トランザクションでリンクされた `DesignParameter` を更新。
+4. 下流の**チェック**（バジェットクロージャ、制約違反、古いマトリクス証拠）が即時実行。
 
-If sync fails, `syncStatus: stale | error` blocks baseline of dependent constraints until resolved.
+同期失敗時は `syncStatus: stale | error` が、解消まで依存制約のベースラインをブロック。
 
 ```mermaid
 sequenceDiagram
   participant CAD as CAD / PLM
-  participant Conn as Connector
-  participant SSOT as SSOT graph
-  participant VV as V and V runners
+  participant Conn as コネクタ
+  participant SSOT as SSOT グラフ
+  participant VV as V and V ランナー
 
-  CAD->>Conn: model saved rev N
-  Conn->>SSOT: upsert CadModel plus parameters
-  SSOT->>SSOT: consistency checks
-  SSOT->>VV: optional re run affected tests
+  CAD->>Conn: モデル保存 rev N
+  Conn->>SSOT: CadModel とパラメータを upsert
+  SSOT->>SSOT: 整合性チェック
+  SSOT->>VV: 任意で影響試験を再実行
 ```
 
-### Verification and test automation
+### 検証と試験自動化
 
-1. **Pull** — API/query returns the **closure** for a requirement or baseline tag: parameters, ICDs, linked activities, platform needs, last evidence.  
-2. **Push** — Test/analysis runners write **evidence nodes** (status, run ID, artifact URI, timestamp); SSOT updates matrix projections and consistency checks.  
-3. **Automate** — On `baseline` or config change, enqueue checks (coverage gaps, orphaned params, ICD mismatch, stale evidence). Humans remain authority for pass/waive judgment.
+1. **Pull** — API／クエリが要件またはベースラインタグの**クロージャ**を返す: パラメータ、ICD、リンク活動、プラットフォームニーズ、最終証拠。
+2. **Push** — 試験／分析ランナーが**証拠ノード**を書き込む（ステータス、run ID、アーティファクト URI、タイムスタンプ）；SSOT がマトリクス投影と整合チェックを更新。
+3. **Automate** — `baseline` または構成変更時にチェックをキュー（カバレッジギャップ、孤立パラメータ、ICD 不一致、古い証拠）。pass/waive 判断の権威は人間。
 
-PoC UI (`apps/web`) demonstrates projections; **P1 persistence** should implement this graph store, not spreadsheet-shaped tables as the primary schema.
+PoC UI（`apps/web`）は投影を示す；**P1 永続化**はスプレッドシート型テーブルではなくこのグラフストアを実装すべき。
 
-**Touchpoints** (permissions, ceremony, audit, integrations) vary by organization size without forking the graph. **First customers:** small teams, where speed and clarity matter most.
+**タッチポイント**（権限、儀式、監査、連携）は組織規模で変わるがグラフは分岐しない。**最初の顧客:** 速度と明快さが重要な小規模チーム。
 
-## Artifact inventory
+## アーティファクト一覧
 
-| Artifact | Purpose | Typical owner |
+| アーティファクト | 目的 | 典型オーナー |
 |----------|---------|----------------|
-| Mission requirements | Program intent, stakeholder success | Lead systems + stakeholders |
-| System requirements | Whole-system “shall” / constraints | Systems engineering |
-| AIV plan (with system reqs) | Plan to verify the **integrated** system | Systems + integration + V&V |
-| Operational requirements | Use, logistics, maintenance, training | Ops + systems |
-| Subsystem requirements | Allocated requirements per subsystem | Subsystem leads + systems |
-| Interface Control Document (ICD) | Cross-subsystem interface agreement (provider/consumer, parameters) | Systems + interface owners |
-| Design parameters | Budgets, setpoints, tolerances (may sync from CAD) | Discipline leads |
-| Design constraints | Detailed-design limits; may act as functional requirements | Design engineering |
-| CAD model (SSOT node) | Revision-linked geometry authority with live sync | Mechanical / design |
-| Specifications | Quantified detail supporting requirements | Engineering |
-| Subsystem design packages | Architecture, budgets, analysis summaries | Design engineers |
-| Analysis results | Models, simulations, calculations | Analysts |
-| Verification plan | Scope, methods, success criteria | V&V lead |
-| Verification activities | Analysis / test / inspection instances | V&V + labs |
-| Activity reports | Evidence and conclusions per activity | Authors + reviewers |
-| Test cases | Step-by-step or scripted verification | V&V |
-| Verification platform requirements | Facilities, tools, sensors, software | V&V + facilities |
-| Verification platform specifications | Detailed platform design / config | Platform owners |
-| Compliance matrix | Requirement ↔ evidence, pass/fail/planned | Auto-derived + curated |
+| ミッション要件 | プログラム意図、ステークホルダー成功 | リード SE + ステークホルダー |
+| システム要件 | システム全体の shall／制約 | システムエンジニアリング |
+| AIV 計画（システム要件付き） | **統合**システムの検証計画 | SE + 統合 + V&V |
+| 運用要件 | 使用、ロジスティクス、保守、訓練 | 運用 + SE |
+| サブシステム要件 | サブシステムごとの配分要件 | サブシステムリード + SE |
+| ICD | サブシステム間インターフェース合意 | SE + インターフェースオーナー |
+| 設計パラメータ | バジェット、設定値、公差（CAD 同期可） | 学問リード |
+| 設計制約 | 詳細設計の制限；機能要件として振る舞う場合あり | 設計エンジニアリング |
+| CAD モデル（SSOT ノード） | ライブ同期付きリビジョンリンクのジオメトリ権威 | 機械／設計 |
+| 仕様 | 要件を支える定量化詳細 | エンジニアリング |
+| サブシステム設計パッケージ | アーキテクチャ、バジェット、分析要約 | 設計エンジニア |
+| 分析結果 | モデル、シミュレーション、計算 | アナリスト |
+| 検証計画 | 範囲、手法、成功基準 | V&V リード |
+| 検証活動 | 分析／試験／検査のインスタンス | V&V + ラボ |
+| 活動レポート | 活動ごとの証拠と結論 | 著者 + レビュア |
+| テストケース | 段階的またはスクリプト化された検証 | V&V |
+| 検証プラットフォーム要件 | 施設、ツール、センサ、ソフトウェア | V&V + 施設 |
+| 検証プラットフォーム仕様 | プラットフォームの詳細設計／構成 | プラットフォームオーナー |
+| コンプライアンスマトリクス | 要件 ↔ 証拠、pass/fail/planned | 自動導出 + キュレーション |
 
-## Requirements graph
+## 要件グラフ
 
-**Vertical lineage (each level drives the next in the stack):**
+**垂直系譜（各レベルが次を駆動）:**
 
 ```mermaid
 flowchart TD
-  MR[Mission requirements]
-  SR[System requirements plus AIV plan]
-  OR[Operational requirements]
-  SubR[Subsystem requirements]
+  MR[ミッション要件]
+  SR[システム要件 + AIV 計画]
+  OR[運用要件]
+  SubR[サブシステム要件]
 
   MR --> SR
   SR --> OR
   OR --> SubR
 ```
 
-## Stable intent vs derived trades
+## 安定した意図 vs 派生トレード
 
-- **Mission / customer / user-facing intent** should remain **explicit, traced, and verified** to closure (matrix + evidence).  
-- **Derived** requirements, budgets, and interface details may **change** during design when analysis or test shows a better allocation—each change should record **why** (rationale artifact, link to test/analysis ID, or engineering decision entry).  
-- This mirrors the useful distinction: *verify what you promised users; optimize and learn how you implement it.*
+- **ミッション／顧客／ユーザー向け意図**は**明示・トレース・検証**してクロージャまで（マトリクス + 証拠）。
+- **派生**要件、バジェット、インターフェース詳細は、分析や試験がより良い配分を示せば設計中に**変更**可能—各変更に**なぜ**を記録（根拠アーティファクト、試験／分析 ID へのリンク、またはエンジニアリング決定エントリ）。
+- 有用な区別: *約束したユーザ向けものを検証する；実装方法は最適化し学ぶ。*
 
-## Branching from system (explicit product rule)
+## システムからの分岐（明示的プロダクトルール）
 
-System requirements **also** drive subsystem requirements directly when allocation skips operational elaboration, or when operational and subsystem concerns must be traced in parallel. The **data model** should allow multiple parents or explicit `derives_from` links from one system requirement to **both** operational and subsystem children—never “lose” the system rationale.
+運用の展開を飛ばす配分や、運用とサブシステムを並行トレースすべきとき、**システム要件はサブシステム要件も直接駆動**する。データモデルは 1 つのシステム要件から**運用とサブシステムの両方**の子へ、複数親または明示的 `derives_from` を許す—システムの根拠を「失わない」。
 
 ```mermaid
 flowchart LR
-  SR[System requirements]
-  OR[Operational requirements]
-  SubR[Subsystem requirements]
+  SR[システム要件]
+  OR[運用要件]
+  SubR[サブシステム要件]
 
   SR --> OR
   SR --> SubR
 ```
 
-## Downstream of subsystem requirements
+## サブシステム要件の下流
 
 ```mermaid
 flowchart TD
-  SubR[Subsystem requirements]
-  DP[Design packages plus analysis]
-  VAP[Subsystem verification activity plan]
-  VPR[Verification platform requirements]
-  VPS[Verification platform specifications]
+  SubR[サブシステム要件]
+  DP[設計パッケージ + 分析]
+  VAP[サブシステム検証活動計画]
+  VPR[検証プラットフォーム要件]
+  VPS[検証プラットフォーム仕様]
 
   SubR --> DP
   SubR --> VAP
@@ -264,67 +264,67 @@ flowchart TD
   VPR --> VPS
 ```
 
-## Consistency checks (automatable + human)
+## 整合性チェック（自動化 + 人間）
 
-| Check | Question |
+| チェック | 問い |
 |-------|----------|
-| Up-trace | Does every subsystem requirement trace to system (and ultimately mission)? |
-| Lateral | Do **ICD** parameter sets match between provider and consumer? |
-| Budgets | Mass, power, thermal, link margin—closed with no orphan assumptions? |
-| CAD freshness | Are `CadModel` revisions synced and parameters current? |
-| Constraint closure | Do **design constraints** acting as functional reqs have verification paths? |
-| Verification | Is every critical requirement covered by at least one planned method with an owner? |
-| Platform | Do planned tests have the facilities and equipment they assume? |
+| 上トレース | すべてのサブシステム要件がシステム（最終的にミッション）にトレースするか？ |
+| 横 | **ICD** パラメータセットが提供者と消費者で一致するか？ |
+| バジェット | 質量、電力、熱、リンクマージン—孤立仮定なくクローズか？ |
+| CAD 鮮度 | `CadModel` リビジョンは同期されパラメータは最新か？ |
+| 制約クロージャ | 機能要件として振る舞う**設計制約**に検証経路があるか？ |
+| 検証 | すべてのクリティカル要件に、オーナー付きの計画された手法が少なくとも 1 つあるか？ |
+| プラットフォーム | 計画試験が想定する施設・設備を持っているか？ |
 
-Failing checks become **review tasks** for humans or fixes for agents—never silent overrides.
+失敗は人間またはエージェント修正用の**レビュータスク**—黙って上書きしない。
 
-## Verification rigor (lifecycle ramp)
+## 検証の厳しさ（ライフサイクル段階化）
 
-Hardware programs often distinguish **why** a test exists, not only **what** it checks. Optional metadata on test-oriented activities:
+ハードウェアプログラムは**何を**チェックするかだけでなく**なぜ**試験するかを区別することが多い。試験指向活動への任意メタデータ:
 
-| Purpose (typical) | Intent |
+| 目的（典型） | 意図 |
 |-------------------|--------|
-| Development | Explore margins, flush out weaknesses, inform trades |
-| Qualification | Demonstrate performance in bounded worst-case / margin conditions |
-| Acceptance | Workmanship and repeatability on delivered units |
+| Development | マージン探索、弱点洗い出し、トレードへの情報 |
+| Qualification | 有界最悪ケース／マージン条件での性能実証 |
+| Acceptance | 納品ユニットの仕上げと再現性 |
 
-**Integrated verification** (e.g. hardware-in-the-loop, system rigs, “service-like” integrated runs) is expressed as **verification activities** plus **verification platform requirements/specifications**—supporting a **test what you fly** mindset without mandating a single physical lab layout.
+**統合検証**（例: HITL、システムリグ、サービス様統合実行）は**検証活動** + **検証プラットフォーム要件／仕様**で表現—単一の物理ラボレイアウトを強制せず **Test what you fly** の考え方を支える。
 
-Analysis and inspection remain first-class; they may close matrix cells where tests are impractical.
+分析と検査は第一級；試験が非現実的なときマトリクスセルを閉じられる。
 
-For the autonomous co-design PoC, analysis evidence is still **simulation-backed** rather than “AI declared”. The loop can update matrix projections and local exploration state, but humans remain authority for baselines, waivers, and any externally-facing “requirements met” claim.
+自律 co-design PoC では、分析証拠は依然 **シミュレーション裏付け**であり「AI が宣言した」ものではない。ループはマトリクス投影とローカル探索状態を更新できるが、ベースライン、免除、外部向け「要件充足」主張の権威は人間に残る。
 
-## Compliance matrix (Excel-simple)
+## コンプライアンスマトリクス（Excel 並み）
 
-**Rows:** requirements (or derived verification objectives).  
-**Columns:** evidence items (test case ID, analysis report ID, inspection record).  
-**Cells:** status + hyperlink to artifact revision + optional waiver reference.
+**行:** 要件（または派生検証目的）。  
+**列:** 証拠（テストケース ID、分析レポート ID、検査記録）。  
+**セル:** ステータス + アーティファクトリビジョンへのハイパーリンク + 任意の免除参照。
 
-Implementation note: store normalized relations in the backend; **project** or **export** flat matrices for auditors and suppliers.
+実装メモ: バックエンドに正規化関係を保持；監査・サプライヤー向けにフラットマトリクスを**投影**または**エクスポート**。
 
-## Mapping to code (`packages/domain`)
+## コードへのマッピング（`packages/domain`）
 
-`EngineeringGraph` (SSOT shape per configuration) includes:
+`EngineeringGraph`（構成ごとの SSOT 形状）に含まれる:
 
-| Type | Role |
+| 型 | 役割 |
 |------|------|
-| `Requirement` | Intent; `kind`: `stakeholder` \| `functional` \| `design_constraint` |
-| `InterfaceControlDocument` + `InterfaceParameter` | ICD and interface lines |
-| `DesignParameter` | Named parameters |
-| `DesignConstraint` | Detailed limits; `actsAsFunctionalRequirement` for V&V |
-| `CadModel` | Live-synced CAD node (`syncStatus`, `revision`, extracted params) |
-| `DesignArtifact` | Versioned Excel workbook or Python script in SSOT |
-| `CellCodeBinding` | Excel cell ↔ Python marker ↔ design parameter |
-| `AgentScopePolicy` | Admin AI scope (~20% default); `SsotProvenanceRecord` audit trail |
-| `TraceLink` | `TraceRelation` vocabulary |
-| `Program` | Configuration-scoped graph + verification projection + provenance |
+| `Requirement` | 意図；`kind`: `stakeholder` \| `functional` \| `design_constraint` |
+| `InterfaceControlDocument` + `InterfaceParameter` | ICD とインターフェース行 |
+| `DesignParameter` | 名前付きパラメータ |
+| `DesignConstraint` | 詳細制限；V&V 用 `actsAsFunctionalRequirement` |
+| `CadModel` | ライブ同期 CAD ノード（`syncStatus`、`revision`、抽出 param） |
+| `DesignArtifact` | SSOT 内のバージョン管理 Excel または Python |
+| `CellCodeBinding` | Excel セル ↔ Python マーカー ↔ 設計パラメータ |
+| `AgentScopePolicy` | 管理者 AI スコープ（デフォルト約 20%）；`SsotProvenanceRecord` 監査証跡 |
+| `TraceLink` | `TraceRelation` 語彙 |
+| `Program` | 構成スコープグラフ + 検証投影 + 来歴 |
 
-Helpers: `isVerificationSubject`, `isVerificationSubjectConstraint`.
+ヘルパー: `isVerificationSubject`、`isVerificationSubjectConstraint`。
 
-Still expected: evidence artifacts, platform specs, decision records, P1 persistence/API, CAD/PLM connectors.
+今後: 証拠アーティファクト、プラットフォーム仕様、決定記録、P1 永続化/API、CAD/PLM コネクタ。
 
-Document migrations here when enums or relations change.
+列挙や関係が変わったらここに移行を文書化する。
 
 ---
 
-*Last updated: 2026-05-23 — actor boundaries, provenance, Excel/Python design integration.*
+*最終更新: 2026-05-30 — 自律 co-design、ドキュメント日本語化（アクター境界・来歴・Excel/Python 連携を含む）。*

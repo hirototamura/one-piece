@@ -1,11 +1,11 @@
-# Documentation index
+# ドキュメント索引
 
-Parallel **living** documents for one-piece. Update them as the product and domain model evolve.
+one-piece の**ライブ**文書群。プロダクトとドメインモデルの進化に合わせて更新する。
 
-| Document | Purpose |
-|----------|---------|
-| [PROJECT_PLAN.md](./PROJECT_PLAN.md) | Phases, backlog, risks, success metrics; **external influences** (industry SE narratives) |
-| [INFORMATION_ARCHITECTURE.md](./INFORMATION_ARCHITECTURE.md) | Artifacts, requirement graph, compliance matrix, consistency checks |
-| [DEVELOPMENT_PROGRESS.md](./DEVELOPMENT_PROGRESS.md) | Short chronological log of substantive changes |
+| 文書 | 目的 |
+|------|------|
+| [PROJECT_PLAN.md](./PROJECT_PLAN.md) | フェーズ、バックログ、リスク、成功指標；**外部の影響**（業界の SE ナラティブ） |
+| [INFORMATION_ARCHITECTURE.md](./INFORMATION_ARCHITECTURE.md) | アーティファクト、要件グラフ、コンプライアンスマトリクス、整合性チェック |
+| [DEVELOPMENT_PROGRESS.md](./DEVELOPMENT_PROGRESS.md) | 実質的な変更の短い時系列ログ |
 
-**Agent control tower:** [../AGENT.md](../AGENT.md) (orchestration, roles, doc duty).
+**エージェントの管制塔:** [../AGENT.md](../AGENT.md)（オーケストレーション、役割、ドキュメント義務）。
