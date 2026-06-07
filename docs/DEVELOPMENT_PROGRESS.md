@@ -2,6 +2,14 @@
 
 **新しいエントリを上に追記**する。各エントリは数文に留め、コミットや PR があればリンクする。
 
+## 2026-06-07（用語: 要求）
+
+- ハードウェア SE の慣習に合わせ、日本語ドキュメントの「要件」を「要求」に統一（`Requirement` 等のコード識別子は原文維持）。
+
+## 2026-06-07（README 充実）
+
+- ルート `README.md` を書き直し: Web UI ツアー、SSOT/アクター用語、エコシステム上の位置づけ、インストール/実行コマンド、リポジトリマップ。
+
 ## 2026-06-07（Apache-2.0 ライセンス）
 
 - ルートに `LICENSE`（Apache-2.0）を追加；`README.md` と `package.json`（ルート・`packages/domain`・`apps/web`）に `Apache-2.0` を明記。Codex レビュー（README のライセンス表記と実体の不一致）への対応。
@@ -9,7 +17,7 @@
 
 ## 2026-05-30（ドキュメント日本語化）
 
-- 日本人チーム向けにリポジトリ内の Markdown（`README.md`、`AGENT.md`、`docs/*`、`.cursor/skills/*`、`packages/design-integration/README.md`）を日本語化。コード識別子・CLI・パスは原文維持。
+- 日本人チーム向けにリポジトリ内の Markdown（`README.md`、`AGENT.md`、`docs/`*、`.cursor/skills/*`、`packages/design-integration/README.md`）を日本語化。コード識別子・CLI・パスは原文維持。
 
 ## 2026-05-26（自律 co-design MVP スキャフォールド）
 
@@ -21,7 +29,7 @@
 
 - ブランチ `feature/actor-boundaries-design-integration`: SSOT 変更を**人間エンジニア**、**ロジック自動化**、**AI エージェント**に帰属；`AgentScopePolicy`（AI デフォルト約 20%）、`aiTouchInHumanDomain` 警告付き `SsotProvenanceRecord`。
 - `packages/domain` 拡張（`DesignArtifact`、`CellCodeBinding`、`IntegrationRun`、ポリシーヘルパー）；新規 `packages/design-integration` Python パッケージ（Excel→Python 同期 + スクリプトランナー）。
-- Web: **Actor boundaries**、**Design integration** ビュー；要件・パラメータに来歴パネル。
+- Web: **Actor boundaries**、**Design integration** ビュー；要求・パラメータに来歴パネル。
 
 ## 2026-05-19（Web — フル SSOT UI）
 
@@ -38,12 +46,12 @@
 
 ## 2026-05-19（Web PoC）
 
-- `apps/web`（Vite + React）追加: レベル別要件ツリー、コンプライアンスマトリクス、構成セレクタ、ライフサイクル操作付き人間レビューキュー；インメモリでデモプログラムをシード。
+- `apps/web`（Vite + React）追加: レベル別要求ツリー、コンプライアンスマトリクス、構成セレクタ、ライフサイクル操作付き人間レビューキュー；インメモリでデモプログラムをシード。
 - `packages/domain` に `RequirementLevel`、`Program`、`VerificationActivity`、`MatrixCell` を拡張。
 
 ## 2026-05-19
 
-- `docs/PROJECT_PLAN.md` の**原則**をハードウェア SE 5 原則で書き直し: トレーサビリティ/記録、完璧より反復、より賢い要件、横断設計、早期試験+自動化；旧デリバリー項目は短いデリバリー小節に統合。
+- `docs/PROJECT_PLAN.md` の**原則**をハードウェア SE 5 原則で書き直し: トレーサビリティ/記録、完璧より反復、より賢い要求、横断設計、早期試験+自動化；旧デリバリー項目は短いデリバリー小節に統合。
 - ビジョンを再定義: **あらゆるチーム規模**のハードウェアエンジニアリング加速（個人 → スタートアップ → 大規模プログラム）。
 
 ## 2026-05-10（SpaceX 2012 SE デッキ）
@@ -67,3 +75,4 @@
 ## YYYY-MM-DD
 
 - …
+
