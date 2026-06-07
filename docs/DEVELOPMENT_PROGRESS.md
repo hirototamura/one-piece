@@ -5,6 +5,7 @@
 ## 2026-06-07（Apache-2.0 ライセンス）
 
 - ルートに `LICENSE`（Apache-2.0）を追加；`README.md` と `package.json`（ルート・`packages/domain`・`apps/web`）に `Apache-2.0` を明記。Codex レビュー（README のライセンス表記と実体の不一致）への対応。
+- Python 側も `pyproject.toml` 4 件（ルート・`connectors`・`co-design`・`design-integration`）に `license = "Apache-2.0"` を追加。
 
 ## 2026-05-30（ドキュメント日本語化）
 
