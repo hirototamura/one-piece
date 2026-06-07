@@ -2,7 +2,6 @@
   "name": "one-piece",
   "private": true,
   "version": "0.0.0",
-  "license": "Apache-2.0",
   "description": "Systems engineering SaaS PoC for hardware (all team sizes; small teams first)",
   "workspaces": [
     "packages/*",

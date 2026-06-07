@@ -1,38 +1,34 @@
 # one-piece
 
-ハードウェア製品向けのシステムエンジニアリング SaaS の概念実証（PoC）—要件、アーキテクチャ、インターフェース、検証、エージェント支援ワークフロー。**あらゆる規模のチーム**を想定。ロードマップは**小規模チーム優先**で、規模に応じたタッチポイントを順次拡張する。
+Systems engineering SaaS proof of concept for hardware products—requirements, architecture, interfaces, verification, and agent-assisted workflows. Built for **teams of any size**; **small teams first** on the roadmap, with scale-specific touchpoints to follow.
 
-## エージェントオーケストレーションとドキュメント
+## Agent orchestration & docs
 
+| Path | Purpose |
+|------|---------|
+| [AGENT.md](./AGENT.md) | Multi-agent roles, workflows, human-in-the-loop gates |
+| [docs/](./docs/) | Living plan, information architecture, progress log |
 
-| パス                     | 目的                           |
-| ---------------------- | ---------------------------- |
-| [AGENT.md](./AGENT.md) | マルチエージェントの役割、ワークフロー、人間参加のゲート |
-| [docs/](./docs/)       | ライブな計画、情報アーキテクチャ、進捗ログ        |
+## Layout
 
+| Path | Purpose |
+|------|---------|
+| `packages/domain` | Shared domain model (requirements, system elements, traceability) |
+| `apps/web` | Web UI PoC — requirements tree, compliance matrix, review queue |
+| `.cursor/skills/` | Project skills for domain + human review workflows |
 
-## レイアウト
-
-
-| パス                | 目的                                       |
-| ----------------- | ---------------------------------------- |
-| `packages/domain` | 共有ドメインモデル（要件、システム要素、トレーサビリティ）            |
-| `apps/web`        | Web UI PoC — 要件ツリー、コンプライアンスマトリクス、レビューキュー |
-| `.cursor/skills/` | ドメインと人間レビュー向けのプロジェクトスキル                  |
-
-
-## 前提条件
+## Prerequisites
 
 - Node.js 20+
 
-## コマンド
+## Commands
 
 ```bash
 npm install
 npm run build -w @one-piece/domain
-npm run dev          # Web UI: http://localhost:5173
+npm run dev          # web UI at http://localhost:5173
 ```
 
-## ライセンス
+## License
 
-[Apache License 2.0](./LICENSE)
+Proprietary / TBD.

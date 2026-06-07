@@ -1,57 +1,58 @@
 ---
 name: systems-engineering-saas
 description: >-
-  one-piece ハードウェア向けシステムエンジニアリング SaaS の要件階層、AIV 計画、サブシステム設計パッケージ、
-  検証（分析／試験／検査）、検証プラットフォームニーズ、コンプライアンスマトリクスをモデル化する。
-  要件の展開、トレーサビリティ、V&V 計画、プラットフォーム仕様、packages/domain 型の拡張時に使う。
+  Models requirements hierarchies, AIV plans, subsystem design packages, verification
+  (analysis/test/inspection), verification platform needs, and compliance matrices for
+  the one-piece hardware systems-engineering SaaS. Use when elaborating requirements,
+  traceability, V&V plans, platform specifications, or extending packages/domain types.
 ---
 
-# システムエンジニアリング SaaS（one-piece）
+# Systems engineering SaaS (one-piece)
 
-## スコープ
+## Scope
 
-**要件 → 設計 → 検証 → 証拠**に触れるドメイン型、API、UX、エージェントプロンプトの作業に適用する。
+Apply when working on domain types, APIs, UX, or agent prompts that touch **requirements → design → verification → evidence**.
 
-## 要件レベル（上から下）
+## Requirement levels (top to bottom)
 
-1. **ミッション要件** — プログラムの意図
-2. **システム要件** — システム全体の振る舞いと制約；**AIV（Assembly and Integration Verification）** 計画を含む
-3. **運用要件** — 使用、展開、ロジスティクス、保守
-4. **サブシステム要件** — サブシステムごとの配分と制約
+1. **Mission requirements** — program intent  
+2. **System requirements** — whole-system behavior and constraints; include **AIV (Assembly and Integration Verification)** plan  
+3. **Operational requirements** — use, deployment, logistics, maintenance  
+4. **Subsystem requirements** — allocations and constraints per subsystem  
 
-**システム要件**は**運用要件**と**サブシステム要件**の**両方**を駆動する。暗黙の順序だけでなく、明示的なトレースリンクで分岐を表現する。
+**System requirements** drive **both** operational and subsystem requirements. Represent branching with explicit trace links, not implicit ordering alone.
 
-## 安定した意図 vs 派生トレード
+## Stable intent vs derived trades
 
-**ユーザ／ミッション／顧客向け**意図は端から端まで検証する。**派生**下位要件と仕様は、試験や分析がより良い配分を示せば変更してよい—常に**トレース可能な根拠**（決定、分析 ID、試験 ID、または免除）を付ける。[AGENT.md](../../AGENT.md) のエンジニアリング哲学を参照。
+Keep **user / mission / customer-facing** intent verified end-to-end. **Derived** lower-level reqs and specs may change when test or analysis informs better trades—always attach **traceable rationale** (decision, analysis ID, test ID, or waiver). See [AGENT.md](../../AGENT.md) engineering philosophy.
 
-## 試験の厳しさと統合
+## Test rigor and integration
 
-- **試験可能**な設計を優先；統合実行（例: HITL 様）は検証活動 + **検証プラットフォーム**アーティファクトにマップする。
-- 有用なら試験に**目的**を付与: development（マージンを学ぶ）→ qualification（有界最悪ケース）→ acceptance（仕上げ）— ライフサイクルに沿って形式性が上がる。
+- Prefer **testable** designs; integrated runs (e.g. HITL-style) map to verification activities + **verification platform** artifacts.  
+- Where useful, tag tests with **purpose**: development (learn margins) → qualification (bounded worst-case) → acceptance (workmanship)—formality ramps with lifecycle.
 
-## サブシステム要件の出力
+## Subsystem requirements outputs
 
-サブシステム要件は次に接続する:
+Subsystem requirements must connect to:
 
-- **サブシステム設計**（設計パッケージ + **分析結果**）
-- **サブシステム検証活動計画**（分析・試験・検査—各 **レポート** 付き）
-- **検証プラットフォーム要件**と**仕様**
+- **Subsystem design** (design packages + **analysis results**)  
+- **Subsystem verification activity plan** (analysis, test, inspection—each with **reports**)  
+- **Verification platform requirements** and **specifications**
 
-## 整合性
+## Consistency
 
-サブシステム設計は相互接続されている。実質的な編集の後:
+Subsystem designs are interconnected. After substantive edits:
 
-- **横方向**整合性（インターフェース、環境、共有仮定）
-- システム・ミッション要件への**上方**整合
+- Check **lateral** consistency (interfaces, environments, shared assumptions)  
+- Check **upward** alignment to system and mission requirements  
 
-## コンプライアンスマトリクス
+## Compliance matrix
 
-UX 目標: **Excel 並みにシンプル**。行 = 要件（または検証目的）；列 = 証拠；セル = ステータス + アーティファクトリビジョンへのリンク。正規化ストレージを優先し、マトリクスは**ビュー／エクスポート**とする。
+Target UX: **Excel-simple**. Rows = requirements (or verification objectives); columns = evidence; cells = status + link to artifact revision. Prefer normalized storage with matrix as a **view/export**.
 
-## 真実の源泉
+## Source of truth
 
-- オーケストレーション: [AGENT.md](../../AGENT.md)
-- ライブアーキテクチャ: [docs/INFORMATION_ARCHITECTURE.md](../../docs/INFORMATION_ARCHITECTURE.md)
+- Orchestration: [AGENT.md](../../AGENT.md)  
+- Living architecture: [docs/INFORMATION_ARCHITECTURE.md](../../docs/INFORMATION_ARCHITECTURE.md)  
 
-有意な変更の後は [docs/DEVELOPMENT_PROGRESS.md](../../docs/DEVELOPMENT_PROGRESS.md) に追記する。
+After meaningful changes, append [docs/DEVELOPMENT_PROGRESS.md](../../docs/DEVELOPMENT_PROGRESS.md).

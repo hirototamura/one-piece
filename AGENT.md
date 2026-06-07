@@ -1,159 +1,157 @@
-# エージェントオーケストレーション — one-piece
+# Agent orchestration — one-piece
 
-本ファイルは one-piece 上で動く AI エージェントの**管制塔**である。ハードウェア向けのシステムエンジニアリング SaaS で、**あらゆる規模のチーム**が要求・設計・検証・トレーサビリティを扱う。人間とエージェントの**ドメインの権威**は調節可能であり、人間が100％権威を持つときはエージェントは起草・相互チェック・アーティファクトの一貫性維持を担う。エージェントが100％権威を持つときは、全工程を人間の介入を省きエージェントに実行させ、圧倒的速度で仮説検証を繰り返す。
+This file is the **control tower** for AI agents working on one-piece: a systems-engineering SaaS for **teams of any size**—requirements, design, verification, and traceability for hardware. Humans remain the **domain authority**; agents draft, cross-check, and keep artifacts consistent.
 
-## 北極星（North star）
+## North star
 
-個人・スタートアップ・研究所・大規模プログラムなど、**革新的なハードウェアを開発するあらゆる規模**の開発者が、構造化された成果物・トレーサビリティ・扱いやすいコンプライアンスビューで、**本格的なシステムエンジニアリング**（ミッションから検証まで）を回せるようにする。**プラットフォームとの接点はチーム規模で異なる**（セルフサーブ vs ガバナンス重視のプログラム）。大組織向けの**タッチポイント**を増やしつつ、小規模向けの明快さは捨てない。
+Enable **every scale** of builder—individuals, startups, labs, and large programs—to run **serious systems engineering** (mission through verification) using structured artifacts, traceability, and compliance views that can stay as approachable as an Excel matrix. **How they meet the platform differs by team size** (self-serve vs. governance-heavy programs); the product should grow **touchpoints** for larger orgs without abandoning clarity for small ones.
 
-**Go-to-market:** まず**小規模チーム**に深さを届ける。大規模顧客のニーズに応じて協働・監査・エンタープライズワークフローを強化する。
+**Go-to-market:** ship depth with **small teams first**; then harden collaboration, audit, and enterprise workflows as larger customers need them.
 
-## チーム規模とタッチポイント
+## Team scale and touchpoints
 
+| Scale | Typical touchpoints (non-exhaustive) |
+|-------|--------------------------------------|
+| Small / solo | Fast capture, agent-assisted drafting, minimal ceremony, simple matrix exports |
+| Mid-size | Shared baselines, clearer roles, richer review queues |
+| Large / regulated | Strong audit trails, formal sign-off, supplier evidence packages, org-wide reporting |
 
-| 規模         | 典型的なタッチポイント（例示・非網羅）                         |
-| ---------- | ------------------------------------------- |
-| 小規模 / ソロ   | 高速キャプチャ、エージェント支援の起草、最小限の儀式、シンプルなマトリクスエクスポート |
-| 中規模        | 共有ベースライン、明確な役割、充実したレビューキュー                  |
-| 大規模 / 規制対象 | 強い監査証跡、正式なサインオフ、サプライヤー証拠パッケージ、組織横断レポート      |
+Same underlying artifact model; **different emphasis in UX, permissions, and integrations**—design so those layers can evolve without rewriting the core graph.
 
+## Engineering philosophy (informed practice)
 
-根底のアーティファクトモデルは同一。**UX・権限・連携の emphasis が異なる**—コアグラフを書き換えずにそれらの層が進化できるよう設計する。
+Ideas below are **adapted from common industry practice**, including the widely circulated 2012 SpaceX slide deck *System Engineering: A Traditional Discipline in a Non-traditional Organization* (often labeled a “systems engineering handbook”). one-piece is **vendor-neutral**; we take the patterns that transfer to SaaS, not any single company’s org chart.
 
-## エンジニアリング哲学（実践に基づく）
+1. **Premise** — Systems engineering exists to catch integration issues early, yet new systems always surprise you. The platform should support **learning from integration and test**, not only from upfront decomposition.
 
-以下は**一般的な業界実践**（2012 年 SpaceX スライド *System Engineering: A Traditional Discipline in a Non-traditional Organization* など、通称「システムエンジニアリングハンドブック」）を**適応**したもの。one-piece は**ベンダー中立**—特定企業の組織図ではなく SaaS に移植できるパターンを採用する。
+2. **Responsibility over checkbox process** — Process cannot replace engineering judgment. Prefer **visible traceability, reviews, and tools** over opaque rule walls.
 
-1. **前提** — システムエンジニアリングは統合問題の早期発見のためだが、新システムは常に驚きをもたらす。プラットフォームは事前分解だけでなく、**統合と試験からの学習**を支えるべきである。
-2. **チェックボックスより責任** — プロセスはエンジニアリング判断に代われない。**見えるトレーサビリティ・レビュー・ツール**を、不透明なルールの壁より優先する。
-3. **基盤の意図 vs 派生トレード** — **ミッション / 顧客 / ユーザーレベルの意図**は**追跡・検証**する。**派生**仕様と下位要求は設計中に**トレード・最適化**してよい。重要なトレードには必ず**監査証跡**（根拠・分析・決定・免除へのリンク）— 黙ってドリフトさせない。
-4. **反復と形式性** — 初期サイクルは速度と **build–test**（または分析）フィードバックの証拠を重視。アーティファクトがベースライン・量産に近づくほど**文書とゲートの重み**が増す。
-5. **飛ばすものを試験する（Test what you fly）** — **試験可能性**を設計に織り込む。統合検証（HW–SW、マルチサブシステム）とプログラムリスクに応じた**実サービス相当**条件を計画する。検証プラットフォーム要求はベンチだけでなく**実環境**と統合リグを反映する。
-6. **試験目的の分類** — 有用なら試験活動を分類（例: **development** — マージン探索・弱点発見；**qualification** — 有界環境・マージンでの性能実証；**acceptance** — 仕上げと再現性）。成熟に伴い形式性と反復期待が上がる。分析・検査を補完する。
-7. **ツールであり官僚制ではない** — 議論・統合状況・証拠は**現代的な協働ツール**（本プロダクト）に置く。「静的な管制盤ではなくネットワークのように振る舞うフォーラム」に近い—ベースラインの所有は依然として人間。
+3. **Stable intent vs derived trades** — Treat **mission / customer / user-level intent** as **tracked and verified**. **Derived** specifications and lower-level requirements may be **traded and optimized during design**; every material trade must leave an **audit trail** (link to rationale, analysis, decision, or waiver)—never silent drift.
 
-## リポジトリマップ
+4. **Iteration and formality** — Early cycles favor speed and evidence from **build–test** (or analysis) feedback; **documentation and gate weight increase** as artifacts move toward baseline and production-like maturity.
 
+5. **Test what you fly** — Design for **testability**; plan integrated verification (hardware–software, multi-subsystem) and **service-like** conditions where program risk warrants it. Verification platform requirements should reflect **real environments** and integration rigs, not only bench checks.
 
-| 領域           | パス                 | メモ                                 |
-| ------------ | ------------------ | ---------------------------------- |
-| ドメインタイプ（進化中） | `packages/domain/` | 要求・要素・トレース—情報モデルの成長に合わせて拡張         |
-| アプリ（将来）      | `apps/`            | API、Web UI、ワーカー                    |
-| 生きたプロダクト文書   | `docs/`            | 計画・情報アーキテクチャ・進捗ログ—**開発の進みに合わせて更新** |
-| プロジェクトスキル    | `.cursor/skills/`  | ドメインワークフローと人間レビューゲート               |
-| Cursor ルール   | `.cursor/rules/`   | エージェントがプロジェクト文脈を読むための短いポインタ        |
+6. **Test purpose taxonomy** — Where useful, classify test activities (e.g. **development** — explore margins / find weaknesses; **qualification** — demonstrate performance to bounded environments and margins; **acceptance** — workmanship and repeatability). Formality and repeat expectations can rise with maturity. This complements analysis and inspection.
 
+7. **Tools, not bureaucracy** — Discussion, integration status, and evidence should live in **modern collaborative tools** (this product), analogous to “forums that behave more like networks than static control boards”—still under human ownership of baselines.
 
-型や API に触れるときは、アプリ側で並行形状を作る前に `packages/domain` の拡張を優先する。
+## Repository map
 
-## コアアーティファクト型（SaaS スコープ）
+| Area | Path | Notes |
+|------|------|--------|
+| Domain types ( evolving ) | `packages/domain/` | Requirements, elements, traces—extend as the information model grows |
+| Apps (future) | `apps/` | API, web UI, workers |
+| Living product docs | `docs/` | Plan, information architecture, progress log—**update as development advances** |
+| Project skills | `.cursor/skills/` | Domain workflows and human-review gates |
+| Cursor rules | `.cursor/rules/` | Short pointers so agents load project context |
 
-プロダクトの中心となる**第一級アーティファクト**（各々バージョン管理・レビュー可能・必要に応じてベースライン化）:
+When touching types or APIs, prefer extending `packages/domain` before inventing parallel shapes in apps.
 
-1. **要求(Requirements)**（階層；`docs/INFORMATION_ARCHITECTURE.md` 参照）
-2. **仕様(Specifications)**（要求から派生／支援する規範的詳細）
-3. **検証計画(Verification plan)**（何をどのレベルで検証し、成功をどう判断するか）
-4. **検証テストケース(Verification test cases)**（検証の実行可能／観測可能なインスタンス）
-5. **検証プラットフォーム要求(Verification platform requirements)**（V&V 実行に必要な施設・設備・ソフトウェア・センサ）
-6. **設計文書(Design documents)**（サブシステム設計パッケージ、インターフェース、バジェット）
-7. **分析結果(Analysis results)**（設計と分析による検証を裏付けるレポート）
+## Core artifact types (SaaS scope)
 
-エージェントが**起草**し、人間がレビュー後に**ベースライン**する。
+The product centers on these **first-class artifacts** (each versioned, reviewable, baselined where appropriate):
 
-## 要求階層とトレース規則
+1. **Requirements** (hierarchical; see `docs/INFORMATION_ARCHITECTURE.md`)
+2. **Specifications** (normative detail derived from / supporting requirements)
+3. **Verification plan** (what will be verified, at which level, and how success is judged)
+4. **Verification test cases** (executable / observable instances of verification)
+5. **Verification platform requirements** (facilities, equipment, software, sensors needed to run V&V)
+6. **Design documents** (subsystem design packages, interfaces, budgets)
+7. **Analysis results** (reports backing design and verification-by-analysis)
 
-**上から下の順**（親が子を駆動）:
+Agents **draft** these; humans **baseline** them after review.
 
-1. **ミッション要求(Mission requirements)** — システムが存在する理由；企業／プログラムレベルの成功
-2. **システム要求(System requirements)** — システム全体が満たす／耐えること
-3. **運用要求(Operational requirements)** — 使用・展開・保守・運用のしかた
-4. **サブシステム要求(Subsystem requirements)** — サブシステムごとの配分と制約
+## Requirements hierarchy and trace rules
 
-**分岐（明示）:**
+**Order from top to bottom** (parent drives children):
 
-- **システム要求**には **Assembly and Integration Verification（AIV）** 計画を付ける（統合システムがシステム意図を満たすことを示す方法）。
-- **システム要求**は**運用要求**と**サブシステム要求**の**両方**を駆動する（表の「次の行」だけではない—トレースリンクでグラフを明示する）。
+1. **Mission requirements** — why the system exists; success at the enterprise / program level  
+2. **System requirements** — what the system must do / endure as a whole  
+3. **Operational requirements** — how the system is used, deployed, maintained, and operated  
+4. **Subsystem requirements** — bounded allocations and constraints per subsystem  
 
-**サブシステム要求**が駆動するもの:
+**Branching (explicit):**
 
-- サブシステム**設計**（設計パッケージ + 分析）
-- サブシステム**検証活動計画**（分析・試験・検査）
-- **検証プラットフォーム要求**と**仕様**（その計画を実行するために存在すべきもの）
+- **System requirements** carry an **Assembly and Integration Verification (AIV)** plan (how the integrated system is shown to meet system intent).  
+- **System requirements** drive **both** **operational requirements** and **subsystem requirements** (not only a single “next row” in a table—use trace links to make the graph explicit).
 
-親→子の関係はすべて**トレース可能**（`packages/domain` で適切に `derives_from` / `satisfies`）。
+**Subsystem requirements** drive:
 
-## 設計の一貫性と人間の判断
+- Subsystem **design** (design packages + analysis)  
+- Subsystem **verification activity plan** (analysis, test, inspection)  
+- **Verification platform requirements** and **specifications** (what must exist to execute that plan)
 
-サブシステム設計は**密結合**である。エージェントは次を行う:
+Every parent→child relationship should be **traceable** (`derives_from` / `satisfies` as appropriate in `packages/domain`).
 
-- **サブシステム横断の整合性チェック**（インターフェース、バジェット、共有環境、タイミング、安全、EMC 仮定など）
-- システム・ミッション要求への**上方整合**
+## Design consistency and human judgment
 
-**重要:** エージェントに対しドメイン専門家を**必ず優先する**。設計判断と分析の信頼性は **Human engineering judgment**（スキル `human-design-review`）へ。プロダクトは人間が受理／却下するための**レビュータスク**・**仮定**・**残存リスク**を surface する。エージェント100%駆動においてはドメインエージェントを準備して仮想的にドメイン専門家の穴埋めをする。
+Subsystem designs are **tightly coupled**. Agents must:
 
-## 検証とコンプライアンス
+- Run **cross-subsystem consistency checks** (interfaces, budgets, shared environments, timing, safety, EMC assumptions, etc.)  
+- Check **upward alignment** to system and mission requirements  
 
-サブシステム検証活動には**分析**・**試験**・**検査**がある。各活動は**レポート**アーティファクトを生む。試験には任意で**目的**（development / qualification / acceptance）を付け、ライフサイクルに沿って厳しさを段階化。統合的な実行は検証活動 + **検証プラットフォーム**仕様でモデル化する。
+**Critical:** Agents do **not** replace domain experts. For design decisions and analysis credibility, route through **Human engineering judgment** (see skill `human-design-review`). The product should surface **review tasks**, **assumptions**, and **residual risks** for humans to accept or reject.
 
-**コンプライアンスチェック**は**マトリクス**としてモデル化: 行 = 要求（または検証目的）、列 = 証拠（テストケース、分析 ID、検査記録）、セル = ステータス（planned / passed / failed / waived 等）+ アーティファクトへのリンク。UX 目標: **Excel 並みにシンプル**；データモデルは下で正規化可能。
+## Verification and compliance
 
-## エージェント役割（サブエージェント／責務分割）
+Subsystem verification activities include **analysis**, **test**, and **inspection**. Each activity produces a **report** artifact. Tests may optionally carry a **purpose** (development / qualification / acceptance) to match how rigor ramps with lifecycle; integrated **HITL**-style runs are modeled via verification activities plus **verification platform** specs.
 
-サブエージェントや並列タスク起動時にこれらの役割を使う。1 つの「オーケストレータ」会話は**薄い垂直スライス**（例:「検証プラットフォーム向けにドメイン型を拡張」+「ドキュメント更新」）で割り当て、巨大な一括投下は避ける。
+**Compliance checks** are modeled as a **matrix**: rows = requirements (or verification objectives), columns = evidence (test case, analysis ID, inspection record), cells = status (e.g. planned / passed / failed / waived) + link to artifact. The UX target: **Excel-simple**; the data model can be normalized underneath.
 
+## Agent roles (subagent / responsibility split)
 
-| 役割                                | 責務                                                              |
-| --------------------------------- | --------------------------------------------------------------- |
-| **Orchestrator** | スライス分解、トレース規則の強制、`docs/DEVELOPMENT_PROGRESS.md` 更新、エージェント間の衝突解消；有界な `CoDesignRun` ループを AI-100 モードで実行し derived/standard ティアを探索可能 |
-| **Requirements agent** | ミッション→システム→運用→サブシステムの流れ；システムレベルの AIV 計画；トレースグラフの健全性 |
-| **Architecture / ICD agent** | システム要素、インターフェース、設計パッケージ；サブシステム横断の整合性 |
-| **Verification agent** | 計画、テストケース、プラットフォームニーズ、証拠マトリクス、レポートテンプレート；co-design ループでは分析結果を読みクロージャを更新（人間の認定は主張しない） |
-| **Domain model agent** | TypeScript ドメイン型、不変条件、ドメインパッケージの移行メモ |
-| **Human gatekeeper** | LLM ではない—人間サインオフが要る停止点のチェックリスト（設計ベースライン、免除権限） |
-| **Subsystem domain expert agent** | Human gatekeeper を補うサブシステム分野の専門家エージェント（設計ベースライン、免除権限） |
+Use these roles when spawning subagents or parallel tasks. One “orchestrator” conversation should assign work in **thin vertical slices** (e.g. “extend domain types for verification platform” + “update docs”) rather than monolithic dumps.
 
-**ハンドオフ契約**（各スライスの終わりに）:
+| Role | Responsibility |
+|------|----------------|
+| **Orchestrator** | Breaks work into slices, enforces traceability rules, updates `docs/DEVELOPMENT_PROGRESS.md`, resolves conflicts between agents, and may run bounded `CoDesignRun` loops in AI-100 mode for derived/standard-tier exploration |
+| **Requirements agent** | Mission→system→operational→subsystem flow; AIV plan content at system level; trace graph health |
+| **Architecture / ICD agent** | System elements, interfaces, design packages; consistency checks across subsystems |
+| **Verification agent** | Plans, test cases, platform needs, evidence matrix, report templates; in co-design loops, reads analysis results and updates closure status without claiming human certification |
+| **Domain model agent** | TypeScript domain types, invariants, migration notes in domain package |
+| **Human gatekeeper** | Not an LLM—checklist for when to stop and require human sign-off (design baselines, waiver authority) |
 
-- 変更内容（ファイル + 意図）
-- トレース影響（新規／更新リンク）
-- 人間レビュー向けの未解決リスク・仮定
-- 次のスライスの提案
+**Handoff contract** (every slice should end with):
 
-## ワークフロー（ハッピーパス）
+- What changed (files + intent)  
+- Trace impact (new or updated links)  
+- Open risks / assumptions for human review  
+- Suggested next slice  
 
-1. 明示的な親子トレースで**要件をトップダウン**に展開する。
-2. システムレベルに **AIV** を付与；運用・サブシステムの両セットがシステムにトレースすることを確認する。
-3. 各サブシステム: 設計パッケージ + 検証活動計画 + プラットフォームニーズ。
-4. サブシステム横断とシステム／ミッションへの**整合性パス**を実行する。
-5. **短いループのフィードバック** — 反復が安いところでは development 試験と分析で派生仕様とトレードを更新；トレース差分を記録する。
-6. 安価で有界な設計トレードでは、オーケストレータが**自律 co-design** モードに入れる: AI が許可された derived/standard ノードを変更し、`logic_automation` が分析を実行し、各反復で来歴と証拠リンクを記録する。
-7. トレース + 検証状態から**コンプライアンスマトリクス**を生成／更新する。
-8. 設計ベースラインと「検証済み」主張の前に**人間レビュー**（必要に応じてドメインエキスパートエージェントと併用）。
+## Workflows (happy path)
 
-**自律 co-design の注意:** 高速ループは探索中の反復についてレビューキューをバイパスし得るが、リリース済みベースライン、免除、外部向け「検証済み」表明の**人間ゲートキーパーには代わらない**。
+1. **Elaborate requirements top-down** with explicit parent/child traces.  
+2. Attach **AIV** at system level; ensure operational and subsystem sets both trace to system.  
+3. For each subsystem: design package + verification activity plan + platform needs.  
+4. Run **consistency pass** across subsystems and upward to system/mission.  
+5. **Short-loop feedback** — where iteration is cheap, use development tests and analysis to update derived specs and trades; record trace deltas.  
+6. For cheap, bounded design trades, the orchestrator may enter **autonomous co-design** mode: AI mutates allowed derived/standard nodes, `logic_automation` executes analysis, and each iteration records provenance plus evidence links.  
+7. Generate / update **compliance matrix** from traces + verification state.  
+8. **Human review** at design baselines and before “verified” claims.
 
-## ドキュメント義務
+**Autonomous co-design caveat:** a fast loop can bypass the review queue for active exploratory iterations, but it does **not** replace the human gatekeeper for released baselines, waived checks, or external “verified” statements.
 
-有意な作業を完了したエージェントは次を行う:
+## Documentation duty
 
-- `docs/DEVELOPMENT_PROGRESS.md` に短いエントリを追記（日付、要約、PR／コミットへのリンクがあれば）
-- 情報モデルやワークフローが変わったら、可能なら同一変更セットで `docs/INFORMATION_ARCHITECTURE.md` または `docs/PROJECT_PLAN.md` を更新する
+Any agent completing meaningful work must:
 
-## 読み込むスキル
+- Append a short entry to `docs/DEVELOPMENT_PROGRESS.md` (date, summary, links to PRs/commits if applicable)  
+- If the information model or workflows shift, update `docs/INFORMATION_ARCHITECTURE.md` or `docs/PROJECT_PLAN.md` in the same change set when practical  
 
+## Skills to load
 
-| 状況                             | スキル                                                |
-| ------------------------------ | -------------------------------------------------- |
-| 要求・V&V・プラットフォームニーズ・マトリクスのモデリング | `.cursor/skills/systems-engineering-saas/SKILL.md` |
-| 設計ベースライン、専門家判断、分析の信頼性          | `.cursor/skills/human-design-review/SKILL.md`      |
+| Situation | Skill |
+|-----------|--------|
+| Modeling requirements, V&V, platform needs, matrices | `.cursor/skills/systems-engineering-saas/SKILL.md` |
+| Design baseline, expert judgment, credibility of analysis | `.cursor/skills/human-design-review/SKILL.md` |
 
+## Glossary (quick)
 
-## 用語（クイック）
-
-- **AIV** — Assembly and Integration Verification（システムレベルの統合実証）
-- **Design package** — サブシステム設計記述 + 裏付け分析結果
-- **Compliance matrix** — 要求 ↔ 証拠のグリッドとシンプルなステータス
+- **AIV** — Assembly and Integration Verification (system-level integrated proof)  
+- **Design package** — Subsystem design description + supporting analysis results  
+- **Compliance matrix** — Requirement ↔ evidence grid with simple statuses  
 
 ---
 
-*バージョン: 0.2 — `docs/PROJECT_PLAN.md`（外部の影響）、`docs/INFORMATION_ARCHITECTURE.md` を参照。*
+*Version: 0.2 — see `docs/PROJECT_PLAN.md` (external influences) and `docs/INFORMATION_ARCHITECTURE.md`.*
