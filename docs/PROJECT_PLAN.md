@@ -1,65 +1,65 @@
-# Project plan — one-piece
+# プロジェクト計画 — one-piece
 
-Living document. **Revise after** each milestone or major scope decision.
+ライブ文書。**マイルストーンまたは大きなスコープ判断のたびに改訂**する。
 
-## Vision
+## ビジョン
 
-Deliver a product that **accelerates hardware engineering** for **teams of any size**—from individuals and startups through large programs—through disciplined systems engineering: structured requirements, traceable design, credible verification, and compliance views that stay as approachable as a spreadsheet where that helps.
+**あらゆる規模のチーム**—個人・スタートアップから大規模プログラムまで—の**ハードウェアエンジニアリングを加速**するプロダクトを届ける。規律あるシステムエンジニアリングで: 構造化要件、トレース可能な設計、信頼できる検証、必要なところではスプレッドシート並みに扱いやすいコンプライアンスビュー。
 
-## Principles
+## 原則
 
-Hardware systems engineering principles that one-piece is built to reinforce:
+one-piece が強化するハードウェア SE の原則:
 
-1. **Traceability and records first** — Traceability and a durable record of what mattered (decisions, requirements, evidence, waivers) are the foundation for everything else. If it isn’t linked and recorded, it didn’t happen.
+1. **トレーサビリティと記録を最優先** — トレーサビリティと、重要だったこと（決定、要件、証拠、免除）の永続的記録が他すべての基盤。リンクも記録もなければ、起きていない。
 
-2. **Iteration dwarfs perfection** — Learn fast from build, test, and integration; refine derived design and lower-level requirements with evidence. Mission and customer intent stay explicit; formality ramps as baselines mature.
+2. **完璧より反復** — build・試験・統合から速く学ぶ；証拠で派生設計と下位要件を洗練する。ミッションと顧客意図は明示のまま；ベースラインが成熟するほど形式性が上がる。
 
-3. **Make requirements less dumb** — Requirements should be clear, testable, and worth verifying—not placeholders or process theater. The product (and agents) should push clarity, challenge ambiguity, and keep intent tied to real verification.
+3. **要件をより賢く** — 要件は明確で検証可能で、検証する価値があること—プレースホルダーやプロセス劇場ではない。プロダクト（とエージェント）は明確化を促し、曖昧さに挑戦し、意図を実検証に結びつける。
 
-4. **Cross-functional, multidisciplinary design** — Interfaces, budgets, and integration risks are first-class across mechanical, electrical, thermal, software, operations, and test—not siloed subsystems reconciled at the end.
+4. **横断的・学際的設計** — インターフェース、バジェット、統合リスクは機械・電気・熱・ソフトウェア・運用・試験で第一級—最後にサイロで突き合わせない。
 
-5. **Test early; automate tests** — Plan verification from the start; run development tests early and often. Prefer repeatable, automated checks where they buy signal; reserve human judgment for baselines, anomalies, and pass/waive.
+5. **早期試験；試験の自動化** — 最初から検証を計画；development 試験を早く頻繁に。シグナルが得られるところでは反復可能な自動チェックを優先；ベースライン、異常、pass/waive は人間の判断に残す。
 
-**How we build the product (delivery):** experts **baseline** what agents draft; the **same core graph** serves solo builders and large programs (**touchpoints differ by team size**—**small teams first** on the roadmap); compliance matrices and supplier packages are **projections** of normalized traces, not a parallel truth; prefer **tools and visible evidence** over heavyweight implicit process.
+**プロダクトの作り方（デリバリー）:** 専門家がエージェントの起草を**ベースライン**化；**同一のコアグラフ**がソロビルダーと大規模プログラムの両方に効く（**タッチポイントはチーム規模で異なる**—ロードマップは**小規模チーム優先**）；コンプライアンスマトリクスとサプライヤーパッケージは正規化トレースの**投影**であり、並行の真実ではない；重い暗黙プロセスより**ツールと見える証拠**を優先する。
 
-## External influences
+## 外部の影響
 
-Industry narratives on **fast hardware iteration with serious V&V** help shape our principles—for example the 2012 SpaceX slide deck *System Engineering: A Traditional Discipline in a Non-traditional Organization* (themes: integration risk is partly experiential; **test what you fly**; **user-level requirements** verified while **lower tiers trade** with test feedback; **development vs qualification vs acceptance** test roles; **tools not rules**). We **do not** copy a specific org structure; we encode patterns that any customer can adopt.
+**速いハードウェア反復と本格的な V&V** に関する業界ナラティブが原則を形作る—例: 2012 年 SpaceX スライド *System Engineering: A Traditional Discipline in a Non-traditional Organization*（統合リスクは経験的な側面がある；**飛ばすものを試験**；**ユーザーレベル要件**は検証し**下位は試験フィードバックでトレード**；development / qualification / acceptance の役割；**ルールよりツール**）。特定組織構造は**コピーしない**；どの顧客も採用できるパターンをエンコードする。
 
-## Phases (suggested)
+## フェーズ（案）
 
-| Phase | Outcome | Notes |
+| フェーズ | 成果 | メモ |
 |-------|---------|--------|
-| **P0 — Domain kernel** | Richer `packages/domain` model: requirement levels, artifact stubs, trace relations | Aligns with `docs/INFORMATION_ARCHITECTURE.md` |
-| **P1 — Vertical slice API** | CRUD + trace queries for one program; compliance matrix endpoint or export | Pick one persistence store; keep migrations explicit |
-| **P2 — Web UI** | Requirements tree, trace explorer, matrix view, review queue | Human-gate UX for baselines |
-| **P3 — Agent hooks** | Server-side or worker flows that draft deltas from natural language, always diff-reviewed | Tie to `AGENT.md` handoff contract |
-| **P4 — Collaboration** | Organizations, roles, audit log, baseline snapshots | Small teams first; then mid/large programs and formal governance |
+| **P0 — ドメインカーネル** | より豊かな `packages/domain`：要件レベル、アーティファクトスタブ、トレース関係 | `docs/INFORMATION_ARCHITECTURE.md` と整合 |
+| **P1 — 垂直スライス API** | 1 プログラムの CRUD + トレースクエリ；コンプライアンスマトリクス API またはエクスポート | 永続化を 1 つ選び；マイグレーションを明示 |
+| **P2 — Web UI** | 要件ツリー、トレースエクスプローラ、マトリクスビュー、レビューキュー | ベースライン向け人間ゲート UX |
+| **P3 — エージェントフック** | 自然言語から差分を起草するサーバー／ワーカー、常に diff レビュー | `AGENT.md` ハンドオフ契約に結びつける |
+| **P4 — 協働** | 組織、役割、監査ログ、ベースラインスナップショット | 小規模優先；その後中・大規模と正式ガバナンス |
 
-Phases are **sequential in dependency** but can overlap in staffing (e.g. UI mockups during P1).
+フェーズは**依存関係上は順次**だが、人員は重ねられる（例: P1 中に UI モック）。
 
-## Near-term backlog (starter)
+## 近期待ちバックログ（スターター）
 
-- [ ] Extend domain model: requirement level, lifecycle, AIV artifact attachment to system level  
-- [ ] Define verification activity types (analysis / test / inspection) + report references; optional **test purpose** (development / qualification / acceptance) for lifecycle ramp  
-- [ ] Sketch compliance matrix query (rows/columns/status) against normalized traces  
-- [ ] Add persistence PoC (SQLite or Postgres) behind a thin repository layer  
-- [ ] Document human review states (draft → under_review → baseline) in UI/API terms  
+- [ ] ドメインモデル拡張: 要件レベル、ライフサイクル、システムレベルへの AIV アーティファクト添付
+- [ ] 検証活動型の定義（分析 / 試験 / 検査）+ レポート参照；任意の**試験目的**（development / qualification / acceptance）でライフサイクル段階化
+- [ ] 正規化トレースに対するコンプライアンスマトリクスクエリのスケッチ（行／列／ステータス）
+- [ ] 薄いリポジトリ層の背後に永続化 PoC（SQLite または Postgres）
+- [ ] 人間レビュー状態（draft → under_review → baseline）を UI/API 用語で文書化
 
-## Risks
+## リスク
 
-| Risk | Mitigation |
+| リスク | 緩和 |
 |------|------------|
-| Model too rigid for diverse industries | Start with configurable **kinds** and optional attributes; avoid hard-coded physics |
-| Agents over-claim verification | Separate “draft” vs “baselined” evidence; human sign-off on pass/waive |
-| Matrix UX too simple for power users | Offer filters, saved views, CSV/Excel export |
+| 多様な産業に対してモデルが硬すぎる | 設定可能な**種別**と任意属性から開始；物理をハードコードしない |
+| エージェントが検証を過大主張 | 「起草」と「ベースライン済み証拠」を分離；pass/waive は人間サインオフ |
+| マトリクス UX がパワーユーザーには単純すぎる | フィルタ、保存ビュー、CSV/Excel エクスポート |
 
-## Success metrics (early)
+## 成功指標（初期）
 
-- Time from blank project to **traceable system + subsystem requirement set** (self-serve)  
-- % requirements with **at least one** planned verification path before baseline  
-- Human **time to review** a design package (should drop with consistency pre-checks)  
+- 空プロジェクトから**トレース可能なシステム + サブシステム要件セット**までの時間（セルフサーブ）
+- ベースライン前に**少なくとも 1 つ**の検証経路が計画されている要件の割合
+- 設計パッケージの人間**レビュー時間**（整合性の事前チェックで短縮すべき）
 
 ---
 
-*Last updated: 2026-05-19 — hardware SE principles (traceability, iteration, smart requirements, cross-discipline, test early).*
+*最終更新: 2026-05-19 — ハードウェア SE 原則（トレーサビリティ、反復、賢い要件、学際、早期試験）。*

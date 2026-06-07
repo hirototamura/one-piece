@@ -1,6 +1,6 @@
-# Design integration
+# 設計連携（design-integration）
 
-Excel ↔ Python SSOT bindings and logic-automation runner. AI agents do not execute here.
+Excel ↔ Python の SSOT バインディングとロジック自動化ランナー。AI エージェントはここでは実行しない。
 
 ```bash
 cd packages/design-integration

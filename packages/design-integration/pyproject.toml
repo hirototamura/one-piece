@@ -2,6 +2,7 @@
 name = "one-piece-design-integration"
 version = "0.1.0"
 description = "Excel ↔ Python SSOT bindings and logic-automation runner for one-piece"
+license = "Apache-2.0"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
