@@ -35,4 +35,4 @@ npm run dev          # Web UI: http://localhost:5173
 
 ## ライセンス
 
-MIT License
+[Apache License 2.0](./LICENSE)

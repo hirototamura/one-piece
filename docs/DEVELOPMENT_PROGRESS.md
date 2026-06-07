@@ -2,6 +2,10 @@
 
 **新しいエントリを上に追記**する。各エントリは数文に留め、コミットや PR があればリンクする。
 
+## 2026-06-07（Apache-2.0 ライセンス）
+
+- ルートに `LICENSE`（Apache-2.0）を追加；`README.md` と `package.json`（ルート・`packages/domain`・`apps/web`）に `Apache-2.0` を明記。Codex レビュー（README のライセンス表記と実体の不一致）への対応。
+
 ## 2026-05-30（ドキュメント日本語化）
 
 - 日本人チーム向けにリポジトリ内の Markdown（`README.md`、`AGENT.md`、`docs/*`、`.cursor/skills/*`、`packages/design-integration/README.md`）を日本語化。コード識別子・CLI・パスは原文維持。
