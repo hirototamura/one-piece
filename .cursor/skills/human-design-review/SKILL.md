@@ -40,5 +40,5 @@ UI/API パターンを優先: レビューキュー、将来の電子署名、�
 
 ## 参照
 
-- [AGENT.md](../../AGENT.md) — オーケストレーションと役割
-- [docs/INFORMATION_ARCHITECTURE.md](../../docs/INFORMATION_ARCHITECTURE.md) — アーティファクトグラフ
+- [ja/AGENT.md](../../ja/AGENT.md) — オーケストレーションと役割
+- [docs/ja/INFORMATION_ARCHITECTURE.md](../../docs/ja/INFORMATION_ARCHITECTURE.md) — アーティファクトグラフ

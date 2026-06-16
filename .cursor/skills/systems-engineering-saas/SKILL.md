@@ -23,7 +23,7 @@ description: >-
 
 ## 安定した意図 vs 派生トレード
 
-**ユーザ／ミッション／顧客向け**意図は端から端まで検証する。**派生**下位要求と仕様は、試験や分析がより良い配分を示せば変更してよい—常に**トレース可能な根拠**（決定、分析 ID、試験 ID、または免除）を付ける。[AGENT.md](../../AGENT.md) のエンジニアリング哲学を参照。
+**ユーザ／ミッション／顧客向け**意図は端から端まで検証する。**派生**下位要求と仕様は、試験や分析がより良い配分を示せば変更してよい—常に**トレース可能な根拠**（決定、分析 ID、試験 ID、または免除）を付ける。[ja/AGENT.md](../../ja/AGENT.md) のエンジニアリング哲学を参照。
 
 ## 試験の厳しさと統合
 
@@ -51,7 +51,7 @@ UX 目標: **Excel 並みにシンプル**。行 = 要求（または検証目�
 
 ## 真実の源泉
 
-- オーケストレーション: [AGENT.md](../../AGENT.md)
-- ライブアーキテクチャ: [docs/INFORMATION_ARCHITECTURE.md](../../docs/INFORMATION_ARCHITECTURE.md)
+- オーケストレーション: [ja/AGENT.md](../../ja/AGENT.md)
+- ライブアーキテクチャ: [docs/ja/INFORMATION_ARCHITECTURE.md](../../docs/ja/INFORMATION_ARCHITECTURE.md)
 
-有意な変更の後は [docs/DEVELOPMENT_PROGRESS.md](../../docs/DEVELOPMENT_PROGRESS.md) に追記する。
+有意な変更の後は [docs/ja/DEVELOPMENT_PROGRESS.md](../../docs/ja/DEVELOPMENT_PROGRESS.md) に追記する。
