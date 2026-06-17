@@ -1,8 +1,8 @@
-# one-piece — Hardware systems-engineering SaaS
+# one-piece — Hardware AI systems engineering
 
-A proof-of-concept (PoC) SaaS that manages hardware product **requirements, design, interfaces, and verification** in **one traceable graph** from mission through verification. Targets **teams of any size**, with the roadmap prioritizing **small teams first** and spreadsheet-simple compliance views.
+A proof-of-concept (PoC) for **AI Systems Engineering as a Service (SEaaS)** that manages hardware product **requirements, design, and verification** in **one traceable graph** from mission through verification. Targets **teams of any size**, with the roadmap prioritizing **small teams first** and spreadsheet-simple compliance views.
 
-Human engineers own **baselines and judgment**; AI agents assist with drafting, cross-checks, and consistency. This repository is **not production SaaS**—it is a **research and development monorepo** combining the domain model, Web UI PoC, Python integration packages, and agent operating rules.
+In early stages, human engineers own **baselines and judgment**; AI agents assist with drafting, cross-checks, and consistency. This repository is **not production SEaaS**—it is a **research and development monorepo** combining the domain model, Web UI PoC, Python integration packages, and agent operating rules.
 
 ---
 
@@ -66,13 +66,13 @@ one-piece makes this loop reproducible in **SaaS data model and UI**, with agent
 **Design principles (excerpt)**
 
 
-| Principle | Meaning |
-| --------- | ------- |
-| Traceability and records first | Without links and records, it did not happen |
-| Iteration over perfection | Mission intent stays fixed; derived specs update with evidence |
-| Smarter requirements | Reduce ambiguity; write verifiable statements |
-| Cross-disciplinary design | Mechanical, electrical, thermal, software, ops, test in one graph |
-| Test early; automate | Run development tests early; humans focus on baselines and anomalies |
+| Principle                      | Meaning                                                              |
+| ------------------------------ | -------------------------------------------------------------------- |
+| Traceability and records first | Without links and records, it did not happen                         |
+| Iteration over perfection      | Mission intent stays fixed; derived specs update with evidence       |
+| Smarter requirements           | Reduce ambiguity; write verifiable statements                        |
+| Cross-disciplinary design      | Mechanical, electrical, thermal, software, ops, test in one graph    |
+| Test early; automate           | Run development tests early; humans focus on baselines and anomalies |
 
 
 See [docs/en/PROJECT_PLAN.md](../docs/en/PROJECT_PLAN.md) and [en/AGENT.md](./AGENT.md) for details.
@@ -82,19 +82,19 @@ See [docs/en/PROJECT_PLAN.md](../docs/en/PROJECT_PLAN.md) and [en/AGENT.md](./AG
 ## Core concepts (glossary)
 
 
-| Term | Description |
-| ---- | ----------- |
-| **SSOT** | Per-program normalized graph (DB is authority); matrices and trees are projections |
-| **Program** | Engineering context for one product/program (configurations V1/V2, etc.) |
-| **Requirement level** | `mission` / `system` / `operational` / `subsystem` |
-| **AIV** | Assembly and Integration Verification — system-level integration verification plan |
-| **ICD** | Interface Control Document — agreed subsystem interface |
-| **Design package** | Subsystem design description + supporting analysis |
-| **Verification activity** | Analysis, test, or inspection (linked to reports and evidence) |
-| **Compliance matrix** | Requirements ↔ evidence grid (simple status + artifact refs) |
-| **AgentScopePolicy** | Caps on node kinds and criticality AI may change (`autonomousCoDesign` allows 100% in PoC) |
-| **CoDesignRun** | Goal-driven autonomous design loop (iterations, metrics, convergence) |
-| **Logic automation** | Deterministic sync without LLM (Excel sync, CI tests, connector webhooks) |
+| Term                      | Description                                                                                |
+| ------------------------- | ------------------------------------------------------------------------------------------ |
+| **SSOT**                  | Per-program normalized graph (DB is authority); matrices and trees are projections         |
+| **Program**               | Engineering context for one product/program (configurations V1/V2, etc.)                   |
+| **Requirement level**     | `mission` / `system` / `operational` / `subsystem`                                         |
+| **AIV**                   | Assembly and Integration Verification — system-level integration verification plan         |
+| **ICD**                   | Interface Control Document — agreed subsystem interface                                    |
+| **Design package**        | Subsystem design description + supporting analysis                                         |
+| **Verification activity** | Analysis, test, or inspection (linked to reports and evidence)                             |
+| **Compliance matrix**     | Requirements ↔ evidence grid (simple status + artifact refs)                               |
+| **AgentScopePolicy**      | Caps on node kinds and criticality AI may change (`autonomousCoDesign` allows 100% in PoC) |
+| **CoDesignRun**           | Goal-driven autonomous design loop (iterations, metrics, convergence)                      |
+| **Logic automation**      | Deterministic sync without LLM (Excel sync, CI tests, connector webhooks)                  |
 
 
 **Stable intent vs derived trades**
@@ -121,11 +121,11 @@ See [docs/en/PROJECT_PLAN.md](../docs/en/PROJECT_PLAN.md) and [en/AGENT.md](./AG
 ### Three SSOT mutation actors
 
 
-| Actor | Role | Examples |
-| ----- | ---- | -------- |
-| **Human engineer** | Baselines, major judgment, real-world interface | Requirement edits, waiver approval |
-| **Logic automation** | Reproducible, deterministic | `one-piece-sync`, test runners, SSOS ingestion |
-| **AI agent** | Drafts within policy (default ~20%) | Requirement text, parameter proposals, co-design iterations |
+| Actor                | Role                                            | Examples                                                    |
+| -------------------- | ----------------------------------------------- | ----------------------------------------------------------- |
+| **Human engineer**   | Baselines, major judgment, real-world interface | Requirement edits, waiver approval                          |
+| **Logic automation** | Reproducible, deterministic                     | `one-piece-sync`, test runners, SSOS ingestion              |
+| **AI agent**         | Drafts within policy (default ~20%)             | Requirement text, parameter proposals, co-design iterations |
 
 
 ---
@@ -146,14 +146,14 @@ See [docs/en/PROJECT_PLAN.md](../docs/en/PROJECT_PLAN.md) and [en/AGENT.md](./AG
 ```
 
 
-| Area | Status | Reference |
-| ---- | ------ | --------- |
-| Domain kernel (`packages/domain`) | **Available** | [docs/en/INFORMATION_ARCHITECTURE.md](../docs/en/INFORMATION_ARCHITECTURE.md) |
-| Web UI PoC (`apps/web`) | **Available** (in-memory demo) | This README [Web UI](#at-a-glance-web-ui) |
-| Excel/Python integration | **Available** (PoC) | [packages/design-integration/README.md](../packages/design-integration/README.md) |
-| Autonomous co-design loop | **Available** (PoC) | [packages/co-design/README.md](../packages/co-design/README.md) |
-| SSOS reverse ingestion | **Stub / CLI** | [packages/connectors/README.md](../packages/connectors/README.md) |
-| Production API, persistent DB, multi-tenant | **Not implemented** | [docs/en/PROJECT_PLAN.md](../docs/en/PROJECT_PLAN.md) |
+| Area                                        | Status                         | Reference                                                                         |
+| ------------------------------------------- | ------------------------------ | --------------------------------------------------------------------------------- |
+| Domain kernel (`packages/domain`)           | **Available**                  | [docs/en/INFORMATION_ARCHITECTURE.md](../docs/en/INFORMATION_ARCHITECTURE.md)     |
+| Web UI PoC (`apps/web`)                     | **Available** (in-memory demo) | This README [Web UI](#at-a-glance-web-ui)                                         |
+| Excel/Python integration                    | **Available** (PoC)            | [packages/design-integration/README.md](../packages/design-integration/README.md) |
+| Autonomous co-design loop                   | **Available** (PoC)            | [packages/co-design/README.md](../packages/co-design/README.md)                   |
+| SSOS reverse ingestion                      | **Stub / CLI**                 | [packages/connectors/README.md](../packages/connectors/README.md)                 |
+| Production API, persistent DB, multi-tenant | **Not implemented**            | [docs/en/PROJECT_PLAN.md](../docs/en/PROJECT_PLAN.md)                             |
 
 
 [engineering_agents](https://github.com/hirototamura/engineering_agents) simulates operational anomalies → team decisions → permanent design proposals and is intended to export **design proposal provenance** in one-piece format (see `docs/one-piece-integration.md` in that repo).
@@ -163,23 +163,23 @@ See [docs/en/PROJECT_PLAN.md](../docs/en/PROJECT_PLAN.md) and [en/AGENT.md](./AG
 ## Documentation
 
 
-| Document | Audience | Contents |
-| -------- | -------- | -------- |
-| [en/AGENT.md](./AGENT.md) | Agents, contributors | Roles, workflows, human gates, documentation duty |
-| [docs/en/PROJECT_PLAN.md](../docs/en/PROJECT_PLAN.md) | Product, engineering | Phases, backlog, risks, success metrics |
-| [docs/en/INFORMATION_ARCHITECTURE.md](../docs/en/INFORMATION_ARCHITECTURE.md) | Modelers, architects | SSOT, artifacts, trace, matrix, co-design |
-| [docs/en/DEVELOPMENT_PROGRESS.md](../docs/en/DEVELOPMENT_PROGRESS.md) | Everyone | Chronological change log |
-| [docs/en/README.md](../docs/en/README.md) | Everyone | Index of the above |
-| [ja/README.md](../ja/README.md) | 日本語読者 | 日本語ドキュメント索引 |
+| Document                                                                      | Audience             | Contents                                          |
+| ----------------------------------------------------------------------------- | -------------------- | ------------------------------------------------- |
+| [en/AGENT.md](./AGENT.md)                                                     | Agents, contributors | Roles, workflows, human gates, documentation duty |
+| [docs/en/PROJECT_PLAN.md](../docs/en/PROJECT_PLAN.md)                         | Product, engineering | Phases, backlog, risks, success metrics           |
+| [docs/en/INFORMATION_ARCHITECTURE.md](../docs/en/INFORMATION_ARCHITECTURE.md) | Modelers, architects | SSOT, artifacts, trace, matrix, co-design         |
+| [docs/en/DEVELOPMENT_PROGRESS.md](../docs/en/DEVELOPMENT_PROGRESS.md)         | Everyone             | Chronological change log                          |
+| [docs/en/README.md](../docs/en/README.md)                                     | Everyone             | Index of the above                                |
+| [ja/README.md](../ja/README.md)                                               | 日本語読者                | 日本語ドキュメント索引                                       |
 
 
 **Cursor project skills**
 
 
-| Skill | Use |
-| ----- | --- |
+| Skill                                      | Use                                                       |
+| ------------------------------------------ | --------------------------------------------------------- |
 | `.cursor/skills/systems-engineering-saas/` | Requirement hierarchy, V&V, matrix, domain type extension |
-| `.cursor/skills/human-design-review/` | Design baseline, human judgment on analysis trust |
+| `.cursor/skills/human-design-review/`      | Design baseline, human judgment on analysis trust         |
 
 
 ---
@@ -290,16 +290,16 @@ python -m one_piece_connectors.cli \
 ## Repository layout
 
 
-| Path | Purpose |
-| ---- | ------- |
-| `packages/domain/` | Shared domain model (requirements, graph, trace, co-design, policy) |
-| `apps/web/` | Vite + React Web UI PoC |
-| `packages/design-integration/` | Excel ↔ Python bindings, logic-automation runner |
-| `packages/co-design/` | Autonomous design loop orchestrator + SQLite persistence |
-| `packages/connectors/` | Reverse-ingestion CLI for SSOS, etc. |
-| `docs/ja/`, `docs/en/` | Living design docs (plan, IA, progress) per language |
-| `.cursor/skills/` | Domain + human-review agent skills |
-| `.cursor/rules/` | Short pointers for agents |
+| Path                           | Purpose                                                             |
+| ------------------------------ | ------------------------------------------------------------------- |
+| `packages/domain/`             | Shared domain model (requirements, graph, trace, co-design, policy) |
+| `apps/web/`                    | Vite + React Web UI PoC                                             |
+| `packages/design-integration/` | Excel ↔ Python bindings, logic-automation runner                    |
+| `packages/co-design/`          | Autonomous design loop orchestrator + SQLite persistence            |
+| `packages/connectors/`         | Reverse-ingestion CLI for SSOS, etc.                                |
+| `docs/ja/`, `docs/en/`         | Living design docs (plan, IA, progress) per language                |
+| `.cursor/skills/`              | Domain + human-review agent skills                                  |
+| `.cursor/rules/`               | Short pointers for agents                                           |
 
 
 **Dependency sketch:** `apps/web` → `packages/domain`; Python packages exchange domain JSON via files at PoC stage.
@@ -307,13 +307,13 @@ python -m one_piece_connectors.cli \
 **Roadmap (summary)**
 
 
-| Phase | Outcome |
-| ----- | ------- |
-| P0 Domain kernel | Rich `packages/domain` (in progress) |
-| P1 Vertical-slice API | CRUD + trace queries + matrix API |
-| P2 Web UI | Requirement tree, matrix, review (PoC done; persistence next) |
-| P3 Agent hooks | Server-side draft → diff review |
-| P4 Collaboration | Orgs, roles, audit log, baseline snapshots |
+| Phase                 | Outcome                                                       |
+| --------------------- | ------------------------------------------------------------- |
+| P0 Domain kernel      | Rich `packages/domain` (in progress)                          |
+| P1 Vertical-slice API | CRUD + trace queries + matrix API                             |
+| P2 Web UI             | Requirement tree, matrix, review (PoC done; persistence next) |
+| P3 Agent hooks        | Server-side draft → diff review                               |
+| P4 Collaboration      | Orgs, roles, audit log, baseline snapshots                    |
 
 
 ---

@@ -1,6 +1,6 @@
 # one-piece
 
-Hardware systems-engineering SaaS proof of concept — requirements, design, verification, and traceability in one traceable graph.
+Hardware AI systems engineering (SEaaS) proof of concept — requirements, design, verification, and traceability in one traceable graph.
 
 **Documentation**
 

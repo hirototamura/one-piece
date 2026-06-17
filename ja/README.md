@@ -1,8 +1,8 @@
-# one-piece — ハードウェア向けシステムエンジニアリング SaaS
+# one-piece — ハードウェア向けAIシステムエンジニアリング
 
-**ミッションから検証まで**、ハードウェア製品の要求・設計・インターフェース・検証を**一つのトレーサブルなグラフ**で管理する SaaS の概念実証（PoC）です。**あらゆる規模のチーム**を対象としつつ、ロードマップでは**小規模チームを最優先**に、スプレッドシート並みに扱えるコンプライアンスビューを目指します。
+**ミッションから検証まで**、ハードウェア製品の要求・設計・検証を**一つのトレーサブルなグラフ**で管理するAI　Systems Engineering as α Service (SEaaS) の概念実証（PoC）です。**あらゆる規模のチーム**を対象としつつ、ロードマップでは**小規模チームを最優先**に、スプレッドシート並みに扱えるコンプライアンスビューを目指します。
 
-人間のエンジニアが**ベースラインと判断**を担い、AI エージェントはドラフト・横断チェック・一貫性維持を支援します。本リポジトリは**本番 SaaS ではなく**、ドメインモデル・Web UI PoC・Python 連携パッケージ・エージェント運用ルールを同居させた**研究・開発用モノレポ**です。
+初期段階では人間のエンジニアが**ベースラインと判断**を担い、AI エージェントはドラフト・横断チェック・一貫性維持を支援します。本リポジトリは**本番 SEaaS でなく**、ドメインモデル・Web UI PoC・Python 連携パッケージ・エージェント運用ルールを同居させた**研究・開発用モノレポ**です。
 
 ---
 
@@ -148,12 +148,12 @@ one-piece はこのループを **SaaS のデータモデルと UI** で再現�
 
 | 領域                          | 状態                | 参照                                                                             |
 | --------------------------- | ----------------- | ------------------------------------------------------------------------------ |
-| ドメインカーネル（`packages/domain`） | **利用可能**          | [docs/ja/INFORMATION_ARCHITECTURE.md](../docs/ja/INFORMATION_ARCHITECTURE.md)           |
+| ドメインカーネル（`packages/domain`） | **利用可能**          | [docs/ja/INFORMATION_ARCHITECTURE.md](../docs/ja/INFORMATION_ARCHITECTURE.md)  |
 | Web UI PoC（`apps/web`）      | **利用可能**（インメモリデモ） | 本 README [Web UI](#一目でわかるweb-ui)                                               |
 | Excel/Python 連携             | **利用可能**（PoC）     | [packages/design-integration/README.md](packages/design-integration/README.md) |
 | 自律 co-design ループ            | **利用可能**（PoC）     | [packages/co-design/README.md](packages/co-design/README.md)                   |
 | SSOS 逆取り込み                  | **スタブ／CLI**       | [packages/connectors/README.md](packages/connectors/README.md)                 |
-| 本番 API・永続 DB・マルチテナント        | **未実装**           | [docs/ja/PROJECT_PLAN.md](../docs/ja/PROJECT_PLAN.md)                                   |
+| 本番 API・永続 DB・マルチテナント        | **未実装**           | [docs/ja/PROJECT_PLAN.md](../docs/ja/PROJECT_PLAN.md)                          |
 
 
 [engineering_agents](https://github.com/hirototamura/engineering_agents) は運用中の異常 → チーム判断 → 恒久設計提案までをシミュレートし、**設計提案のプロベナンス**を one-piece 形式へエクスポートする連携を想定しています（詳細: 相手リポジトリの `docs/one-piece-integration.md`）。
@@ -163,14 +163,14 @@ one-piece はこのループを **SaaS のデータモデルと UI** で再現�
 ## ドキュメント
 
 
-| ドキュメント                                                               | 対象読者            | 内容                                 |
-| -------------------------------------------------------------------- | --------------- | ---------------------------------- |
-| [ja/AGENT.md](./AGENT.md)                                               | エージェント・コントリビュータ | 役割分担、ワークフロー、人間ゲート、ドキュメント義務         |
+| ドキュメント                                                                        | 対象読者            | 内容                                 |
+| ----------------------------------------------------------------------------- | --------------- | ---------------------------------- |
+| [ja/AGENT.md](./AGENT.md)                                                     | エージェント・コントリビュータ | 役割分担、ワークフロー、人間ゲート、ドキュメント義務         |
 | [docs/ja/PROJECT_PLAN.md](../docs/ja/PROJECT_PLAN.md)                         | プロダクト・開発        | フェーズ、バックログ、リスク、成功指標                |
 | [docs/ja/INFORMATION_ARCHITECTURE.md](../docs/ja/INFORMATION_ARCHITECTURE.md) | モデラー・設計者        | SSOT、アーティファクト、トレース、マトリクス、co-design |
 | [docs/ja/DEVELOPMENT_PROGRESS.md](../docs/ja/DEVELOPMENT_PROGRESS.md)         | 全員              | 時系列の変更ログ                           |
 | [docs/ja/README.md](../docs/ja/README.md)                                     | 全員              | 上記ドキュメントの索引                        |
-| [en/README.md](../en/README.md)                                     | English readers   | English documentation index                 |
+| [en/README.md](../en/README.md)                                               | English readers | English documentation index        |
 
 
 **Cursor プロジェクトスキル**
@@ -297,7 +297,7 @@ python -m one_piece_connectors.cli \
 | `packages/design-integration/` | Excel ↔ Python バインディング、ロジック自動化ランナー    |
 | `packages/co-design/`          | 自律設計ループ orchestrator + SQLite 永続化     |
 | `packages/connectors/`         | SSOS 等への逆取り込み CLI                     |
-| `docs/ja/`、`docs/en/`                        | 生きた設計ドキュメント（計画・IA・進捗、言語別）                 |
+| `docs/ja/`、`docs/en/`          | 生きた設計ドキュメント（計画・IA・進捗、言語別）             |
 | `.cursor/skills/`              | ドメイン + 人間レビュー用エージェントスキル               |
 | `.cursor/rules/`               | エージェント向けリポジトリコンテキスト                   |
 
