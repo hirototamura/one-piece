@@ -7,9 +7,9 @@ alwaysApply: true
 
 For systems engineering, requirements, verification, or domain modeling work:
 
-1. Follow [AGENT.md](../../AGENT.md) for roles, workflows, and documentation duty.  
-2. Keep [docs/INFORMATION_ARCHITECTURE.md](../../docs/INFORMATION_ARCHITECTURE.md) aligned with code changes to the domain model.  
-3. Append substantive work to [docs/DEVELOPMENT_PROGRESS.md](../../docs/DEVELOPMENT_PROGRESS.md).  
+1. Follow [en/AGENT.md](../../en/AGENT.md) for roles, workflows, and documentation duty (Japanese: [ja/AGENT.md](../../ja/AGENT.md)).  
+2. Keep [docs/en/INFORMATION_ARCHITECTURE.md](../../docs/en/INFORMATION_ARCHITECTURE.md) aligned with code changes to the domain model (Japanese: [docs/ja/INFORMATION_ARCHITECTURE.md](../../docs/ja/INFORMATION_ARCHITECTURE.md)).  
+3. Append substantive work to [docs/en/DEVELOPMENT_PROGRESS.md](../../docs/en/DEVELOPMENT_PROGRESS.md) (Japanese: [docs/ja/DEVELOPMENT_PROGRESS.md](../../docs/ja/DEVELOPMENT_PROGRESS.md)).  
 4. Load project skills `systems-engineering-saas` and `human-design-review` when editing requirements, design, or V&V flows.
 
 Human experts own baselines and engineering judgment; agents draft and cross-check.
