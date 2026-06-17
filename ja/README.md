@@ -150,9 +150,9 @@ one-piece はこのループを **SaaS のデータモデルと UI** で再現�
 | --------------------------- | ----------------- | ------------------------------------------------------------------------------ |
 | ドメインカーネル（`packages/domain`） | **利用可能**          | [docs/ja/INFORMATION_ARCHITECTURE.md](../docs/ja/INFORMATION_ARCHITECTURE.md)  |
 | Web UI PoC（`apps/web`）      | **利用可能**（インメモリデモ） | 本 README [Web UI](#一目でわかるweb-ui)                                               |
-| Excel/Python 連携             | **利用可能**（PoC）     | [packages/design-integration/README.md](packages/design-integration/README.md) |
-| 自律 co-design ループ            | **利用可能**（PoC）     | [packages/co-design/README.md](packages/co-design/README.md)                   |
-| SSOS 逆取り込み                  | **スタブ／CLI**       | [packages/connectors/README.md](packages/connectors/README.md)                 |
+| Excel/Python 連携             | **利用可能**（PoC）     | [packages/design-integration/README.md](../packages/design-integration/README.md) |
+| 自律 co-design ループ            | **利用可能**（PoC）     | [packages/co-design/README.md](../packages/co-design/README.md)                   |
+| SSOS 逆取り込み                  | **スタブ／CLI**       | [packages/connectors/README.md](../packages/connectors/README.md)                 |
 | 本番 API・永続 DB・マルチテナント        | **未実装**           | [docs/ja/PROJECT_PLAN.md](../docs/ja/PROJECT_PLAN.md)                          |
 
 
@@ -320,4 +320,4 @@ python -m one_piece_connectors.cli \
 
 ## ライセンス
 
-[Apache License 2.0](./LICENSE)
+[Apache License 2.0](../LICENSE)
