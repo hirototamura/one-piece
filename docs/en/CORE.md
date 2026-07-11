@@ -77,7 +77,7 @@ Agents **draft**; humans **baseline** after review.
 - Subsystem **verification activity plans** (analysis, test, inspection)
 - **Verification platform requirements** and **specifications** (what must exist to execute those plans)
 
-Every parent→child relationship is **traceable** (appropriate `derives_from` / `satisfies` in `packages/domain`).
+Every parent→child relationship is **traceable** (appropriate `derives_from` / `satisfies` links in the system model).
 
 ## Design consistency and human judgment
 
@@ -86,7 +86,7 @@ Subsystem design is **tightly coupled**. Agents should:
 - Run **cross-subsystem consistency checks** (interfaces, budgets, shared environments, timing, safety, EMC assumptions, etc.)
 - Check **upward alignment** to system and mission requirements
 
-**Critical:** Domain experts **always take precedence** over agents. Route design decisions and analysis credibility through **Human engineering judgment** (skill `human-design-review`). The product should surface **review tasks**, **assumptions**, and **residual risks** for humans to accept or reject. In agent-100% mode, prepare domain agents to virtually fill gaps left by domain experts.
+**Critical:** Domain experts **always take precedence** over agents. Route design decisions and analysis credibility through **Human engineering judgment**. The product should surface **review tasks**, **assumptions**, and **residual risks** for humans to accept or reject. In agent-100% mode, prepare domain agents to virtually fill gaps left by domain experts.
 
 ## Verification and compliance
 

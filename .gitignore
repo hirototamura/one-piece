@@ -1,18 +1,3 @@
-# Dependencies
-node_modules/
-
-# Build
-dist/
-build/
-.next/
-.turbo/
-*.tsbuildinfo
-
-# Env & secrets
-.env
-.env.*
-!.env.example
-
 # OS & editors
 .DS_Store
 *.swp
@@ -20,19 +5,5 @@ build/
 .vscode/*
 !.vscode/extensions.json
 
-# Logs & caches
+# Logs
 *.log
-npm-debug.log*
-.cache/
-
-# Python (agents, scripts, firmware tooling)
-.venv/
-venv/
-__pycache__/
-*.py[cod]
-.pytest_cache/
-.mypy_cache/
-
-# Hardware / EDA artifacts (adjust per toolchain)
-*.sch-bak
-*.kicad_prl
