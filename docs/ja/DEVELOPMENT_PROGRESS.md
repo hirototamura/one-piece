@@ -2,9 +2,14 @@
 
 **新しいエントリを上に追記**する。各エントリは数文に留め、コミットや PR があればリンクする。
 
+## 2026-07-11（ドキュメント整理）
+
+- `docs/ja/`・`docs/en/` から `PROJECT_PLAN.md` と `INFORMATION_ARCHITECTURE.md` を削除。ライブ文書は README 索引と `development_progress.md` のみ。哲学・IA の内容は `ja/CORE.md` / `en/CORE.md` に集約。
+- リポジトリ全体の README と `CORE.md` のリンクを更新。
+
 ## 2026-06-16（ドキュメント言語別整理）
 
-- ライブ文書を `docs/ja/` と `docs/en/` に分割。ルート `README.md` と `AGENT.md` を `ja/`・`en/` に移し、ルートには言語索引を配置。
+- ライブ文書を `docs/ja/` と `docs/en/` に分割。ルート `README.md` と `AGENTS.md` を `ja/`・`en/` に移し、ルートには言語索引を配置。
 
 ## 2026-06-07（用語: 要求）
 
@@ -21,7 +26,7 @@
 
 ## 2026-05-30（ドキュメント日本語化）
 
-- 日本人チーム向けにリポジトリ内の Markdown（`README.md`、`AGENT.md`、`docs/`*、`.cursor/skills/*`、`packages/design-integration/README.md`）を日本語化。コード識別子・CLI・パスは原文維持。
+- 日本人チーム向けにリポジトリ内の Markdown（`README.md`、`AGENTS.md`、`docs/`*、`.cursor/skills/*`、`packages/design-integration/README.md`）を日本語化。コード識別子・CLI・パスは原文維持。
 
 ## 2026-05-26（自律 co-design MVP スキャフォールド）
 
@@ -60,15 +65,15 @@
 
 ## 2026-05-10（SpaceX 2012 SE デッキ）
 
-- 業界ハンドブック型デッキを参照；`AGENT.md`（エンジニアリング哲学、検証メモ、ワークフロー）、`docs/PROJECT_PLAN.md`（原則 6–7、外部の影響）、`docs/INFORMATION_ARCHITECTURE.md`（安定 vs 派生トレード、検証厳しさ表）、`.cursor/skills/systems-engineering-saas/SKILL.md` を整合。
+- 業界ハンドブック型デッキを参照；`AGENTS.md`（エンジニアリング哲学、検証メモ、ワークフロー）、`docs/PROJECT_PLAN.md`（原則 6–7、外部の影響）、`docs/INFORMATION_ARCHITECTURE.md`（安定 vs 派生トレード、検証厳しさ表）、`.cursor/skills/systems-engineering-saas/SKILL.md` を整合。
 
 ## 2026-05-10（後）
 
-- ミッション文言: **すべてのチーム規模**；**規模でタッチポイントが異なる**；GTM 楔として**小規模チーム優先**。`AGENT.md`、`docs/PROJECT_PLAN.md`、`docs/INFORMATION_ARCHITECTURE.md` を更新。
+- ミッション文言: **すべてのチーム規模**；**規模でタッチポイントが異なる**；GTM 楔として**小規模チーム優先**。`AGENTS.md`、`docs/PROJECT_PLAN.md`、`docs/INFORMATION_ARCHITECTURE.md` を更新。
 
 ## 2026-05-10
 
-- マルチエージェントオーケストレーション用 `AGENT.md` 追加（役割、ワークフロー、人間ゲート）。
+- マルチエージェントオーケストレーション用 `AGENTS.md` 追加（役割、ワークフロー、人間ゲート）。
 - `docs/PROJECT_PLAN.md`、`docs/INFORMATION_ARCHITECTURE.md`、本ログを追加。
 - プロジェクトスキル `systems-engineering-saas`、`human-design-review` と、エージェントをリポ文脈へ誘導する Cursor ルールを追加。
 
