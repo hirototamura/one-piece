@@ -2,6 +2,17 @@
 
 **新しいエントリを上に追記**する。各エントリは数文に留め、コミットや PR があればリンクする。
 
+## 2026-07-11（ドキュメント専用リポジトリ）
+
+- 実装物をすべて削除: `apps/`、`packages/`、ルート `package.json`、`package-lock.json`、`pyproject.toml`、`tsconfig.base.json`。
+- リポジトリの範囲は `docs/en/CORE.md`、`docs/ja/CORE.md`、本ログ、および `LICENSE` のみ。
+- 削除したコードパスへの参照を `CORE.md` と `.gitignore` から除去。
+
+## 2026-07-11（Web アプリ削除）
+
+- `apps/web`（Vite + React PoC）と monorepo の `apps/` ワークスペースを削除。
+- ルート `package.json` と `package-lock.json` を更新。
+
 ## 2026-07-11（ドキュメント整理）
 
 - `docs/ja/`・`docs/en/` から `PROJECT_PLAN.md` と `INFORMATION_ARCHITECTURE.md` を削除。ライブ文書は README 索引と `development_progress.md` のみ。哲学・IA の内容は `ja/CORE.md` / `en/CORE.md` に集約。
@@ -84,4 +95,3 @@
 ## YYYY-MM-DD
 
 - …
-

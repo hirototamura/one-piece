@@ -2,6 +2,17 @@
 
 Append **newest entries at the top**. Keep each entry to a few sentences; link commits or PRs when available.
 
+## 2026-07-11 (documentation-only repository)
+
+- Removed all implementation artifacts: `apps/`, `packages/`, root `package.json`, `package-lock.json`, `pyproject.toml`, and `tsconfig.base.json`.
+- Repository scope is now `docs/en/CORE.md`, `docs/ja/CORE.md`, and this log, plus `LICENSE`.
+- Updated `CORE.md` and `.gitignore` to drop references to removed code paths.
+
+## 2026-07-11 (remove web app)
+
+- Removed `apps/web` (Vite + React PoC) and the `apps/` workspace from the monorepo.
+- Updated root `package.json` and `package-lock.json`.
+
 ## 2026-07-11 (docs consolidation)
 
 - Removed `PROJECT_PLAN.md` and `INFORMATION_ARCHITECTURE.md` from `docs/ja/` and `docs/en/`. Living docs are now README indexes plus `development_progress.md`; philosophy and IA content live in `ja/CORE.md` / `en/CORE.md`.
