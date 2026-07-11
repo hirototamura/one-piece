@@ -2,9 +2,14 @@
 
 Append **newest entries at the top**. Keep each entry to a few sentences; link commits or PRs when available.
 
+## 2026-07-11 (docs consolidation)
+
+- Removed `PROJECT_PLAN.md` and `INFORMATION_ARCHITECTURE.md` from `docs/ja/` and `docs/en/`. Living docs are now README indexes plus `development_progress.md`; philosophy and IA content live in `ja/CORE.md` / `en/CORE.md`.
+- Updated README and `CORE.md` links across the repository.
+
 ## 2026-06-16 (documentation i18n layout)
 
-- Split living docs into `docs/ja/` and `docs/en/`. Moved root `README.md` and `AGENT.md` under `ja/` and `en/`; root files are now language indexes.
+- Split living docs into `docs/ja/` and `docs/en/`. Moved root `README.md` and `AGENTS.md` under `ja/` and `en/`; root files are now language indexes.
 
 ## 2026-06-07 (terminology: requirements)
 
@@ -20,7 +25,7 @@ Append **newest entries at the top**. Keep each entry to a few sentences; link c
 
 ## 2026-05-30 (documentation Japanese translation)
 
-- Translated repository Markdown to Japanese for local teams (`ja/README.md`, `ja/AGENT.md`, `docs/ja/*`, `.cursor/skills/*`, `packages/design-integration/README.md`). Code identifiers, CLI, and paths kept in original form.
+- Translated repository Markdown to Japanese for local teams (`ja/README.md`, `ja/AGENTS.md`, `docs/ja/*`, `.cursor/skills/*`, `packages/design-integration/README.md`). Code identifiers, CLI, and paths kept in original form.
 
 ## 2026-05-26 (autonomous co-design MVP scaffold)
 
@@ -59,15 +64,15 @@ Append **newest entries at the top**. Keep each entry to a few sentences; link c
 
 ## 2026-05-10 (SpaceX 2012 SE deck)
 
-- Read industry handbook-style deck; aligned `AGENT.md` (engineering philosophy, verification notes, workflow), `docs/PROJECT_PLAN.md` (principles 6–7, external influences), `docs/INFORMATION_ARCHITECTURE.md` (stable vs derived trades, verification rigor table), `.cursor/skills/systems-engineering-saas/SKILL.md`.
+- Read industry handbook-style deck; aligned `AGENTS.md` (engineering philosophy, verification notes, workflow), `docs/PROJECT_PLAN.md` (principles 6–7, external influences), `docs/INFORMATION_ARCHITECTURE.md` (stable vs derived trades, verification rigor table), `.cursor/skills/systems-engineering-saas/SKILL.md`.
 
 ## 2026-05-10 (later)
 
-- Mission wording: **all team sizes**; **touchpoints differ by scale**; **small teams first** as GTM wedge. Updated `AGENT.md`, `docs/PROJECT_PLAN.md`, `docs/INFORMATION_ARCHITECTURE.md`.
+- Mission wording: **all team sizes**; **touchpoints differ by scale**; **small teams first** as GTM wedge. Updated `AGENTS.md`, `docs/PROJECT_PLAN.md`, `docs/INFORMATION_ARCHITECTURE.md`.
 
 ## 2026-05-10
 
-- Added `AGENT.md` for multi-agent orchestration (roles, workflows, human gates).  
+- Added `AGENTS.md` for multi-agent orchestration (roles, workflows, human gates).  
 - Added `docs/PROJECT_PLAN.md`, `docs/INFORMATION_ARCHITECTURE.md`, and this log.  
 - Added project skills: `systems-engineering-saas`, `human-design-review`; Cursor rule pointing agents at repo context.  
 

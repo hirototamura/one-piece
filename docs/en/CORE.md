@@ -2,15 +2,11 @@
 
 This file records the central philosophy of One Piece Engineering.
 
-
-
 ## Project mission
 
 Engineer systems that can reach space and evolve on their own.
 
 To that end, we first build a process for developing systems autonomously.
-
-
 
 ## North star
 
@@ -30,19 +26,20 @@ To that end, we first build a process for developing systems autonomously.
 
 - When agents hold 100% authority, they run the full workflow without human intervention to iterate hypotheses at high speed.
 
-
-
 ## Engineering philosophy
 
 The following is **adapted from common industry practice** (including the widely circulated 2012 SpaceX slide deck *System Engineering: A Traditional Discipline in a Non-traditional Organization*, often labeled a “systems engineering handbook”). one-piece is **vendor-neutral**—we adopt patterns that transfer to SaaS, not any single company’s org chart.
 
-1. **Premise** — Systems engineering exists to catch integration issues early, yet new systems always surprise you. The platform should support **learning from integration and test**, not only from upfront decomposition.
-2. **Responsibility over checkbox process** — Process cannot replace engineering judgment. Prefer **visible traceability, reviews, and tools** over opaque rule walls.
-3. **Stable intent vs derived trades** — Treat **mission / customer / user-level intent** as **tracked and verified**. **Derived** specifications and lower-level requirements may be **traded and optimized during design**; every material trade must leave an **audit trail** (link to rationale, analysis, decision, or waiver)—never silent drift.
-4. **Iteration and formality** — Early cycles favor speed and evidence from **build–test** (or analysis) feedback; **documentation and gate weight increase** as artifacts move toward baseline and production-like maturity.
-5. **Test what you fly** — Design for **testability**; plan integrated verification (hardware–software, multi-subsystem) and **service-like** conditions where program risk warrants it. Verification platform requirements should reflect **real environments** and integration rigs, not only bench checks.
-6. **Test purpose taxonomy** — Where useful, classify test activities (e.g. **development** — explore margins / find weaknesses; **qualification** — demonstrate performance to bounded environments and margins; **acceptance** — workmanship and repeatability). Formality and repeat expectations can rise with maturity. This complements analysis and inspection.
-7. **Tools, not bureaucracy** — Discussion, integration status, and evidence should live in **modern collaborative tools**. Analogous to “forums that behave more like networks than static control boards”—still under human ownership of baselines.
+1. **Premise** — Systems engineering exists to catch integration issues early, yet taking on new systems always brings surprises. The platform should support **learning from integration and test**, not only from upfront decomposition.
+2. **Traceability and record first** — Traceability and a durable record of what mattered (decisions, requirements, evidence, waivers) underpin everything else. Without links and records, it might as well not have happened.
+3. **Iteration over perfection** — Learn fast from build, test, and integration; refine derived design and lower-level requirements with evidence. Keep mission and customer intent explicit; formality rises as baselines mature.
+4. **Smarter requirements** — Requirements should be clear, verifiable, and worth verifying—not placeholders or theater. The product (and agents) should drive clarification, challenge ambiguity, and tie intent to real verification.
+5. **Stable intent vs derived trades** — Treat **mission / customer / user-level intent** as **tracked and verified**. **Derived** specifications and lower-level requirements may be **traded and optimized during design**; every material trade must leave an **audit trail** (link to rationale, analysis, decision, or waiver)—never silent drift.
+6. **Test what you fly** — Design for **testability**; plan integrated verification (hardware–software, multi-subsystem) and **service-like** conditions where program risk warrants it. Verification platform requirements should reflect **real environments** and integration rigs, not only bench checks.
+7. **Cross-disciplinary design** — Interfaces, budgets, and integration risk are first-class across mechanical, electrical, thermal, software, operations, and test—do not reconcile in silos at the end.
+8. **Test purpose taxonomy** — Where useful, classify test activities (e.g. **development** — explore margins / find weaknesses; **qualification** — demonstrate performance to bounded environments and margins; **acceptance** — workmanship and repeatability). Formality and repeat expectations can rise with maturity. This complements analysis and inspection.
+9. **Test early; automate tests** — Plan verification from the start; run development tests early and often. Prefer repeatable automated checks where signal is available; leave baselines, anomalies, and pass/waive to human judgment.
+10. **Tools, not bureaucracy** — Discussion, integration status, and evidence should live in **modern collaborative tools**. Analogous to “forums that behave more like networks than static control boards”—still under human ownership of baselines.
 
 
 
@@ -50,7 +47,7 @@ The following is **adapted from common industry practice** (including the widely
 
 **First-class artifacts** at the center of the product (each versioned, reviewable, and baselined when needed):
 
-1. **Requirements** (hierarchical; see `docs/en/INFORMATION_ARCHITECTURE.md`)
+1. **Requirements** (hierarchical; see [Requirement hierarchy and trace rules](#requirement-hierarchy-and-trace-rules) below)
 2. **Specifications** (normative detail derived from or supporting requirements)
 3. **Verification plan** (what to verify at which level, and how success is judged)
 4. **Verification test cases** (executable / observable instances of verification)
@@ -59,8 +56,6 @@ The following is **adapted from common industry practice** (including the widely
 7. **Analysis results** (reports backing design and analysis-based verification)
 
 Agents **draft**; humans **baseline** after review.
-
-
 
 ## Requirement hierarchy and trace rules
 
@@ -84,8 +79,6 @@ Agents **draft**; humans **baseline** after review.
 
 Every parent→child relationship is **traceable** (appropriate `derives_from` / `satisfies` in `packages/domain`).
 
-
-
 ## Design consistency and human judgment
 
 Subsystem design is **tightly coupled**. Agents should:
@@ -94,8 +87,6 @@ Subsystem design is **tightly coupled**. Agents should:
 - Check **upward alignment** to system and mission requirements
 
 **Critical:** Domain experts **always take precedence** over agents. Route design decisions and analysis credibility through **Human engineering judgment** (skill `human-design-review`). The product should surface **review tasks**, **assumptions**, and **residual risks** for humans to accept or reject. In agent-100% mode, prepare domain agents to virtually fill gaps left by domain experts.
-
-
 
 ## Verification and compliance
 
