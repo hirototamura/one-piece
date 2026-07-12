@@ -1,0 +1,43 @@
+program: engineering_agents
+requirements:
+  - id: EA-SW-MIS-001
+    level: mission
+    shall: "The Engineering Agents software shall accelerate hardware-oriented design-verification loops under a deterministic truth gate."
+  - id: EA-SW-SYS-010
+    level: system
+    shall: "The system shall execute Layer-1 physics simulation and Layer-2 meta-agent evaluation for an operator-specified iteration count N and shall emit a Final Design or Plan Change."
+  - id: EA-SW-SYS-020
+    level: system
+    shall: "The system shall judge proposal truth using deterministic simulation results, constraints, and evidence only; LLM self-assertion alone shall not constitute a pass."
+  - id: EA-SW-OPS-010
+    level: operational
+    shall: "An operator shall be able to specify N, scenario, agents_mode, run_id, and whether/which proposals to apply, then execute the loop."
+  - id: EA-SW-OPS-020
+    level: operational
+    shall: "The system shall allow human intervention; habitual intervention may introduce time bottleneck."
+  - id: EA-SW-SUB-CLI-010
+    level: subsystem
+    shall: "The CLI subsystem shall provide run control, results inspection, and diagnostics."
+  - id: EA-SW-SUB-SCN-010
+    level: subsystem
+    shall: "The scenario subsystem shall orchestrate simulation and agent execution."
+  - id: EA-SW-SUB-AGT-010
+    level: subsystem
+    shall: "The agents subsystem shall perform L1 operational response and L2 meta evaluation with design/parameter proposals."
+  - id: EA-SW-SUB-ENV-010
+    level: subsystem
+    shall: "The environment subsystem shall isolate the interface to the external sim / plant backend."
+  - id: EA-SW-SUB-CORE-010
+    level: subsystem
+    shall: "The core subsystem shall own shared state, proposal schema, and persistence of run artifacts."
+
+derive:
+  - { parent: EA-SW-MIS-001, child: EA-SW-SYS-010 }
+  - { parent: EA-SW-MIS-001, child: EA-SW-SYS-020 }
+  - { parent: EA-SW-SYS-010, child: EA-SW-OPS-010 }
+  - { parent: EA-SW-SYS-010, child: EA-SW-OPS-020 }
+  - { parent: EA-SW-SYS-010, child: EA-SW-SUB-SCN-010 }
+  - { parent: EA-SW-SYS-010, child: EA-SW-SUB-AGT-010 }
+  - { parent: EA-SW-SYS-020, child: EA-SW-SUB-ENV-010 }
+  - { parent: EA-SW-SYS-020, child: EA-SW-SUB-CORE-010 }
+  - { parent: EA-SW-OPS-010, child: EA-SW-SUB-CLI-010 }

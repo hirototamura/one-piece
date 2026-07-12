@@ -2,6 +2,12 @@
 
 **新しいエントリを上に追記**する。各エントリは数文に留め、コミットや PR があればリンクする。
 
+## 2026-07-12（Engineering Agents ソフトウェア SE ベースライン）
+
+- 最初のプログラムを `docs/en/programs/engineering_agents/` と `docs/ja/programs/engineering_agents/` に追加: ConOps、システムモデル（凡例＋図）、要求、境界、検証／妥当性確認、マトリクス、競合トレードオフ、`model/*.yaml`（en を正）。
+- One Piece は任意の複雑システムの SE 管理面、EA は最初の **ソフトウェア** プログラム例と明記（ドメイン／プラントは当該プログラムの要求グラフにしない）。
+- `CORE.md`（en/ja）更新: ソフトウェア・システムモデル、動詞基本形の関係、verification case 第一級。
+
 ## 2026-07-11（ドキュメント専用リポジトリ）
 
 - 実装物をすべて削除: `apps/`、`packages/`、ルート `package.json`、`package-lock.json`、`pyproject.toml`、`tsconfig.base.json`。

@@ -1,0 +1,26 @@
+program: engineering_agents
+verification_cases:
+  - id: VC-ea-loop-2run
+    which: [EA-SW-SYS-010, EA-SW-SYS-020]
+    means: "CLI -> scenario; Cycle1 emit proposals; Cycle2 apply proposals and re-run"
+    judge: [C-N-ge-1, C-proposals_emitted, C-proposals_applied, C-result_delta, C-truth-gate]
+    evidence: [E-run1, E-run2]
+    verify:
+      - EA-SW-SYS-010
+      - EA-SW-SYS-020
+  - id: VC-ea-pytest
+    which:
+      - EA-SW-SUB-CLI-010
+      - EA-SW-SUB-SCN-010
+      - EA-SW-SUB-AGT-010
+      - EA-SW-SUB-ENV-010
+      - EA-SW-SUB-CORE-010
+    means: "Development regression suite"
+    judge: [C-pytest_green]
+    evidence: [E-pytest]
+    verify:
+      - EA-SW-SUB-CLI-010
+      - EA-SW-SUB-SCN-010
+      - EA-SW-SUB-AGT-010
+      - EA-SW-SUB-ENV-010
+      - EA-SW-SUB-CORE-010

@@ -2,6 +2,12 @@
 
 Append **newest entries at the top**. Keep each entry to a few sentences; link commits or PRs when available.
 
+## 2026-07-12 (Engineering Agents software SE baseline)
+
+- Added first program under `docs/en/programs/engineering_agents/` and `docs/ja/programs/engineering_agents/`: ConOps, system model (legend + diagrams), requirements, boundaries, verification/validation, compliance matrix, competitor tradeoff, and `model/*.yaml` (en canonical).
+- Clarified One Piece as SE management for any complex system; EA is the first example **software** program (domain/plant content is not that program’s requirement graph).
+- Updated `CORE.md` (en/ja): software system models; verb-base relations (`derive` / `satisfy` / `verify` / `allocate` / `constrain`); verification cases first-class.
+
 ## 2026-07-11 (documentation-only repository)
 
 - Removed all implementation artifacts: `apps/`, `packages/`, root `package.json`, `package-lock.json`, `pyproject.toml`, and `tsconfig.base.json`.
