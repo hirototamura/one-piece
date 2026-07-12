@@ -24,12 +24,14 @@ nodes:
     - { id: P-run_id, text: "Run id (evidence key)" }
     - { id: P-proposals_path, text: "Path to proposals to apply (empty = none)" }
     - { id: P-proposals_count, text: "Number of emitted proposals" }
+    - { id: P-results_delta, text: "Whether Cycle 2 tracked outputs differ from Cycle 1 (derived from E-run1 vs E-run2)" }
+    - { id: P-pass_materials_basis, text: "Recorded basis for pass judgment (sim / constraint / evidence; not LLM-only)" }
 
   constraints:
     - { id: C-N-ge-1, text: "P-N >= 1" }
     - { id: C-proposals_emitted, text: "P-proposals_count >= 1 after Cycle 1" }
-    - { id: C-result_delta, text: "Cycle 2 results differ from Cycle 1" }
-    - { id: C-truth-gate, text: "Pass materials are sim results, constraints, and evidence only" }
+    - { id: C-result_delta, text: "P-results_delta is true" }
+    - { id: C-truth-gate, text: "P-pass_materials_basis excludes LLM-only self-certification" }
     - { id: C-pytest_green, text: "Regression suite succeeds" }
 
   boundaries:
@@ -47,7 +49,7 @@ nodes:
   verification_cases:
     - id: VC-ea-loop-2run
       which: [EA-SW-SYS-010, EA-SW-SYS-020]
-      means: "CLI -> scenario; Cycle1 then apply proposals then Cycle2"
+      means: "CLI -> scenario; Cycle1 emit proposals; Cycle2 apply proposals and re-run"
       judge: [C-N-ge-1, C-proposals_emitted, C-result_delta, C-truth-gate]
       evidence: [E-run1, E-run2]
     - id: VC-ea-pytest
@@ -73,8 +75,8 @@ relations:
   - { type: derive, from: EA-SW-OPS-010, to: EA-SW-SUB-CLI-010 }
   - { type: constrain, from: C-N-ge-1, to: P-N }
   - { type: constrain, from: C-proposals_emitted, to: P-proposals_count }
-  - { type: constrain, from: C-result_delta, to: P-proposals_path }
-  - { type: constrain, from: C-truth-gate, to: P-agents_mode }
+  - { type: constrain, from: C-result_delta, to: P-results_delta }
+  - { type: constrain, from: C-truth-gate, to: P-pass_materials_basis }
   - { type: allocate, from: B-cli-scenario, to: EA-SW-SUB-CLI-010 }
   - { type: allocate, from: B-scenario-agents, to: EA-SW-SUB-AGT-010 }
   - { type: allocate, from: B-scenario-env, to: EA-SW-SUB-SCN-010 }

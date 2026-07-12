@@ -45,8 +45,10 @@ flowchart TB
   D1["D-arch-layers"]
   D2["D-proposals-schema"]
   D3["D-results-store"]
-  D1 -.->|"satisfy"| SCN
-  D2 -.->|"satisfy"| CORE
+  SYS10["EA-SW-SYS-010"]
+  SYS20["EA-SW-SYS-020"]
+  D1 -.->|"satisfy"| SYS10
+  D2 -.->|"satisfy"| SYS20
   D3 -.->|"satisfy"| CORE
 ```
 
@@ -57,7 +59,8 @@ flowchart LR
   subgraph params["Parameters"]
     PN["P-N"]
     PPC["P-proposals_count"]
-    PPR["P-proposals_path"]
+    PRD["P-results_delta"]
+    PPB["P-pass_materials_basis"]
   end
   subgraph constraints["Constraints"]
     CN["C-N-ge-1"]
@@ -81,8 +84,8 @@ flowchart LR
 
   CN -->|"constrain"| PN
   CP -->|"constrain"| PPC
-  CD -->|"constrain"| PPR
-  CT -->|"constrain"| SYS20
+  CD -->|"constrain"| PRD
+  CT -->|"constrain"| PPB
 
   VC2 -->|"verify"| SYS10
   VC2 -->|"verify"| SYS20
@@ -138,10 +141,12 @@ Hierarchy: Mission → System; System → Operational **and** Subsystem (`derive
 | `P-run_id` | parameter | Run id (evidence key) |
 | `P-proposals_path` | parameter | Path to proposals to apply (empty = none) |
 | `P-proposals_count` | parameter | Number of emitted proposals |
+| `P-results_delta` | parameter | Whether Cycle 2 tracked outputs differ from Cycle 1 (derived from E-run1 vs E-run2) |
+| `P-pass_materials_basis` | parameter | Recorded basis for pass judgment (sim / constraint / evidence; not LLM-only) |
 | `C-N-ge-1` | constraint | `P-N >= 1` |
 | `C-proposals_emitted` | constraint | `P-proposals_count >= 1` after Cycle 1 |
-| `C-result_delta` | constraint | Cycle 2 results differ from Cycle 1 |
-| `C-truth-gate` | constraint | Pass materials are sim results, constraints, and evidence only |
+| `C-result_delta` | constraint | `P-results_delta` is true |
+| `C-truth-gate` | constraint | `P-pass_materials_basis` excludes LLM-only self-certification |
 | `C-pytest_green` | constraint | Regression suite succeeds |
 
 ## Boundaries, design, verification cases, evidence
@@ -173,8 +178,8 @@ Hierarchy: Mission → System; System → Operational **and** Subsystem (`derive
 - `derive(EA-SW-OPS-010, EA-SW-SUB-CLI-010)`
 - `constrain(C-N-ge-1, P-N)`
 - `constrain(C-proposals_emitted, P-proposals_count)`
-- `constrain(C-result_delta, P-proposals_path)`
-- `constrain(C-truth-gate, P-agents_mode)`
+- `constrain(C-result_delta, P-results_delta)`
+- `constrain(C-truth-gate, P-pass_materials_basis)`
 - `allocate(B-cli-scenario, EA-SW-SUB-CLI-010)`
 - `allocate(B-scenario-agents, EA-SW-SUB-AGT-010)`
 - `allocate(B-scenario-env, EA-SW-SUB-SCN-010)`
@@ -196,7 +201,7 @@ Hierarchy: Mission → System; System → Operational **and** Subsystem (`derive
 **`VC-ea-loop-2run`**
 
 - Which: `EA-SW-SYS-010`, `EA-SW-SYS-020`
-- Means: CLI → scenario, two runs with proposal apply between them
+- Means: CLI → scenario: Cycle 1 run → emit proposals → Cycle 2 run with proposals applied
 - Judge: `C-N-ge-1`, `C-proposals_emitted`, `C-result_delta`, `C-truth-gate` on `E-run1` / `E-run2`
 
 **`VC-ea-pytest`**
