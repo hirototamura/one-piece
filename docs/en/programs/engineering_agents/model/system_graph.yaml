@@ -1,0 +1,92 @@
+# Engineering Agents software — system graph (machine-readable)
+# Canonical with system_graph.md. Domain/plant physics are not requirement nodes.
+
+program: engineering_agents
+kind: software_system_graph
+relation_verbs: [derive, satisfy, verify, allocate, constrain]
+
+nodes:
+  requirements:
+    - { id: EA-SW-MIS-001, level: mission, text: "Accelerate hardware-oriented design-verification loops with a deterministic truth gate" }
+    - { id: EA-SW-SYS-010, level: system, text: "Execute L1-L2 for operator-specified N and emit Final Design or Plan Change" }
+    - { id: EA-SW-SYS-020, level: system, text: "Base proposal truth materials on deterministic sim, constraints, and evidence only" }
+    - { id: EA-SW-OPS-010, level: operational, text: "Operator can set N, scenario, agents_mode, run_id, and proposal application" }
+    - { id: EA-SW-OPS-020, level: operational, text: "Allow human intervention; intervention may introduce time bottleneck" }
+    - { id: EA-SW-SUB-CLI-010, level: subsystem, text: "CLI provides run, results inspection, and diagnostics" }
+    - { id: EA-SW-SUB-SCN-010, level: subsystem, text: "scenario orchestrates simulation and agent execution" }
+    - { id: EA-SW-SUB-AGT-010, level: subsystem, text: "agents perform L1 ops response and L2 meta evaluation / design-param proposal" }
+    - { id: EA-SW-SUB-ENV-010, level: subsystem, text: "environment isolates boundary to external sim / plant backend" }
+    - { id: EA-SW-SUB-CORE-010, level: subsystem, text: "core owns shared state, proposal schema, and run artifact persistence" }
+
+  parameters:
+    - { id: P-N, text: "Iteration count N" }
+    - { id: P-agents_mode, text: "Agent mode" }
+    - { id: P-run_id, text: "Run id (evidence key)" }
+    - { id: P-proposals_path, text: "Path to proposals to apply (empty = none)" }
+    - { id: P-proposals_count, text: "Number of emitted proposals" }
+
+  constraints:
+    - { id: C-N-ge-1, text: "P-N >= 1" }
+    - { id: C-proposals_emitted, text: "P-proposals_count >= 1 after Cycle 1" }
+    - { id: C-result_delta, text: "Cycle 2 results differ from Cycle 1" }
+    - { id: C-truth-gate, text: "Pass materials are sim results, constraints, and evidence only" }
+    - { id: C-pytest_green, text: "Regression suite succeeds" }
+
+  boundaries:
+    - { id: B-cli-scenario, text: "CLI <-> scenario" }
+    - { id: B-scenario-agents, text: "scenario <-> agents" }
+    - { id: B-scenario-env, text: "scenario <-> environment" }
+    - { id: B-scenario-core, text: "scenario <-> core" }
+    - { id: B-env-backend, text: "environment <-> external sim / plant backend" }
+
+  designs:
+    - { id: D-arch-layers, text: "tools -> scenario -> environment/agents -> core" }
+    - { id: D-proposals-schema, text: "Proposal schema and apply path" }
+    - { id: D-results-store, text: "Persistence of summary / telemetry / messages" }
+
+  verification_cases:
+    - id: VC-ea-loop-2run
+      which: [EA-SW-SYS-010, EA-SW-SYS-020]
+      means: "CLI -> scenario; Cycle1 then apply proposals then Cycle2"
+      judge: [C-N-ge-1, C-proposals_emitted, C-result_delta, C-truth-gate]
+      evidence: [E-run1, E-run2]
+    - id: VC-ea-pytest
+      which: [EA-SW-SUB-CLI-010, EA-SW-SUB-SCN-010, EA-SW-SUB-AGT-010, EA-SW-SUB-ENV-010, EA-SW-SUB-CORE-010]
+      means: "Development regression suite"
+      judge: [C-pytest_green]
+      evidence: [E-pytest]
+
+  evidence:
+    - { id: E-run1, text: "Cycle 1 run artifacts" }
+    - { id: E-run2, text: "Cycle 2 run artifacts" }
+    - { id: E-pytest, text: "Regression suite output" }
+
+relations:
+  - { type: derive, from: EA-SW-MIS-001, to: EA-SW-SYS-010 }
+  - { type: derive, from: EA-SW-MIS-001, to: EA-SW-SYS-020 }
+  - { type: derive, from: EA-SW-SYS-010, to: EA-SW-OPS-010 }
+  - { type: derive, from: EA-SW-SYS-010, to: EA-SW-OPS-020 }
+  - { type: derive, from: EA-SW-SYS-010, to: EA-SW-SUB-SCN-010 }
+  - { type: derive, from: EA-SW-SYS-010, to: EA-SW-SUB-AGT-010 }
+  - { type: derive, from: EA-SW-SYS-020, to: EA-SW-SUB-ENV-010 }
+  - { type: derive, from: EA-SW-SYS-020, to: EA-SW-SUB-CORE-010 }
+  - { type: derive, from: EA-SW-OPS-010, to: EA-SW-SUB-CLI-010 }
+  - { type: constrain, from: C-N-ge-1, to: P-N }
+  - { type: constrain, from: C-proposals_emitted, to: P-proposals_count }
+  - { type: constrain, from: C-result_delta, to: P-proposals_path }
+  - { type: constrain, from: C-truth-gate, to: P-agents_mode }
+  - { type: allocate, from: B-cli-scenario, to: EA-SW-SUB-CLI-010 }
+  - { type: allocate, from: B-scenario-agents, to: EA-SW-SUB-AGT-010 }
+  - { type: allocate, from: B-scenario-env, to: EA-SW-SUB-SCN-010 }
+  - { type: allocate, from: B-scenario-core, to: EA-SW-SUB-CORE-010 }
+  - { type: allocate, from: B-env-backend, to: EA-SW-SUB-ENV-010 }
+  - { type: satisfy, from: D-arch-layers, to: EA-SW-SYS-010 }
+  - { type: satisfy, from: D-proposals-schema, to: EA-SW-SYS-020 }
+  - { type: satisfy, from: D-results-store, to: EA-SW-SUB-CORE-010 }
+  - { type: verify, from: VC-ea-loop-2run, to: EA-SW-SYS-010 }
+  - { type: verify, from: VC-ea-loop-2run, to: EA-SW-SYS-020 }
+  - { type: verify, from: VC-ea-pytest, to: EA-SW-SUB-CLI-010 }
+  - { type: verify, from: VC-ea-pytest, to: EA-SW-SUB-SCN-010 }
+  - { type: verify, from: VC-ea-pytest, to: EA-SW-SUB-AGT-010 }
+  - { type: verify, from: VC-ea-pytest, to: EA-SW-SUB-ENV-010 }
+  - { type: verify, from: VC-ea-pytest, to: EA-SW-SUB-CORE-010 }

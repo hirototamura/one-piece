@@ -18,6 +18,10 @@ To that end, we first build a process for developing systems autonomously.
 
 - Primary work objects: requirements management, system-model construction, automated verification and updates, and structured artifacts linked to the system model.
 
+- The platform is the **SE management surface for any complex system** (not a single product). Programs are recorded under `docs/*/programs/`. The first example program is **Engineering Agents** (software)—see `docs/en/programs/engineering_agents/`.
+
+- **Software systems also have system models.** Prefer requirements, boundaries, verification cases, and evidence—not hardware CAD/mass budgets as the mandatory center. Domain/plant content exercised *by* a software program is a separate model from that software’s own SE graph.
+
 - Agent-generated outputs must be explainable through the system model and documentation.
 
 - **Domain authority** between humans and agents is adjustable. When humans hold 100% authority, agents draft, cross-check, and maintain artifact consistency.
@@ -77,7 +81,7 @@ Agents **draft**; humans **baseline** after review.
 - Subsystem **verification activity plans** (analysis, test, inspection)
 - **Verification platform requirements** and **specifications** (what must exist to execute those plans)
 
-Every parent→child relationship is **traceable** (appropriate `derives_from` / `satisfies` links in the system model).
+Every parent→child relationship is **traceable**. Prefer verb-base relations aligned with MBSE practice: `derive(parent, child)`, `satisfy(design, requirement)`, `verify(verification_case, requirement)`, `allocate(element, requirement)`, `constrain(constraint, parameter)`. Verification cases are first-class (which requirement, by what means, how judged).
 
 ## Design consistency and human judgment
 
