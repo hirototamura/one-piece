@@ -1,7 +1,7 @@
 # Engineering Agents — 要求
 
 Engineering Agents プログラムのソフトウェア要求。  
-正本 ID・関係: [system_model.md](system_model.md)、[model/requirements.yaml](../../en/programs/engineering_agents/model/requirements.yaml)。
+正本 ID・関係: [system_model.md](system_model.md)、[model/requirements.yaml](../../../en/programs/engineering_agents/model/requirements.yaml)。
 
 ## 階層
 

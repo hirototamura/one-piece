@@ -1,7 +1,7 @@
 # Engineering Agents — システムモデル
 
 Engineering Agents プログラムの正本ソフトウェア・システムモデル。  
-機械可読: [model/system_model.yaml](../../en/programs/engineering_agents/model/system_model.yaml)（model は en を正とする）。  
+機械可読: [model/system_model.yaml](../../../en/programs/engineering_agents/model/system_model.yaml)（model は en を正とする）。  
 関係凡例は動詞の基本形。SysML の区別を取り入れるがフル準拠は必須ではない。
 
 ## スコープ
@@ -172,7 +172,7 @@ flowchart LR
 
 ## 関係
 
-英語版 [system_model.md](../../en/programs/engineering_agents/system_model.md) および [model/system_model.yaml](../../en/programs/engineering_agents/model/system_model.yaml) と同一の `derive` / `constrain` / `allocate` / `satisfy` / `verify` 一覧を正とする。
+英語版 [system_model.md](../../../en/programs/engineering_agents/system_model.md) および [model/system_model.yaml](../../../en/programs/engineering_agents/model/system_model.yaml) と同一の `derive` / `constrain` / `allocate` / `satisfy` / `verify` 一覧を正とする。
 
 ### verification case 三点セット
 

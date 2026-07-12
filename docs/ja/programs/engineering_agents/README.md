@@ -14,6 +14,6 @@ One Piece 自体は **あらゆる複雑システム** の SE 管理面であり
 | 妥当性確認 | [validation.md](validation.md) |
 | マトリクス | [matrix.md](matrix.md) |
 | 競合トレードオフ（共通方針） | [../../competitor_tradeoff.md](../../competitor_tradeoff.md) |
-| モデル（YAML） | [../../en/programs/engineering_agents/model/](../../en/programs/engineering_agents/model/)（en を正） |
+| モデル（YAML） | [../../../en/programs/engineering_agents/model/](../../../en/programs/engineering_agents/model/)（en を正） |
 
-英語: [../../en/programs/engineering_agents/](../../en/programs/engineering_agents/)。
+英語: [../../../en/programs/engineering_agents/](../../../en/programs/engineering_agents/)。

@@ -1,7 +1,7 @@
 # Engineering Agents — 境界
 
 EA サブシステム間および外部シム backend とのソフトウェア境界。  
-機械可読: [model/boundaries.yaml](../../en/programs/engineering_agents/model/boundaries.yaml)。
+機械可読: [model/boundaries.yaml](../../../en/programs/engineering_agents/model/boundaries.yaml)。
 
 | ID | From | To | 注 |
 |----|------|-----|----|

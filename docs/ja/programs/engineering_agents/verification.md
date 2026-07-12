@@ -39,4 +39,4 @@ requirement_id → shell の単純自動束縛は用いない。
 
 ## 機械可読
 
-[model/verification_cases.yaml](../../en/programs/engineering_agents/model/verification_cases.yaml)
+[model/verification_cases.yaml](../../../en/programs/engineering_agents/model/verification_cases.yaml)
