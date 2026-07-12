@@ -48,5 +48,5 @@ flowchart TB
 ## 関連
 
 - [requirements.md](requirements.md)
-- [system_graph.md](system_graph.md)
+- [system_model.md](system_model.md)
 - [validation.md](validation.md)

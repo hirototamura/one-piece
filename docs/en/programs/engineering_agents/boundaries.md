@@ -19,4 +19,4 @@ Machine-readable: [model/boundaries.yaml](model/boundaries.yaml).
 - `allocate(B-scenario-core, EA-SW-SUB-CORE-010)`
 - `allocate(B-env-backend, EA-SW-SUB-ENV-010)`
 
-See [system_graph.md](system_graph.md).
+See [system_model.md](system_model.md).

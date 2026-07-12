@@ -1,8 +1,8 @@
-# Engineering Agents software — system graph (machine-readable)
-# Canonical with system_graph.md. Domain/plant physics are not requirement nodes.
+# Engineering Agents software — system model (machine-readable)
+# Canonical with system_model.md. Domain/plant physics are not requirement nodes.
 
 program: engineering_agents
-kind: software_system_graph
+kind: software_system_model
 relation_verbs: [derive, satisfy, verify, allocate, constrain]
 
 nodes:

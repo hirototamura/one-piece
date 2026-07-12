@@ -1,13 +1,102 @@
-# Engineering Agents — System graph
+# Engineering Agents — System model
 
-Canonical software system graph for the Engineering Agents program.  
-Machine-readable twin: [model/system_graph.yaml](model/system_graph.yaml).  
+Canonical software system model for the Engineering Agents program.  
+Machine-readable twin: [model/system_model.yaml](model/system_model.yaml).  
 Relation legend matches One Piece SE practice (verb base forms; SysML-inspired distinctions without full SysML compliance).
 
 ## Scope
 
 - **In scope:** EA *software* requirements, parameters, constraints, boundaries, design elements, verification cases, evidence.
-- **Out of graph as requirements:** domain/plant physics (those are content the software may simulate, not this program’s requirement nodes).
+- **Out of model as requirements:** domain/plant physics (those are content the software may simulate, not this program’s requirement nodes).
+
+## System model diagram
+
+Layered software architecture, boundaries (`allocate`), and external backend. Domain/plant physics sit outside this software model.
+
+```mermaid
+flowchart TB
+  subgraph operator["Operator"]
+    OPS["EA-SW-OPS-010 / EA-SW-OPS-020"]
+  end
+  subgraph tools["CLI (tools)"]
+    CLI["EA-SW-SUB-CLI-010"]
+  end
+  subgraph orchestration["scenario"]
+    SCN["EA-SW-SUB-SCN-010"]
+  end
+  subgraph agents_layer["agents"]
+    AGT["EA-SW-SUB-AGT-010"]
+  end
+  subgraph isolation["environment"]
+    ENV["EA-SW-SUB-ENV-010"]
+  end
+  subgraph persistence["core"]
+    CORE["EA-SW-SUB-CORE-010"]
+  end
+  EXT["external sim / plant backend"]
+
+  OPS --> CLI
+  CLI -->|"B-cli-scenario"| SCN
+  SCN -->|"B-scenario-agents"| AGT
+  SCN -->|"B-scenario-env"| ENV
+  SCN -->|"B-scenario-core"| CORE
+  ENV -->|"B-env-backend"| EXT
+
+  D1["D-arch-layers"]
+  D2["D-proposals-schema"]
+  D3["D-results-store"]
+  D1 -.->|"satisfy"| SCN
+  D2 -.->|"satisfy"| CORE
+  D3 -.->|"satisfy"| CORE
+```
+
+Verification cases, constraints, and evidence close the loop on system requirements (truth gate: no LLM self-certification).
+
+```mermaid
+flowchart LR
+  subgraph params["Parameters"]
+    PN["P-N"]
+    PPC["P-proposals_count"]
+    PPR["P-proposals_path"]
+  end
+  subgraph constraints["Constraints"]
+    CN["C-N-ge-1"]
+    CP["C-proposals_emitted"]
+    CD["C-result_delta"]
+    CT["C-truth-gate"]
+    CYG["C-pytest_green"]
+  end
+  subgraph vcs["Verification cases"]
+    VC2["VC-ea-loop-2run"]
+    VCp["VC-ea-pytest"]
+  end
+  subgraph evidence["Evidence"]
+    E1["E-run1"]
+    E2["E-run2"]
+    Ep["E-pytest"]
+  end
+  SYS10["EA-SW-SYS-010"]
+  SYS20["EA-SW-SYS-020"]
+  SUB["EA-SW-SUB-*"]
+
+  CN -->|"constrain"| PN
+  CP -->|"constrain"| PPC
+  CD -->|"constrain"| PPR
+  CT -->|"constrain"| SYS20
+
+  VC2 -->|"verify"| SYS10
+  VC2 -->|"verify"| SYS20
+  VC2 --> E1
+  VC2 --> E2
+  VC2 --> CN
+  VC2 --> CP
+  VC2 --> CD
+  VC2 --> CT
+
+  VCp -->|"verify"| SUB
+  VCp --> Ep
+  VCp --> CYG
+```
 
 ## Relation legend
 
@@ -115,6 +204,8 @@ Hierarchy: Mission → System; System → Operational **and** Subsystem (`derive
 - Which: subsystem requirements `EA-SW-SUB-*`
 - Means: development regression suite
 - Judge: `C-pytest_green` on `E-pytest`
+
+### Requirement graph
 
 ```mermaid
 flowchart TB

@@ -1,5 +1,7 @@
 # Competitor methods and adoption tradeoffs
 
+Cross-program design policy for **One Piece Engineering** and **Engineering Agents** (not tied to a single program folder).
+
 Source: One Piece Engineering market survey PDF (8 vendors, 2026-07-12) plus public product pages.  
 Purpose: choose patterns for **constraint-backed automatic verification**, **data joining**, and **AI agent assembly**—without naive requirement_id → shell auto-binding.
 
@@ -51,4 +53,4 @@ flowchart LR
   Evidence --> Graph
 ```
 
-EA software graph: [system_graph.md](system_graph.md).
+Example application (EA software model): [programs/engineering_agents/system_model.md](programs/engineering_agents/system_model.md).

@@ -48,5 +48,5 @@ Anchored in software verification case `VC-ea-loop-2run` (see [verification.md](
 ## Related artifacts
 
 - [requirements.md](requirements.md)
-- [system_graph.md](system_graph.md)
+- [system_model.md](system_model.md)
 - [validation.md](validation.md)

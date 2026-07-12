@@ -16,4 +16,4 @@
 | `EA-SW-SUB-CORE-010` | — | verify | planned | E-pytest |
 
 関係は動詞基本形: `verify(verification_case, requirement)`。  
-全体グラフ: [system_graph.md](system_graph.md)。
+全体モデル: [system_model.md](system_model.md)。

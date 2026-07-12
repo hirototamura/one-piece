@@ -1,7 +1,7 @@
 # Engineering Agents — Requirements
 
 Software requirements for the Engineering Agents program.  
-Canonical IDs and relations: [system_graph.md](system_graph.md), [model/requirements.yaml](model/requirements.yaml).
+Canonical IDs and relations: [system_model.md](system_model.md), [model/requirements.yaml](model/requirements.yaml).
 
 ## Hierarchy
 

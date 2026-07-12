@@ -35,7 +35,7 @@ ConOps の **ミニマムサクセス** ゲートにもアンカー（[validatio
 ## 制約付き自動検証の立場
 
 requirement_id → shell の単純自動束縛は用いない。  
-**システムグラフ + constrain + 決定論的真実ゲート**（[competitor_tradeoff.md](competitor_tradeoff.md)）。
+**システムモデル + constrain + 決定論的真実ゲート**（[../../competitor_tradeoff.md](../../competitor_tradeoff.md)）。
 
 ## 機械可読
 

@@ -37,7 +37,7 @@ This case also anchors the ConOps **minimum success** gate (see [validation.md](
 ## Constraint-backed auto-verification stance
 
 Do **not** use naive requirement_id → shell auto-binding.  
-Use the **system graph + constrain + deterministic truth gate** pattern ([competitor_tradeoff.md](competitor_tradeoff.md)).
+Use the **system model + constrain + deterministic truth gate** pattern ([../../competitor_tradeoff.md](../../competitor_tradeoff.md)).
 
 ## Machine-readable
 

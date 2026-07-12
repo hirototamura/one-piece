@@ -16,4 +16,4 @@ Requirement × verification case. Evidence columns filled when runs/tests are re
 | `EA-SW-SUB-CORE-010` | — | verify | planned | E-pytest |
 
 Relations use verb base forms: `verify(verification_case, requirement)`.  
-Full graph: [system_graph.md](system_graph.md).
+Full model: [system_model.md](system_model.md).

@@ -19,4 +19,4 @@ EA サブシステム間および外部シム backend とのソフトウェア�
 - `allocate(B-scenario-core, EA-SW-SUB-CORE-010)`
 - `allocate(B-env-backend, EA-SW-SUB-ENV-010)`
 
-詳細は [system_graph.md](system_graph.md)。
+詳細は [system_model.md](system_model.md)。

@@ -1,5 +1,7 @@
 # 競合手法と採用トレードオフ
 
+**One Piece Engineering** と **Engineering Agents** に共通する設計方針（特定プログラム専用ではない）。
+
 出典: One Piece Engineering 市場調査 PDF（8社、2026-07-12）および各社公開情報。  
 目的: **制約付き自動検証**・**データ結合**・**AI エージェント組み付け**の手法選定。requirement_id → shell の単純自動束縛は採らない。
 
@@ -37,4 +39,4 @@
 
 ## 制約付き検証ループ
 
-EA ソフトウェアグラフ: [system_graph.md](system_graph.md)。
+適用例（EA ソフトウェアモデル）: [programs/engineering_agents/system_model.md](programs/engineering_agents/system_model.md)。
