@@ -10,6 +10,7 @@ parameters:
 constraints:
   - { id: C-N-ge-1, text: "P-N >= 1", constrains: P-N }
   - { id: C-proposals_emitted, text: "P-proposals_count >= 1 after Cycle 1", constrains: P-proposals_count }
+  - { id: C-proposals_applied, text: "P-proposals_path is non-empty for Cycle 2 apply", constrains: P-proposals_path }
   - { id: C-result_delta, text: "P-results_delta is true", constrains: P-results_delta }
   - { id: C-truth-gate, text: "P-pass_materials_basis excludes LLM-only self-certification", constrains: P-pass_materials_basis }
   - { id: C-pytest_green, text: "Regression suite succeeds" }

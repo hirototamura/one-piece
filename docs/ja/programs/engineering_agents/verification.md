@@ -18,7 +18,7 @@
 |----|------|
 | どの要求か | `EA-SW-SYS-010`, `EA-SW-SYS-020` |
 | 何をもってか | CLI → scenario: Cycle1 → 提案出力 → 提案適用して Cycle2 |
-| どう判定か | `C-N-ge-1`, `C-proposals_emitted`, `C-result_delta`, `C-truth-gate` |
+| どう判定か | `C-N-ge-1`, `C-proposals_emitted`, `C-proposals_applied`, `C-result_delta`, `C-truth-gate` |
 | 証拠 | `E-run1`, `E-run2` |
 
 ConOps の **ミニマムサクセス** ゲートにもアンカー（[validation.md](validation.md)）。

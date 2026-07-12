@@ -1,7 +1,7 @@
 # Engineering Agents — システムモデル
 
 Engineering Agents プログラムの正本ソフトウェア・システムモデル。  
-機械可読: [../en/programs/engineering_agents/model/system_model.yaml](../../en/programs/engineering_agents/model/system_model.yaml)（model は en を正とする）。  
+機械可読: [model/system_model.yaml](../../en/programs/engineering_agents/model/system_model.yaml)（model は en を正とする）。  
 関係凡例は動詞の基本形。SysML の区別を取り入れるがフル準拠は必須ではない。
 
 ## スコープ
@@ -59,12 +59,14 @@ flowchart LR
   subgraph params["パラメータ"]
     PN["P-N"]
     PPC["P-proposals_count"]
+    PPR["P-proposals_path"]
     PRD["P-results_delta"]
     PPB["P-pass_materials_basis"]
   end
   subgraph constraints["制約"]
     CN["C-N-ge-1"]
     CP["C-proposals_emitted"]
+    CPA["C-proposals_applied"]
     CD["C-result_delta"]
     CT["C-truth-gate"]
     CYG["C-pytest_green"]
@@ -84,6 +86,7 @@ flowchart LR
 
   CN -->|"constrain"| PN
   CP -->|"constrain"| PPC
+  CPA -->|"constrain"| PPR
   CD -->|"constrain"| PRD
   CT -->|"constrain"| PPB
 
@@ -93,6 +96,7 @@ flowchart LR
   VC2 --> E2
   VC2 --> CN
   VC2 --> CP
+  VC2 --> CPA
   VC2 --> CD
   VC2 --> CT
 
@@ -145,6 +149,7 @@ flowchart LR
 | `P-pass_materials_basis` | parameter | 合格判定の記録根拠（sim / constraint / evidence。LLM のみは不可） |
 | `C-N-ge-1` | constraint | `P-N >= 1` |
 | `C-proposals_emitted` | constraint | Cycle1 後 `P-proposals_count >= 1` |
+| `C-proposals_applied` | constraint | Cycle2 適用時 `P-proposals_path` が非空 |
 | `C-result_delta` | constraint | `P-results_delta` が true |
 | `C-truth-gate` | constraint | `P-pass_materials_basis` が LLM 自己申告のみを除外する |
 | `C-pytest_green` | constraint | 回帰スイート成功 |
@@ -171,7 +176,7 @@ flowchart LR
 
 ### verification case 三点セット
 
-**`VC-ea-loop-2run`** — どの要求: SYS-010/020／何をもって: CLI→scenario、Cycle1 実行→proposals 出力→Cycle2 適用再実行／どう判定: `C-N-ge-1`, `C-proposals_emitted`, `C-result_delta`, `C-truth-gate`（E-run1/E-run2）。
+**`VC-ea-loop-2run`** — どの要求: SYS-010/020／何をもって: CLI→scenario、Cycle1 実行→proposals 出力→Cycle2 適用再実行／どう判定: `C-N-ge-1`, `C-proposals_emitted`, `C-proposals_applied`, `C-result_delta`, `C-truth-gate`（E-run1/E-run2）。
 
 **`VC-ea-pytest`** — どの要求: `EA-SW-SUB-*`／何をもって: 回帰スイート／どう判定: `C-pytest_green`（E-pytest）。
 

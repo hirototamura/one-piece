@@ -18,7 +18,7 @@ Matrix: [matrix.md](matrix.md).
 |-------|---------|
 | Which requirements | `EA-SW-SYS-010`, `EA-SW-SYS-020` |
 | Means | CLI → scenario: Cycle 1 run → emit proposals → Cycle 2 run with proposals applied |
-| Judge | `C-N-ge-1`, `C-proposals_emitted`, `C-result_delta`, `C-truth-gate` |
+| Judge | `C-N-ge-1`, `C-proposals_emitted`, `C-proposals_applied`, `C-result_delta`, `C-truth-gate` |
 | Evidence | `E-run1`, `E-run2` |
 | Relation | `verify(VC-ea-loop-2run, EA-SW-SYS-010)`, `verify(VC-ea-loop-2run, EA-SW-SYS-020)` |
 

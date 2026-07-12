@@ -59,12 +59,14 @@ flowchart LR
   subgraph params["Parameters"]
     PN["P-N"]
     PPC["P-proposals_count"]
+    PPR["P-proposals_path"]
     PRD["P-results_delta"]
     PPB["P-pass_materials_basis"]
   end
   subgraph constraints["Constraints"]
     CN["C-N-ge-1"]
     CP["C-proposals_emitted"]
+    CPA["C-proposals_applied"]
     CD["C-result_delta"]
     CT["C-truth-gate"]
     CYG["C-pytest_green"]
@@ -84,6 +86,7 @@ flowchart LR
 
   CN -->|"constrain"| PN
   CP -->|"constrain"| PPC
+  CPA -->|"constrain"| PPR
   CD -->|"constrain"| PRD
   CT -->|"constrain"| PPB
 
@@ -93,6 +96,7 @@ flowchart LR
   VC2 --> E2
   VC2 --> CN
   VC2 --> CP
+  VC2 --> CPA
   VC2 --> CD
   VC2 --> CT
 
@@ -145,6 +149,7 @@ Hierarchy: Mission → System; System → Operational **and** Subsystem (`derive
 | `P-pass_materials_basis` | parameter | Recorded basis for pass judgment (sim / constraint / evidence; not LLM-only) |
 | `C-N-ge-1` | constraint | `P-N >= 1` |
 | `C-proposals_emitted` | constraint | `P-proposals_count >= 1` after Cycle 1 |
+| `C-proposals_applied` | constraint | `P-proposals_path` is non-empty for Cycle 2 apply |
 | `C-result_delta` | constraint | `P-results_delta` is true |
 | `C-truth-gate` | constraint | `P-pass_materials_basis` excludes LLM-only self-certification |
 | `C-pytest_green` | constraint | Regression suite succeeds |
@@ -178,6 +183,7 @@ Hierarchy: Mission → System; System → Operational **and** Subsystem (`derive
 - `derive(EA-SW-OPS-010, EA-SW-SUB-CLI-010)`
 - `constrain(C-N-ge-1, P-N)`
 - `constrain(C-proposals_emitted, P-proposals_count)`
+- `constrain(C-proposals_applied, P-proposals_path)`
 - `constrain(C-result_delta, P-results_delta)`
 - `constrain(C-truth-gate, P-pass_materials_basis)`
 - `allocate(B-cli-scenario, EA-SW-SUB-CLI-010)`
@@ -202,7 +208,7 @@ Hierarchy: Mission → System; System → Operational **and** Subsystem (`derive
 
 - Which: `EA-SW-SYS-010`, `EA-SW-SYS-020`
 - Means: CLI → scenario: Cycle 1 run → emit proposals → Cycle 2 run with proposals applied
-- Judge: `C-N-ge-1`, `C-proposals_emitted`, `C-result_delta`, `C-truth-gate` on `E-run1` / `E-run2`
+- Judge: `C-N-ge-1`, `C-proposals_emitted`, `C-proposals_applied`, `C-result_delta`, `C-truth-gate` on `E-run1` / `E-run2`
 
 **`VC-ea-pytest`**
 
