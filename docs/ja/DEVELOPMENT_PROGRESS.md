@@ -2,6 +2,11 @@
 
 **新しいエントリを上に追記**する。各エントリは数文に留め、コミットや PR があればリンクする。
 
+## 2026-07-17（nasa-se サブエージェント）
+
+- NASA Systems Engineering Handbook（SP-2016-6105 Rev2）の SE Engine（17 共通技術プロセス）に沿ってアクションを実行するプロジェクトサブエージェント `.cursor/agents/nasa-se.md` を追加。
+- 要求定義・論理分解・設計解・V&V 区別・技術管理（トレーサビリティ/IF/リスク/CM/意思決定）と Pre-Phase A〜F の適用をプロンプトに組み込み、`docs/*/CORE.md` の成果物型とも対応。
+
 ## 2026-07-11（ドキュメント専用リポジトリ）
 
 - 実装物をすべて削除: `apps/`、`packages/`、ルート `package.json`、`package-lock.json`、`pyproject.toml`、`tsconfig.base.json`。

@@ -2,6 +2,11 @@
 
 Append **newest entries at the top**. Keep each entry to a few sentences; link commits or PRs when available.
 
+## 2026-07-17 (nasa-se subagent)
+
+- Added project subagent `.cursor/agents/nasa-se.md` that executes NASA Systems Engineering Handbook (SP-2016-6105 Rev2) SE Engine actions across the 17 common technical processes.
+- Encodes requirements, logical decomposition, design solution, verification vs validation, and technical management (traceability/interfaces/risk/CM/decision analysis) with Pre-Phase A–F framing, mapped to `docs/*/CORE.md` artifact types.
+
 ## 2026-07-11 (documentation-only repository)
 
 - Removed all implementation artifacts: `apps/`, `packages/`, root `package.json`, `package-lock.json`, `pyproject.toml`, and `tsconfig.base.json`.
