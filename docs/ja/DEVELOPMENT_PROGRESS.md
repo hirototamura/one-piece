@@ -2,6 +2,11 @@
 
 **新しいエントリを上に追記**する。各エントリは数文に留め、コミットや PR があればリンクする。
 
+## 2026-07-17（spacex-se サブエージェント）
+
+- 2012 SpaceX SE デッキ（*System Engineering: A Traditional Discipline in a Non-traditional Organization*）と Hardware DevOps / モジュラー首席エンジニア運用を実行するプロジェクトサブエージェント `.cursor/agents/spacex-se.md` を追加。
+- 安定した上位意図 vs 取引可能な KDP、Plan–Design–Build–Test スパイラル、Test Like You Fly、開発/認定/受入/HITL 階層、Tools not rules、および `docs/*/CORE.md` 成果物型への対応をプロンプトに組み込み。
+
 ## 2026-07-11（ドキュメント専用リポジトリ）
 
 - 実装物をすべて削除: `apps/`、`packages/`、ルート `package.json`、`package-lock.json`、`pyproject.toml`、`tsconfig.base.json`。
