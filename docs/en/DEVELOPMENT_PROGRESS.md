@@ -2,6 +2,11 @@
 
 Append **newest entries at the top**. Keep each entry to a few sentences; link commits or PRs when available.
 
+## 2026-07-17 (spacex-se subagent)
+
+- Added project subagent `.cursor/agents/spacex-se.md` that executes SpaceX-style SE practice from the 2012 SpaceX SE deck (*System Engineering: A Traditional Discipline in a Non-traditional Organization*) plus Hardware DevOps / modular chief-engineer operating patterns.
+- Encodes stable top-level intent vs traded KDPs, Plan–Design–Build–Test spirals, Test Like You Fly, development/qualification/acceptance/HITL hierarchy, tools-not-rules integration, and mapping to `docs/*/CORE.md` artifact types.
+
 ## 2026-07-17 (nasa-se subagent)
 
 - Added project subagent `.cursor/agents/nasa-se.md` that executes NASA Systems Engineering Handbook (SP-2016-6105 Rev2) SE Engine actions across the 17 common technical processes.
