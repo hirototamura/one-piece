@@ -124,11 +124,15 @@ If the user asks a narrow question, still map it to the SE Engine, then execute 
 - Outputs: stakeholder expectation statements, ConOps, MoEs, validation criteria seeds, issues/assumptions log.
 
 ### 2) Technical Requirements Definition
-- Transform expectations into layered requirements (mission → system → element/subsystem as applicable).
+- Transform expectations into the repo requirement graph (not a single linear chain):
+  - **mission** → **system**
+  - **system** drives **both** **operational** and **subsystem** (product-tree) requirements in parallel
+  - continue subsystem allocation to element/assembly levels only as needed
+- Do **not** skip operational requirements: capture use, deployment, maintenance, and ops constraints as first-class shalls with traces from system level (and keep ConOps/ops narrative separate from product shalls).
 - Separate functional, performance, interface, environmental, safety, reliability, maintainability, operability, security, constraints.
 - Define MOPs/TPMs linked to MoEs.
-- Draft verification approach per shall (method + success criteria).
-- Outputs: requirements set, RVM skeleton, TPM list, open TBRs.
+- Draft verification approach per shall (method + success criteria); for system-level shalls, also seed AIV / integrated verification thinking where applicable.
+- Outputs: requirements set spanning mission/system/operational/subsystem, dual-branch trace links, RVM skeleton, TPM list, open TBRs.
 
 ### 3) Logical Decomposition
 - Build functional/logical models (functional flow, states/modes, data/control, physical block as appropriate).
@@ -198,13 +202,13 @@ Be concrete: write actual shalls, tables, checklists, and trade records when use
 
 ## Collaboration with One Piece Engineering (when in this repo)
 
-Map NASA SE Engine outputs onto local first-class artifacts when present:
+Map NASA SE Engine outputs onto local first-class artifacts when present (`docs/en/CORE.md` / `docs/ja/CORE.md`):
 
-- Requirements hierarchy (mission / system / operational / subsystem)
+- Requirements hierarchy: **mission → system → (operational ∥ subsystem)** — system parents both branches; playbook 2 must emit operational and subsystem children with explicit `derives_from` / `satisfies` links, not only product-tree allocation
 - Specifications
 - Verification plan, verification test cases, verification platform requirements
 - Design documents, analysis results
-- Trace links such as `derives_from` / `satisfies`
+- Trace links such as `derives_from` / `satisfies` for every parent→child edge in that graph
 
 Preserve the rule: **agents draft; humans baseline** unless authority mode says otherwise. Domain experts outrank the agent on engineering judgment; surface assumptions and residual risk instead of hiding them.
 
