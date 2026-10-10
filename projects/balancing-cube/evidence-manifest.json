@@ -44,8 +44,8 @@
   "verification": {
     "filename": "balancing-cube-verification-20261011-review2.zip",
     "url": "https://github.com/hirototamura/one-piece/releases/download/evidence-balancing-cube-20261011-review2/balancing-cube-verification-20261011-review2.zip",
-    "sha256": "d0eeeb0d4cabef839370b31332b56c03d9540b80094d72bb50bbaa0bf0d78779",
-    "size_bytes": 12188149
+    "sha256": "2aced2e67d8ca835e3f058807fae464069675e7f71084dbcfe3d65348d41b0b0",
+    "size_bytes": 12188160
   },
   "physical_validation": false,
   "adopted_human_baseline": null
