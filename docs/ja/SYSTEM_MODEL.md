@@ -36,3 +36,5 @@ Verificationは指定した要求と条件への適合、Validationは意図し�
 - [SpaceX-style SE](../../.cursor/agents/spacex-se.md)：上位意図を保ち、下位KDPを証拠付きでトレードし、安価な開発試験で学ぶ。
 - [OMG SysML v2](https://www.omg.org/spec/SysML/2.0/)：構成・属性・要求・検証の参考。
 - [ENPIRE](https://arxiv.org/html/2606.19980v2)：環境構築と、その環境を固定した改善ループを分離する。
+
+Current balancing-cube projections use `cube.simulation.snapshot@fixed-dt-mvp-2` via an explicit active system-model reference. The comparison design and campaign summary are mandatory outside context limits. Requirement statement status is separate from physical verification; `hardware_verification_required` is a planned hardware evidence obligation, not a pass flag. Numerical evaluations verify development test cases. Historical revisions retain their original fields and links for audit.

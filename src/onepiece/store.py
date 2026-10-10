@@ -63,6 +63,39 @@ def _bundle_compression(chunks: Iterable[bytes]) -> int:
     return zipfile.ZIP_STORED if size > max(compressed, 1) * MAX_ZIP_EXPANSION_RATIO else zipfile.ZIP_DEFLATED
 
 
+def current_records(records, snapshot=None):
+    """A revision projection; canonical history is never deleted or rewritten."""
+    selected = {}
+    for record in records:
+        key = record["project_id"], record["id"]
+        if key not in selected or (record["created_at"], record["revision"]) > (selected[key]["created_at"], selected[key]["revision"]):
+            selected[key] = record
+    if snapshot is not None:
+        by_ref = {_key(r): r for r in records}
+        refs = snapshot["data"].get("context_refs", {})
+        pinned = refs.get("requirements", []) + refs.get("kdps", [])
+        pinned += [r for r in [refs.get("campaign_summary"), snapshot["data"].get("comparison_design_ref")] if r]
+        for reference in pinned:
+            key = (snapshot["project_id"], reference["id"], reference["revision"])
+            if key not in by_ref:
+                raise IntegrityError("Missing pinned context record")
+            selected[key[:2]] = by_ref[key]
+        selected[_key(snapshot)[:2]] = snapshot
+    return sorted(selected.values(), key=lambda r: (r["created_at"], r["id"], r["revision"]))
+
+
+def _data_refs(value, path="data"):
+    if isinstance(value, dict):
+        if isinstance(value.get("id"), str) and isinstance(value.get("revision"), str):
+            yield path, {"id": value["id"], "revision": value["revision"]}
+        else:
+            for key, child in value.items():
+                yield from _data_refs(child, path + "." + key)
+    elif isinstance(value, list):
+        for i, child in enumerate(value):
+            yield from _data_refs(child, f"{path}.{i}")
+
+
 class Store:
     def __init__(self, path: str | Path):
         self.path = Path(path).expanduser().resolve()
@@ -434,6 +467,12 @@ class Store:
         if max_designs < 0 or max_evidence < 0:
             raise RecordError("Context limits must be nonnegative")
         records = self.records(project_id)
+        project_record_count = len(records)
+        if snapshot_ref is None:
+            active = next((r for r in current_records(records) if r["kind"] == "system_model"
+                           and r["data"].get("simulation_snapshot_ref")), None)
+            if active is not None:
+                snapshot_ref = active["data"]["simulation_snapshot_ref"]
         # Requirements, KDPs, and assumptions retain their exact units/uncertainty even when evidence is bounded.
         always = {"requirement", "kdp", "parameter", "model_parameter", "simulation_snapshot", "campaign_summary", "verification_coverage", "design_parameter", "assumption", "risk", "interface", "product", "system_model", "baseline"}
         snapshot = None
@@ -444,7 +483,19 @@ class Store:
             # Keep every requirement/parameter with its units and uncertainty.
             # Historical snapshots/aggregates stay queryable in the Store; a
             # scoped agent view avoids repeating their embedded registries.
-            always -= {"simulation_snapshot", "campaign_summary", "verification_coverage"}
+            records = current_records(records, snapshot)
+            always -= {"simulation_snapshot", "verification_coverage"}
+        pinned_keys = set()
+        if snapshot is not None:
+            comparison = snapshot["data"].get("comparison_design_ref")
+            if comparison:
+                pinned_key = (project_id, comparison["id"], comparison["revision"])
+                pinned = next((r for r in self.records(project_id) if _key(r) == pinned_key), None)
+                if pinned is None or pinned["kind"] != "design":
+                    raise IntegrityError("Missing exact comparison design in context")
+                records = [r for r in records if r["id"] != pinned["id"]] + [pinned]
+                records.sort(key=lambda r: (r["created_at"], r["id"], r["revision"]))
+                pinned_keys.add(pinned_key)
         design_kinds = {"design", "design_candidate", "candidate"}
         evidence_kinds = {"evidence", "evaluation", "artifact", "simulation_run", "trial", "verification", "analysis_result"}
         selected, design_count, evidence_count = [], 0, 0
@@ -452,13 +503,14 @@ class Store:
         # Keep requirements/KDP from the whole project, not only the selected subsystem, to preserve system context.
         eligible_keys = {_key(r) for r in eligible} | {_key(r) for r in records if r["kind"] in always}
         if snapshot is not None:
-            eligible_keys -= {_key(r) for r in records if r["kind"] in {"simulation_snapshot", "campaign_summary", "verification_coverage"}}
+            eligible_keys -= {_key(r) for r in records if r["kind"] in {"simulation_snapshot", "verification_coverage"}}
             eligible_keys.add(_key(snapshot))
+            eligible_keys |= pinned_keys
         for record in reversed(records):
             if _key(record) not in eligible_keys:
                 continue
             kind = record["kind"]
-            if kind in design_kinds:
+            if kind in design_kinds and _key(record) not in pinned_keys:
                 if design_count >= max_designs:
                     continue
                 design_count += 1
@@ -475,7 +527,10 @@ class Store:
                 target = edge["target"]
                 if (project_id, target["id"], target["revision"]) not in keys:
                     omitted_refs.append({"source": ref(record), "type": edge["type"], "target": target, "reason": "context_filter_or_limit"})
-        return {"schema_version": "1.0", "project_id": project_id, "records": selected, "counts": {"project_records": len(records), "returned": len(selected), "designs": design_count, "evidence": evidence_count}, "limits": {"max_designs": max_designs, "max_evidence": max_evidence}, "snapshot_ref": snapshot_ref, "omitted_record_count": len(records) - len(selected), "omitted_references": omitted_refs, "semantics": "All project requirements, KDPs, assumptions and risks retained verbatim; returned evidence/designs are bounded. A snapshot_ref scopes embedded model history to that exact snapshot. Omitted references remain in canonical storage. Simulation/numerical agreement is not physical validation."}
+            for path, target in _data_refs(record["data"]):
+                if (project_id, target["id"], target["revision"]) not in keys:
+                    omitted_refs.append({"source": ref(record), "type": "data_reference", "path": path, "target": target, "reason": "context_filter_or_limit"})
+        return {"schema_version": "1.0", "project_id": project_id, "records": selected, "counts": {"project_records": project_record_count, "returned": len(selected), "designs": design_count + len(pinned_keys), "bounded_designs": design_count, "pinned_designs": len(pinned_keys), "evidence": evidence_count}, "limits": {"max_designs": max_designs, "max_evidence": max_evidence}, "snapshot_ref": snapshot_ref, "omitted_record_count": project_record_count - len(selected), "omitted_references": omitted_refs, "semantics": "Current requirement/parameter revisions retain exact units and uncertainty; snapshot context_refs pin historical revisions when requested. Comparison design and campaign summaries are mandatory outside count/kind limits. Other evidence/designs are bounded; omitted edge and data references remain queryable in canonical history. Simulation/numerical agreement is not physical validation."}
 
     def check(self, project_id: str | None = None) -> dict:
         errors, warnings, records = [], [], []

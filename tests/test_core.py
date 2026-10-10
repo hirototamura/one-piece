@@ -346,3 +346,29 @@ def test_scoped_context_keeps_all_parameters_and_exact_snapshot(tmp_path):
     assert context["omitted_record_count"] == 2 and context["snapshot_ref"] == ref(current)
     with pytest.raises(RecordError, match="existing exact revision"):
         store.context("cube", snapshot_ref={"id": "snapshot", "revision": "missing"})
+
+
+def test_scoped_context_pins_comparison_and_campaign_outside_limits(tmp_path):
+    store = Store(tmp_path)
+    best = record("D-best", "design")
+    summary = record("campaign", "campaign_summary", data={"prior46": {"status_counts": {"pass": 31, "fail": 9, "inconclusive": 6}}})
+    snapshot = record("snapshot", "simulation_snapshot", data={"comparison_design_ref": ref(best)})
+    newer = [make_record(project_id="cube", id=f"test-{i}", kind="design_candidate") for i in range(7)]
+    iteration = record("legacy", "iteration", data={"best_design_ref": ref(best), "other_ref": ref("omitted", "1")})
+    omitted = record("omitted", "design")
+    store.import_records([best, summary, snapshot, iteration, omitted, *newer])
+    context = store.context("cube", kinds=["design_candidate", "iteration"], max_designs=5, max_evidence=0, snapshot_ref=ref(snapshot))
+    assert best in context["records"] and summary in context["records"]
+    assert len([r for r in context["records"] if r["kind"] == "design_candidate"]) == 5
+    assert context["counts"]["pinned_designs"] == 1
+    assert any(r["type"] == "data_reference" and r["target"] == ref(omitted) for r in context["omitted_references"])
+
+
+def test_context_pins_requirement_revision_and_does_not_mix_superseded_trace(tmp_path):
+    store = Store(tmp_path)
+    old = record("mission", data={"owner": "old"})
+    new = make_record(project_id="cube", id="mission", kind="requirement", revision="2", data={"owner": "system"})
+    snapshot = record("snapshot", "simulation_snapshot", data={"context_refs": {"requirements": [ref(old)]}})
+    store.import_records([old, new, snapshot])
+    context = store.context("cube", snapshot_ref=ref(snapshot))
+    assert old in context["records"] and new not in context["records"]

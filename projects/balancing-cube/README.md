@@ -4,11 +4,11 @@ One-Piece owns the versioned system model. Engineering Agents reads it, proposes
 
 The imported historical record contains 16 original requirements plus 5 explicitly drafted hierarchy nodes, 37 KDPs, 60 numerical model leaves, 2,048 designs, and distinct original GPU/CPU, supplemental CPU and replay evidence. The prior 46 candidates retain **31 pass / 9 fail / 6 inconclusive**. `D-000544-52890@legacy-20261009` is the existing paired numerical comparison reference. No adopted human baseline has been created.
 
-The original `cube.simulation.snapshot@legacy-20261009` stays immutable. New runs use `cube.simulation.snapshot@fixed-dt-mvp-1`, which pins the comparison design, retains the nominal controller-design plant and saved K, and applies fixed-timestep CPU/GPU checks. Historical half-step evidence remains history; this pipeline does not run new half-step checks. Original KDP registry values and resolved model values remain distinct where they differ.
+The original `cube.simulation.snapshot@legacy-20261009` stays immutable. New runs use `cube.simulation.snapshot@fixed-dt-mvp-2`, which pins the comparison design, retains the nominal controller-design plant and saved K, and applies fixed-timestep CPU/GPU checks. Historical half-step evidence remains history; this pipeline does not run new half-step checks. Original KDP registry values and resolved model values remain distinct where they differ.
 
 ## Restore and inspect
 
-Install One-Piece 0.1.0 from this checkout or the wheel attached to the [evidence Release](https://github.com/hirototamura/one-piece/releases/tag/evidence-balancing-cube-20261010). [evidence-manifest.json](evidence-manifest.json) pins asset URLs, sizes and SHA-256 values. A Git clone includes metadata only: restore artifacts before `check` or execution.
+Install One-Piece 0.1.1 from this checkout or the wheel attached to the [evidence Release](https://github.com/hirototamura/one-piece/releases/tag/evidence-balancing-cube-20261011-review2). [evidence-manifest.json](evidence-manifest.json) pins asset URLs, sizes and SHA-256 values. A Git clone includes metadata only: restore artifacts before `check` or execution.
 
 ```sh
 python -m pip install -e .
@@ -31,4 +31,12 @@ The final offline acceptance is `cube.acceptance.offline-20261010@2`. It records
 
 The Fake LLM proposals did not improve the numerical reference. CPU-only proposals remain provisional. New GPU execution, real LLM improvement, hardware measurements and physical validation have not been performed. Six-second numerical results do not verify the draft thirty-second hardware holding requirement. Existing unstructured acceptance criteria remain explicit warnings; imported historical states do not approve the new hierarchy.
 
-The system graph uses `derive / satisfy / verify / allocate / constrain`; `satisfy` records intent and `verify` carries scoped evidence. The [system-model guide](../../docs/ja/SYSTEM_MODEL.md) explains the NASA/SpaceX principles, and the [Engineering Agents guide](https://github.com/hirototamura/engineering_agents/blob/codex/mujoco-evidence-loop/docs/ja/mujoco-one-piece.md) describes the bounded ENPIRE-inspired pipeline. It evolves hypothesis, priority KDPs and search step, with hardware/software changes limited to the approved MVP variables.
+The system graph uses `derive / satisfy / verify / allocate / constrain`; `satisfy` records intent and `verify` carries scoped evidence. The [system-model guide](../../docs/ja/SYSTEM_MODEL.md) explains the NASA/SpaceX principles, and the [Engineering Agents guide](https://github.com/hirototamura/engineering_agents/blob/codex/mujoco-evidence-loop/docs/ja/mujoco-one-piece.md) describes the bounded ENPIRE-inspired pipeline. It evolves hypothesis, priority KDPs and suggested search step (advisory), with hardware/software changes limited to the approved MVP variables.
+
+## Trace corrections and acceptance isolation
+
+`fixed-dt-mvp-2` supersedes v1 for current contexts and report selection. Only trace metadata changes: M-VERTEX allocates to cube.system; numerical evaluations verify the six-second development test cases instead of the hardware mission. Requirement `status` describes the source statement, not a verification outcome. `hardware_verification_required` replaces the ambiguous `hardware_acceptance` field in current revisions and identifies work still to demonstrate with hardware. `physical_verified` remains null. Physics, controller K, conditions and outcomes are unchanged.
+
+The 4,445 previously published records remain immutable history, including earlier offline acceptance runs. The 2,175 appended revisions bring canonical history to 6,620 records; current projections contain one revision per ID. The exact comparison design and campaign_summary are outside context count limits, so acceptance candidates cannot hide the best original design or 31/9/6 summary. New acceptance runs use a separate temporary store; their logs are published in the new Release verification ZIP. The original 0.1.0 Release remains an archive, not the current install target.
+
+CI builds and tests the installed 0.1.1 wheel on Python 3.11/3.12. Engineering Agents uses that Release wheel with its SHA-256 pin and makes MuJoCo CPU integration tests mandatory with zero dependency skips. Requested-but-unavailable GPU execution is inconclusive and has a nonzero process exit; no GPU or physical result is inferred.

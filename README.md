@@ -92,9 +92,9 @@ System requirements branch to **both operational and subsystem requirements**. P
 
 ## Agent context and authority
 
-`Store.context(project_id, product_node=None, kinds=None, max_designs=20, max_evidence=50)` retains all project requirements, KDPs, detailed parameters, assumptions, risks, snapshots and model-binding data verbatim. Designs and evidence are bounded, with explicit omitted-reference metadata. The `kinds` and product filters apply to optional detail; they do not erase top-level requirements or parameter units. Agents should consume this structured context rather than parse a report.
+`Store.context(project_id, product_node=None, kinds=None, max_designs=20, max_evidence=50)` retains requirement/KDP units, uncertainty and source semantics. An explicit system-model `simulation_snapshot_ref` selects the current context by default; an optional exact `snapshot_ref` overrides it. Snapshot `context_refs` pin requirement and KDP revisions. Canonical history remains queryable through `records()` and is never rewritten.
 
-An optional `snapshot_ref={"id": ..., "revision": ...}` selects one exact model snapshot and omits repeated historical snapshot/aggregate payloads, while retaining every requirement and parameter. The CLI exposes `--snapshot-id` together with `--snapshot-revision`. Balancing Cube uses this scoped view with five designs and eight evidence records; its HTML exports the same projection. Full histories remain in canonical storage. Size the real LLM context window for the returned JSON; real-provider capacity has not been tested in offline acceptance.
+The comparison design and campaign summary are mandatory **outside** design/evidence count and kind filters. Balancing Cube returns five optional designs plus its comparison design, eight evidence records and the prior-46 summary. Omitted edge references and references embedded in data are enumerated. The CLI exposes `--snapshot-id` and `--snapshot-revision`; HTML exports the same selected context. Real-provider context-window capacity has not been tested.
 
 Development iterations may propose design changes, run bounded experiments and record decisions under their configured authority. Requirements/evaluation-contract adoption is separate from automatic experiment decisions. Imported historical `baseline` labels are not approval of a new design.
 
