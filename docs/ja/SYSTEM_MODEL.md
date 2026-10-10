@@ -28,6 +28,8 @@ Verificationは指定した要求と条件への適合、Validationは意図し�
 
 小さな正本JSON・索引情報をGitへ保存し、DB、軌跡、HTML、動画は内容ハッシュ付きの証拠パックにする。GitHub ReleaseへのZIP添付は証拠の保管手段であり、要求や設計の承認とは別である。CLIで取得後にハッシュを照合でき、オフラインでも同じパックを復元できる。生成HTMLは正本からの投影であり、LLMはJSONのcontextを使う。
 
+プロジェクト指定の `check` と `bundle` は、そのプロジェクトの成果物を検査する。全プロジェクトの証拠監査には指定なしの `check` を使う。復元後に再びGit cloneしても、正本JSONを変更せず成果物を再復元できる。極端によく圧縮できるZIPエントリは無圧縮で保存し、有効な証拠が取込時の展開率制限にも適合するようにする。
+
 ## 参考
 
 - [NASA SE Engine](../../.cursor/agents/nasa-se.md)：反復と階層的再帰、双方向トレース、構成管理、VerificationとValidationの区別。

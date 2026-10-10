@@ -64,6 +64,21 @@ def test_missing_or_bad_artifact_does_not_publish_batch(tmp_path):
     assert not store.check()["ok"]
 
 
+def test_existing_artifact_size_is_checked_before_publishing_new_record(tmp_path):
+    content = b"shared evidence bytes"
+    sha = hashlib.sha256(content).hexdigest()
+    store = Store(tmp_path / "store")
+    artifact = {"path": "result", "sha256": sha, "size_bytes": len(content)}
+    store.import_records([record("original", "evidence", artifacts=[artifact])],
+                         artifact_objects={sha: content})
+    before = store.records()
+    bad = record("reused", "evidence", artifacts=[{**artifact, "size_bytes": len(content) + 1}])
+    with pytest.raises(IntegrityError, match="size mismatch"):
+        store.import_records([record("also-new"), bad])
+    assert store.records() == before
+    assert store.check()["ok"]
+
+
 def test_traversal_and_escaping_symlink_artifacts_are_rejected(tmp_path):
     for name in ["../outside", "/etc/passwd", "C:/secret", "a\\b", "a/./b", "a//b"]:
         with pytest.raises(RecordError):
@@ -126,6 +141,50 @@ def test_bundle_roundtrip_hash_and_zip_safety(tmp_path):
     with pytest.raises(RecordError):
         restored.import_bundle(malicious, expected_sha256=file_sha256(malicious))
     assert not (tmp_path / "escape").exists()
+
+
+def test_bundle_roundtrip_for_highly_compressible_artifact_and_manifest(tmp_path):
+    content = bytes(1024 * 1024)
+    sha = hashlib.sha256(content).hexdigest()
+    store = Store(tmp_path / "original")
+    ev = record("zeros", "evidence", data={"repeated": "0" * 1024 * 1024},
+                artifacts=[{"path": "zeros.bin", "sha256": sha, "size_bytes": len(content)}])
+    store.import_records([ev], artifact_objects={sha: content})
+    bundle = store.bundle(tmp_path / "release.zip")
+    with zipfile.ZipFile(bundle["path"]) as archive:
+        assert all(info.compress_type == zipfile.ZIP_STORED for info in archive.infolist())
+    clone = Store(tmp_path / "clone")
+    clone.import_bundle(bundle["path"], expected_sha256=bundle["sha256"])
+    assert clone.records() == [ev]
+    assert clone.artifact_path(ev["artifacts"][0]).read_bytes() == content
+    assert clone.check()["ok"]
+    unsafe = tmp_path / "overcompressed.zip"
+    with zipfile.ZipFile(unsafe, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        archive.writestr("bundle.json", bytes(1024 * 1024))
+    with pytest.raises(IntegrityError, match="expansion ratio"):
+        clone.import_bundle(unsafe, expected_sha256=file_sha256(unsafe))
+
+
+def test_project_check_and_bundle_require_only_that_projects_artifacts(tmp_path):
+    store = Store(tmp_path / "store")
+    artifacts = {}
+    records = []
+    for project in ("a", "b"):
+        content = project.encode()
+        sha = hashlib.sha256(content).hexdigest()
+        artifacts[sha] = content
+        records.append(make_record(project_id=project, id="ev", kind="evidence",
+                                   artifacts=[{"path": "result", "sha256": sha, "size_bytes": len(content)}]))
+    store.import_records(records, artifact_objects=artifacts)
+    store.artifact_path(records[1]["artifacts"][0]).unlink()
+    assert not store.check()["ok"]
+    assert not store.check("b")["ok"]
+    assert store.check("a")["ok"]
+    bundle = store.bundle(tmp_path / "a.zip", "a")
+    clone = Store(tmp_path / "clone")
+    clone.import_bundle(bundle["path"], expected_sha256=bundle["sha256"])
+    assert clone.records() == [records[0]]
+    assert clone.check()["ok"]
 
 
 def test_no_numerical_physical_pass_or_agent_baseline(tmp_path):
@@ -248,6 +307,21 @@ def test_bundle_rehydrates_metadata_only_clone_without_rewriting_records(tmp_pat
     assert clone.records() == before
     assert clone.check()["ok"]
     assert clone.import_bundle(bundle["path"], expected_sha256=bundle["sha256"])["commit_id"] is None
+    # Git retains the objects-only restore commit's metadata, but excludes its
+    # objects. Re-cloning and restoring must work repeatedly, not just once.
+    for generation in range(2):
+        clone_root = tmp_path / f"clone-{generation + 2}"
+        shutil.copytree(clone.path, clone_root, ignore=shutil.ignore_patterns("objects", "index.sqlite", ".write.lock"))
+        clone = Store(clone_root)
+        canonical = {str(p.relative_to(clone.path)): p.read_bytes()
+                     for p in clone.commits.rglob("*.json")}
+        assert not clone.check()["ok"]
+        restored = clone.import_bundle(bundle["path"], expected_sha256=bundle["sha256"])
+        assert restored["imported"] == 0 and restored["restored_artifacts"] == 1
+        assert clone.check()["ok"] and clone.records() == before
+        assert canonical == {str(p.relative_to(clone.path)): p.read_bytes()
+                             for p in clone.commits.rglob("*.json")}
+        assert clone.import_bundle(bundle["path"], expected_sha256=bundle["sha256"])["commit_id"] is None
 
 
 def test_index_filter_columns_cannot_hide_canonical_requirements(tmp_path):

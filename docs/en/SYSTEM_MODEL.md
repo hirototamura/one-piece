@@ -26,4 +26,6 @@ Verification concerns specified requirements; validation concerns intended purpo
 
 Track compact canonical JSON in Git. Content-addressed evidence bundles carry databases, trajectories, HTML and video as GitHub Release assets. Release publication does not approve a requirement or design. Fetch verifies hashes, and the same pack restores offline. Reports are projections of records; LLMs read structured context instead of parsing HTML.
 
+Project-scoped `check` and `bundle` require the selected project's artifacts; use an unscoped `check` to audit every project's evidence. Metadata-only clones can be restored repeatedly, including after another Git clone, without rewriting canonical records. Bundles store unusually compressible entries uncompressed so that valid evidence also respects the import expansion-ratio guard.
+
 References: [NASA SE](../../.cursor/agents/nasa-se.md), [SpaceX-style SE](../../.cursor/agents/spacex-se.md), [OMG SysML v2](https://www.omg.org/spec/SysML/2.0/), [ENPIRE](https://arxiv.org/html/2606.19980v2).

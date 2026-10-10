@@ -13,6 +13,7 @@ import tempfile
 import urllib.parse
 import urllib.request
 import zipfile
+import zlib
 from pathlib import Path
 from typing import Iterable
 
@@ -21,6 +22,7 @@ from .model import RecordError, SHA_RE, canonical_bytes, digest, make_record, re
 MAX_BUNDLE_BYTES = 512 * 1024 * 1024
 MAX_BUNDLE_ENTRIES = 20000
 MAX_RECORD_BYTES = 8 * 1024 * 1024
+MAX_ZIP_EXPANSION_RATIO = 300
 
 
 class ConflictError(RecordError):
@@ -48,6 +50,17 @@ def _fsync_file(path: Path, value: bytes) -> None:
 
 def _key(record: dict) -> tuple[str, str, str]:
     return record["project_id"], record["id"], record["revision"]
+
+
+def _bundle_compression(chunks: Iterable[bytes]) -> int:
+    """Keep our own bundles within the reader's expansion-ratio limit."""
+    compressor = zlib.compressobj(wbits=-15)
+    size = compressed = 0
+    for chunk in chunks:
+        size += len(chunk)
+        compressed += len(compressor.compress(chunk))
+    compressed += len(compressor.flush())
+    return zipfile.ZIP_STORED if size > max(compressed, 1) * MAX_ZIP_EXPANSION_RATIO else zipfile.ZIP_DEFLATED
 
 
 class Store:
@@ -312,7 +325,17 @@ class Store:
                     known[k] = record
                     new.append(record)
             self._check_references(known.values())
-            missing_objects = {a["sha256"] for r in incoming for a in r["artifacts"] if self._find_object(a["sha256"]) is None}
+            existing_objects, missing_objects = {}, set()
+            for record in incoming:
+                for artifact in record["artifacts"]:
+                    sha = artifact["sha256"]
+                    if sha not in existing_objects:
+                        existing_objects[sha] = self._find_object(sha)
+                    existing = existing_objects[sha]
+                    if existing is None:
+                        missing_objects.add(sha)
+                    elif "size_bytes" in artifact and existing.stat().st_size != artifact["size_bytes"]:
+                        raise IntegrityError("Artifact size mismatch: " + artifact["path"])
             if not new and not missing_objects:
                 return {"imported": 0, "unchanged": unchanged, "commit_id": None, "restored_artifacts": 0}
             new.sort(key=_key)
@@ -362,9 +385,24 @@ class Store:
                 commit_id = digest({"records_sha256": records_hash, "objects": object_hashes})
                 _fsync_file(stage / "records.json", canonical_bytes(new))
                 _fsync_file(stage / "manifest.json", canonical_bytes({"schema_version": "1.0", "records_sha256": records_hash, "record_count": len(new), "objects": object_hashes, "commit_sha256": commit_id}))
-                # Atomic directory rename is the sole canonical commit point. No partial batch becomes visible.
-                os.replace(stage, self.commits / commit_id)
-                directory_fd = os.open(self.commits, os.O_RDONLY)
+                destination = self.commits / commit_id
+                if destination.exists():
+                    # A metadata-only re-clone can retain an objects-only restore
+                    # commit with this same identity. Restore its missing object
+                    # directory atomically without rewriting canonical JSON.
+                    if any((destination / name).read_bytes() != (stage / name).read_bytes()
+                           for name in ("records.json", "manifest.json")):
+                        raise ConflictError("Canonical commit identity collision")
+                    object_target = destination / "objects"
+                    if object_target.is_symlink() or (object_target.exists() and any(object_target.iterdir())):
+                        raise IntegrityError("Unexpected existing objects in restore commit")
+                    os.replace(objects, object_target)
+                    directory_to_sync = destination
+                else:
+                    # No partial record batch becomes visible before this rename.
+                    os.replace(stage, destination)
+                    directory_to_sync = self.commits
+                directory_fd = os.open(directory_to_sync, os.O_RDONLY)
                 try:
                     os.fsync(directory_fd)
                 finally:
@@ -440,18 +478,17 @@ class Store:
         return {"schema_version": "1.0", "project_id": project_id, "records": selected, "counts": {"project_records": len(records), "returned": len(selected), "designs": design_count, "evidence": evidence_count}, "limits": {"max_designs": max_designs, "max_evidence": max_evidence}, "snapshot_ref": snapshot_ref, "omitted_record_count": len(records) - len(selected), "omitted_references": omitted_refs, "semantics": "All project requirements, KDPs, assumptions and risks retained verbatim; returned evidence/designs are bounded. A snapshot_ref scopes embedded model history to that exact snapshot. Omitted references remain in canonical storage. Simulation/numerical agreement is not physical validation."}
 
     def check(self, project_id: str | None = None) -> dict:
-        errors, warnings, entries = [], [], []
+        errors, warnings, records = [], [], []
         try:
-            entries = self._load()
-            self._check_references(r for r, _ in entries)
-            for record, _ in entries:
+            records = [r for r, _ in self._load() if project_id is None or r["project_id"] == project_id]
+            self._check_references(records)
+            for record in records:
                 for artifact in record["artifacts"]:
                     obj = self.artifact_path(artifact)
                     if "size_bytes" in artifact and obj.stat().st_size != artifact["size_bytes"]:
                         raise IntegrityError("Stored artifact size mismatch")
         except (OSError, ValueError, sqlite3.Error) as exc:
             errors.append(str(exc))
-        records = [r for r, _ in entries if project_id is None or r["project_id"] == project_id]
         for record in records:
             data = record["data"]
             if record["kind"] in {"kdp", "parameter", "design_parameter", "model_parameter"} and not isinstance(data.get("unit", data.get("units")), str):
@@ -480,10 +517,18 @@ class Store:
         os.close(fd)
         try:
             with zipfile.ZipFile(temporary, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-                archive.writestr("bundle.json", canonical_bytes({"schema_version": "1.0", "format": "onepiece-evidence-bundle", "records": records}))
+                manifest = canonical_bytes({"schema_version": "1.0", "format": "onepiece-evidence-bundle", "records": records})
+                archive.writestr("bundle.json", manifest, compress_type=_bundle_compression([manifest]))
                 objects = {a["sha256"] for r in records for a in r["artifacts"]}
                 for sha in sorted(objects):
-                    archive.write(self.artifact_path({"sha256": sha}), "objects/" + sha)
+                    path = self.artifact_path({"sha256": sha})
+                    with path.open("rb") as stream:
+                        compression = _bundle_compression(iter(lambda: stream.read(1024 * 1024), b""))
+                    archive.write(path, "objects/" + sha, compress_type=compression)
+                if len(archive.infolist()) > MAX_BUNDLE_ENTRIES or sum(i.file_size for i in archive.infolist()) > MAX_BUNDLE_BYTES:
+                    raise IntegrityError("Bundle exceeds entry or uncompressed size limit")
+            if Path(temporary).stat().st_size > MAX_BUNDLE_BYTES:
+                raise IntegrityError("Bundle exceeds download size limit")
             os.replace(temporary, output)
         finally:
             Path(temporary).unlink(missing_ok=True)
@@ -508,7 +553,7 @@ class Store:
                         raise IntegrityError("Unsafe ZIP entry")
                     if name != "bundle.json" and not (name.startswith("objects/") and SHA_RE.fullmatch(name.removeprefix("objects/"))):
                         raise IntegrityError("Unexpected bundle entry: " + name)
-                    if info.file_size > max(info.compress_size, 1) * 300:
+                    if info.file_size > max(info.compress_size, 1) * MAX_ZIP_EXPANSION_RATIO:
                         raise IntegrityError("Suspicious ZIP expansion ratio")
                 manifest = json.loads(archive.read("bundle.json"))
                 if manifest.get("schema_version") != "1.0" or manifest.get("format") != "onepiece-evidence-bundle" or not isinstance(manifest.get("records"), list):
