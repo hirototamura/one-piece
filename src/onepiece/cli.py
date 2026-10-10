@@ -1,0 +1,98 @@
+"""Local CLI. Import and report operations never establish engineering baselines."""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+from .model import RecordError, canonical_bytes
+from .store import Store
+
+
+def parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(prog="onepiece", description="Versioned system model and engineering evidence")
+    p.add_argument("--store", default=".onepiece", help="local JSON record store (default .onepiece)")
+    sub = p.add_subparsers(dest="command", required=True)
+    imp = sub.add_parser("import", help="atomically import records or a SHA-256-checked ZIP bundle")
+    imp.add_argument("source", type=Path)
+    imp.add_argument("--artifacts-root", type=Path)
+    imp.add_argument("--sha256", help="required for ZIP imports")
+    ctx = sub.add_parser("context", help="export agent context retaining all requirements and parameter units")
+    ctx.add_argument("--project", required=True)
+    ctx.add_argument("--product-node")
+    ctx.add_argument("--kind", action="append", dest="kinds")
+    ctx.add_argument("--max-designs", type=int, default=20)
+    ctx.add_argument("--max-evidence", type=int, default=50)
+    ctx.add_argument("--output", type=Path)
+    ctx.add_argument("--snapshot-id")
+    ctx.add_argument("--snapshot-revision")
+    check = sub.add_parser("check", help="verify canonical commits, references, artifact hashes and claim scopes")
+    check.add_argument("--project")
+    bundle = sub.add_parser("bundle", help="create a portable content-addressed evidence ZIP")
+    bundle.add_argument("output", type=Path)
+    bundle.add_argument("--project")
+    fetch = sub.add_parser("fetch", help="fetch and atomically import a bundle with a mandatory expected hash")
+    fetch.add_argument("url")
+    fetch.add_argument("--sha256", required=True)
+    report = sub.add_parser("report", help="render the system graph and evidence from canonical records")
+    report.add_argument("output", type=Path)
+    report.add_argument("--project")
+    baseline = sub.add_parser("baseline", help="record a separate, explicit human configuration-baseline action")
+    baseline.add_argument("--project", required=True)
+    baseline.add_argument("--id", required=True)
+    baseline.add_argument("--revision", default="1")
+    baseline.add_argument("--human-actor", required=True, help="human identity; never use for automatic agent decisions")
+    baseline.add_argument("--reason", required=True)
+    sub.add_parser("reindex", help="rebuild disposable SQLite from canonical versioned JSON")
+    return p
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = parser().parse_args(argv)
+    try:
+        store = Store(args.store)
+        if args.command == "import":
+            if args.source.suffix.lower() == ".zip":
+                if not args.sha256:
+                    raise RecordError("ZIP imports require --sha256")
+                result = store.import_bundle(args.source, expected_sha256=args.sha256)
+            else:
+                value = json.loads(args.source.read_text())
+                records = value.get("records") if isinstance(value, dict) and "records" in value else [value] if isinstance(value, dict) else value
+                if not isinstance(records, list):
+                    raise RecordError("Import JSON must be an envelope, an array, or an object containing records")
+                result = store.import_records(records, artifacts_root=args.artifacts_root)
+        elif args.command == "context":
+            if bool(args.snapshot_id) != bool(args.snapshot_revision):
+                raise RecordError("Pass both --snapshot-id and --snapshot-revision")
+            snapshot = {"id": args.snapshot_id, "revision": args.snapshot_revision} if args.snapshot_id else None
+            result = store.context(args.project, product_node=args.product_node, kinds=args.kinds, max_designs=args.max_designs, max_evidence=args.max_evidence, snapshot_ref=snapshot)
+            if args.output:
+                args.output.parent.mkdir(parents=True, exist_ok=True)
+                args.output.write_bytes(canonical_bytes(result) + b"\n")
+                result = {"path": str(args.output.resolve()), **result["counts"]}
+        elif args.command == "check":
+            result = store.check(args.project)
+        elif args.command == "bundle":
+            result = store.bundle(args.output, args.project)
+        elif args.command == "fetch":
+            result = store.fetch(args.url, expected_sha256=args.sha256)
+        elif args.command == "report":
+            from .report import report
+            result = {"path": str(report(store, args.output, project_id=args.project))}
+        elif args.command == "baseline":
+            result = store.baseline(args.project, id=args.id, revision=args.revision, actor={"type": "human", "id": args.human_actor}, reason=args.reason)
+        elif args.command == "reindex":
+            result = store.rebuild_index()
+        else:
+            raise RecordError("Unknown command")
+        print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
+        return 0 if args.command != "check" or result["ok"] else 1
+    except (OSError, ValueError) as exc:
+        print(json.dumps({"ok": False, "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

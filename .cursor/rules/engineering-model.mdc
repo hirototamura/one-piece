@@ -1,0 +1,17 @@
+---
+description: Preserve the minimum One-Piece system model and engineering evidence contract
+alwaysApply: true
+---
+
+# One-Piece system model
+
+- Versioned JSON records are the SSOT; SQLite is a rebuildable index.
+- Model requirements, KDPs and detailed parameters using stable IDs and explicit revisions.
+- Graph relations are derive, satisfy, verify, allocate and constrain.
+- The graph is inspired by SysML v2; do not claim language or API conformance.
+- Preserve values, units, uncertainties, provenance and source approval state.
+- Imported historical evidence does not approve new requirements or baselines.
+- Simulation verification does not establish physical validation.
+- Human baseline decisions are separate from automatic experiment decisions.
+- Artifacts require content hashes; missing evidence is never a pass.
+- Run the record, bundle and graph tests after changes.

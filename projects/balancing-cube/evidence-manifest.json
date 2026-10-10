@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "format": "onepiece-project-evidence-index",
+  "project_id": "balancing-cube",
+  "contract_package": "one-piece-engineering==0.1.0",
+  "record_schema_sha256": "7c173762fd02d1274d4fc06ac90221f7ae3eb84ec54496f8c165b9e0879188b9",
+  "canonical_records": 4445,
+  "bundle": {
+    "filename": "balancing-cube-evidence-20261010.zip",
+    "url": "https://github.com/hirototamura/one-piece/releases/download/evidence-balancing-cube-20261010/balancing-cube-evidence-20261010.zip",
+    "sha256": "658dd02f76d18f8d89cdb380088bb88454c1cf185db1bec6e3c367b1337635af",
+    "size_bytes": 97464216
+  },
+  "report": {
+    "filename": "balancing-cube-report-20261010.zip",
+    "url": "https://github.com/hirototamura/one-piece/releases/download/evidence-balancing-cube-20261010/balancing-cube-report-20261010.zip",
+    "sha256": "574056473c7280fd97656548b57298222a0c4920b8adcc69caac9ec020b925ab",
+    "size_bytes": 98283337
+  },
+  "wheel": {
+    "filename": "one_piece_engineering-0.1.0-py3-none-any.whl",
+    "url": "https://github.com/hirototamura/one-piece/releases/download/evidence-balancing-cube-20261010/one_piece_engineering-0.1.0-py3-none-any.whl",
+    "sha256": "2e57106be1e72a87355eba134e7f68a2830a1ef01728c5f3071686277ff805d6",
+    "size_bytes": 36874
+  },
+  "roundtrip": {
+    "passed": true,
+    "records": 4445,
+    "tested_bundle_sha256": "658dd02f76d18f8d89cdb380088bb88454c1cf185db1bec6e3c367b1337635af",
+    "restored_artifacts": 128,
+    "metadata_only_clone_rehydrated": true,
+    "canonical_json_unchanged": true,
+    "context_identical": true,
+    "duplicate_delivery_no_commit": true
+  },
+  "acceptance_record": {
+    "id": "cube.acceptance.offline-20261010",
+    "revision": "2"
+  },
+  "physical_validation": false,
+  "adopted_human_baseline": null
+}
