@@ -1,0 +1,4 @@
+# Preserve official OMG document hashes on every checkout. Their source URLs,
+# sizes and SHA-256 values remain reviewable in the adjacent sources.json.
+src/onepiece/standards/omg/**/OpenAPI.json -text -diff linguist-vendored=true
+src/onepiece/standards/omg/**/Schema.json -text -diff linguist-vendored=true
