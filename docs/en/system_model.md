@@ -4,7 +4,7 @@ One-Piece is the single source of truth for requirements, Key Design Parameters,
 
 ## Graph contract
 
-This small graph uses an [OMG Systems Modeling API 1.0 boundary](SYSML_API.md) for ProjectService Read and ElementNavigationService. It preserves the source graph as standard annotations and named Dependencies. It is not a SysML parser or a complete native SysML semantic transformation. Nodes have stable IDs, revisions, kinds, product nodes, data and provenance. Edges pin a target ID and revision.
+This small graph uses an [OMG Systems Modeling API 1.0 boundary](sysml_api.md) for ProjectService Read and ElementNavigationService. It preserves the source graph as standard annotations and named Dependencies. It is not a SysML parser or a complete native SysML semantic transformation. Nodes have stable IDs, revisions, kinds, product nodes, data and provenance. Edges pin a target ID and revision.
 
 - `derive`: derived requirement → parent requirement.
 - `satisfy`: design/product → intended requirement; correspondence, not proof of a pass.
@@ -24,12 +24,12 @@ Verification concerns specified requirements; validation concerns intended purpo
 
 ## Portable storage
 
-Automated requirement verification and Git-like model diffs are mandatory platform capabilities. A change must identify affected verification cases and retain the applicability of each result to exact source revisions. Existing integrity checks and the HTML design comparison cover part of this intent. See [scope and proposed acceptance criteria](VERIFICATION_AND_DIFF.md) for the remaining verification execution, semantic diff and re-execution work.
+Automated requirement verification and Git-like model diffs are mandatory platform capabilities. A change must identify affected verification cases and retain the applicability of each result to exact source revisions. Existing integrity checks and the HTML design comparison cover part of this intent. See [scope and proposed acceptance criteria](verification_and_diff.md) for the remaining verification execution, semantic diff and re-execution work.
 
 Track compact canonical JSON in Git. Content-addressed evidence bundles carry databases, trajectories, HTML and video as GitHub Release assets. Release publication does not approve a requirement or design. Fetch verifies hashes, and the same pack restores offline. Reports are projections of records; LLMs read structured context instead of parsing HTML.
 
 Project-scoped `check` and `bundle` require the selected project's artifacts; use an unscoped `check` to audit every project's evidence. Metadata-only clones can be restored repeatedly, including after another Git clone, without rewriting canonical records. Bundles store unusually compressible entries uncompressed so that valid evidence also respects the import expansion-ratio guard.
 
-References: [NASA SE](../engineering/nasa-se.md), [SpaceX-style SE](../engineering/spacex-se.md), [OMG SysML v2](https://www.omg.org/spec/SysML/2.0/), [ENPIRE](https://arxiv.org/html/2606.19980v2).
+References: [NASA SE](../engineering/nasa_se.md), [SpaceX-style SE](../engineering/spacex_se.md), [OMG SysML v2](https://www.omg.org/spec/SysML/2.0/), [ENPIRE](https://arxiv.org/html/2606.19980v2).
 
 Current balancing-cube projections use `cube.simulation.snapshot@fixed-dt-mvp-2` via an explicit active system-model reference. The comparison design and campaign summary are mandatory outside context limits. Requirement statement status is separate from physical verification; `hardware_verification_required` is a planned hardware evidence obligation, not a pass flag. Numerical evaluations verify development test cases. Historical revisions retain their original fields and links for audit.

@@ -1,6 +1,8 @@
 # Shared engineering standards
 
-This policy applies to humans and every agent, including Codex, Claude and Cursor. The canonical guides are [NASA SE](nasa-se.md) and [SpaceX-style SE](spacex-se.md). Tool-specific files are entry points, not separate policies.
+This policy applies to humans and every agent, including Codex, Claude and Cursor. The canonical guides are [NASA SE](nasa_se.md) and [SpaceX-style SE](spacex_se.md). Tool-specific files are entry points, not separate policies.
+
+Follow the [document-governance rules](../../AGENTS.md#protected-philosophy-and-document-names) before edits. CORE.md holds protected long-term philosophy. Current strategy and specification choices belong in [strategy.md](../en/strategy.md) / [日本語](../ja/strategy.md).
 
 ## Requirements: first source
 
@@ -16,6 +18,6 @@ Consult the official [ASD-STE100 site](https://www.asd-ste100.org/) and [FAQ](ht
 
 ## System-model exchange
 
-Use **OMG Systems Modeling API and Services 1.0** for the API boundary. Keep its UUID identities, Project/Commit model, standard element payloads, endpoint paths, pagination and error responses. Read [API scope and mapping](../en/SYSML_API.md) before changes. The five One-Piece trace relations are represented by named standard Dependencies. They do not assert native SysML satisfaction, verification or physical compliance.
+Use **OMG Systems Modeling API and Services 1.0** for the API boundary. Keep its UUID identities, Project/Commit model, standard element payloads, endpoint paths, pagination and error responses. Read [API scope and mapping](../en/sysml_api.md) before changes. The five One-Piece trace relations are represented by named standard Dependencies. They do not assert native SysML satisfaction, verification or physical compliance.
 
 Versioned One-Piece JSON remains the single source of truth for requirements, KDPs, detailed parameters and evidence. An API response or report is a projection of those records. Never add a second authoritative copy in a tool-specific guide or an agent prompt.

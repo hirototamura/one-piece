@@ -1,8 +1,8 @@
 # One Piece Engineering の中枢理念
 
-人間とすべてのエージェントは共通の[標準方針](../engineering/standards.md)、[NASA SE](../engineering/nasa-se.md)、[SpaceX-style SE](../engineering/spacex-se.md)を参照する。**要求標準の第一参照はISO/IEC/IEEE 29148:2018**とする。英語の要求・技術文書には**適用可能な範囲でASD-STE100 Simplified Technical English**を使う。NASA／SpaceXの方法論はこれを補完する。過去の原文は維持し、文言の変更は新しい草案として提案する。
-
 本ファイルに One Piece Engineering の中枢理念を記す。
+
+具体的な戦略・仕様は[strategy.md](strategy.md)を参照する。
 
 ## プロジェクトのミッション
 
@@ -11,8 +11,6 @@
 そのためにまず、システムを自律的に開発するプロセスを構築する。
 
 ## 北極星（North star）
-
-要求への自動適合検証と、Gitのような履歴・モデルdiff管理を必須の製品能力とする。構成の差分から影響する試験を特定し、再実行または根拠付き再評価を行い、要求・構成の特定版へ証拠を記録する。未実行・失敗・変更後に適用できない証拠を明示する。[競合調査](competitor_tradeoff.md)の旧採用判定は適用しない。[設計と受入条件の草案](VERIFICATION_AND_DIFF.md)に現状と未実装部分を記す。
 
 ・ハードウェア向けのAI Systems Engineering as a Service (SEaaS) で、**エンジニアリング**の要求・設計・検証・トレーサビリティを扱う。
 

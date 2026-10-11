@@ -34,4 +34,4 @@
 
 実行側はEngineering Agents、要求・構成・証拠・判断の正本はOne-Pieceとする。ISO/IEC/IEEE 29148:2018を要求標準の第一参照とし、SysML APIの標準参照境界を維持する。競合製品のデータモデルをそのまま採用する判断は行わない。
 
-[必須能力の設計と受入条件](VERIFICATION_AND_DIFF.md)に、現状の実装、未実装部分、次に確認する最小ケースを記す。英語版は[こちら](../en/competitor_tradeoff.md)。
+[必須能力の設計と受入条件](verification_and_diff.md)に、現状の実装、未実装部分、次に確認する最小ケースを記す。英語版は[こちら](../en/competitor_tradeoff.md)。

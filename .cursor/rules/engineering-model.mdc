@@ -5,12 +5,15 @@ alwaysApply: true
 
 # One-Piece system model
 
-Read [AGENTS.md](../../AGENTS.md) and the shared [engineering standards](../../docs/engineering/standards.md), [NASA SE](../../docs/engineering/nasa-se.md) and [SpaceX-style SE](../../docs/engineering/spacex-se.md). These guides apply to all agents. ISO/IEC/IEEE 29148:2018 is the first requirements reference. Apply ASD-STE100 where applicable.
+Read [AGENTS.md](../../AGENTS.md) and the shared [engineering standards](../../docs/engineering/standards.md), [NASA SE](../../docs/engineering/nasa_se.md) and [SpaceX-style SE](../../docs/engineering/spacex_se.md). These guides apply to all agents. ISO/IEC/IEEE 29148:2018 is the first requirements reference. Apply ASD-STE100 where applicable.
+
+- Follow AGENTS.md's protected-CORE approval rule before any CORE.md edit.
+- Put concrete strategy and specification decisions in [strategy.md](../../docs/en/strategy.md). Use lowercase snake_case for docs Markdown names except CORE.md.
 
 - Versioned JSON records are the SSOT; SQLite is a rebuildable index.
 - Model requirements, KDPs and detailed parameters using stable IDs and explicit revisions.
 - Graph relations are derive, satisfy, verify, allocate and constrain.
-- Use the [OMG Systems Modeling API boundary](../../docs/en/SYSML_API.md); keep claims within its tested service scope. Do not claim full SysML language conformance.
+- Use the [OMG Systems Modeling API boundary](../../docs/en/sysml_api.md); keep claims within its tested service scope. Do not claim full SysML language conformance.
 - Preserve values, units, uncertainties, provenance and source approval state.
 - Imported historical evidence does not approve new requirements or baselines.
 - Simulation verification does not establish physical validation.

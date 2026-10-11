@@ -1,6 +1,6 @@
 # OMG Systems Modeling APIとの接続
 
-One-Piece 0.2.0は、OMG Systems Modeling API and Services 1.0のREST/HTTP参照境界を提供する。対象は **ProjectService Read** と **ElementNavigationService**。正式なパス、UUID、Project／Branch／Commit、要素・関係の取得、方向、ページ分割、Error形式を使う。書込、Query、OSLC、全サービスやSysML言語全体の準拠は対象外である。[対応範囲・交換形式・試験の詳細](../en/SYSML_API.md)を正本とする。
+One-Piece 0.2.0は、OMG Systems Modeling API and Services 1.0のREST/HTTP参照境界を提供する。対象は **ProjectService Read** と **ElementNavigationService**。正式なパス、UUID、Project／Branch／Commit、要素・関係の取得、方向、ページ分割、Error形式を使う。書込、Query、OSLC、全サービスやSysML言語全体の準拠は対象外である。[対応範囲・交換形式・試験の詳細](../en/sysml_api.md)を正本とする。
 
 最小の `onepiece-annotation-graph-1` では、プロジェクトをPackage、記録の各版をComment、その対応をAnnotation、5種類のトレースを名前付きDependencyとして表す。Comment本文には要求、KDP、詳細パラメータの値・単位・不確かさ・状態・出典・成果物ハッシュを含む元JSONをそのまま保持する。Dependencyの端点は特定のIDとrevisionを指す。異なる版を同時に保持でき、過去の証拠が新しい要求へ付け替わることはない。
 

@@ -31,7 +31,7 @@ The final offline acceptance is `cube.acceptance.offline-20261010@2`. It records
 
 The Fake LLM proposals did not improve the numerical reference. CPU-only proposals remain provisional. New GPU execution, real LLM improvement, hardware measurements and physical validation have not been performed. Six-second numerical results do not verify the draft thirty-second hardware holding requirement. Existing unstructured acceptance criteria remain explicit warnings; imported historical states do not approve the new hierarchy.
 
-The system graph uses `derive / satisfy / verify / allocate / constrain`; `satisfy` records intent and `verify` carries scoped evidence. The [system-model guide](../../docs/ja/SYSTEM_MODEL.md) explains the NASA/SpaceX principles, and the [Engineering Agents guide](https://github.com/hirototamura/engineering_agents/blob/codex/mujoco-evidence-loop/docs/ja/mujoco-one-piece.md) describes the bounded ENPIRE-inspired pipeline. It evolves hypothesis, priority KDPs and suggested search step (advisory), with hardware/software changes limited to the approved MVP variables.
+The system graph uses `derive / satisfy / verify / allocate / constrain`; `satisfy` records intent and `verify` carries scoped evidence. The [system-model guide](../../docs/ja/system_model.md) explains the NASA/SpaceX principles, and the [Engineering Agents guide](https://github.com/hirototamura/engineering_agents/blob/codex/mujoco-evidence-loop/docs/ja/mujoco-one-piece.md) describes the bounded ENPIRE-inspired pipeline. It evolves hypothesis, priority KDPs and suggested search step (advisory), with hardware/software changes limited to the approved MVP variables.
 
 ## Trace corrections and acceptance isolation
 

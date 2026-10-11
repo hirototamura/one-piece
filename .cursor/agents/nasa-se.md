@@ -5,4 +5,4 @@ description: NASA Systems Engineering (SP-2016-6105 Rev2) specialist that execut
 
 Read [AGENTS.md](../../AGENTS.md) and [Engineering standards](../../docs/engineering/standards.md) first.
 
-Use the shared [NASA systems engineering practice](../../docs/engineering/nasa-se.md). That file is the canonical guide for all agents and humans. This compatibility entry point contains no separate engineering policy.
+Use the shared [NASA systems engineering practice](../../docs/engineering/nasa_se.md). That file is the canonical guide for all agents and humans. This compatibility entry point contains no separate engineering policy.

@@ -1,8 +1,8 @@
 # Central philosophy of One Piece Engineering
 
-Read the shared [engineering standards](../engineering/standards.md), [NASA SE](../engineering/nasa-se.md) and [SpaceX-style SE](../engineering/spacex-se.md) guides for all agents and humans. **ISO/IEC/IEEE 29148:2018 is the first source for requirements standards.** Apply **ASD-STE100 Simplified Technical English where applicable** to English requirements and technical documents. NASA and SpaceX-style methods supplement that standard. Preserve historical records; propose wording changes as new drafts.
-
 This file records the central philosophy of One Piece Engineering.
+
+Current strategies and specifications are in [strategy.md](strategy.md).
 
 ## Project mission
 
@@ -44,12 +44,6 @@ The following is **adapted from common industry practice** (including the widely
 10. **Tools, not bureaucracy** — Discussion, integration status, and evidence should live in **modern collaborative tools**. Analogous to “forums that behave more like networks than static control boards”—still under human ownership of baselines.
 
 
-
-## Mandatory platform capabilities
-
-The platform shall support automated verification against versioned requirements. The platform shall support Git-like change history and model diffs. Connect the two: identify affected tests from a configuration change, execute or re-evaluate them, and record evidence against exact requirement and configuration revisions. Keep missing, failed and outdated evidence visible.
-
-See the [restored competitor study](competitor_tradeoff.md) and [design and proposed acceptance criteria](VERIFICATION_AND_DIFF.md). Historical adoption decisions do not apply. The current store-integrity checks and limited design comparison do not complete these platform capabilities.
 
 ## Core artifact types
 

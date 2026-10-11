@@ -2,15 +2,17 @@
 
 A local, versioned system model and engineering evidence core. Requirements, Key Design Parameters (KDPs), detailed model parameters, designs, experiments and decisions share stable IDs and explicit revision references. Humans and Engineering Agents consume the same records.
 
-The graph has an [OMG Systems Modeling API 1.0 read and exchange boundary](docs/en/SYSML_API.md). Its scope is ProjectService Read and ElementNavigationService, using standard annotation and Dependency payloads. This project does not implement the full SysML language or all API services. Simulation evidence and CPU/GPU numerical agreement do not establish physical-world validation.
+The graph has an [OMG Systems Modeling API 1.0 read and exchange boundary](docs/en/sysml_api.md). Its scope is ProjectService Read and ElementNavigationService, using standard annotation and Dependency payloads. This project does not implement the full SysML language or all API services. Simulation evidence and CPU/GPU numerical agreement do not establish physical-world validation.
 
-[理念 / Philosophy](docs/ja/CORE.md) · [System model](docs/en/SYSTEM_MODEL.md) · [システムモデル](docs/ja/SYSTEM_MODEL.md) · [Development history](docs/en/DEVELOPMENT_PROGRESS.md)
+[理念 / Philosophy](docs/ja/CORE.md) · [System model](docs/en/system_model.md) · [システムモデル](docs/ja/system_model.md) · [Development history](docs/en/development_progress.md)
 
-[Competitor research / 競合調査](docs/ja/competitor_tradeoff.md) restores the historical observations without their old adoption decisions. **Automated requirement verification and Git-like model diffs are mandatory capabilities.** The [design and acceptance proposals](docs/en/VERIFICATION_AND_DIFF.md) / [日本語](docs/ja/VERIFICATION_AND_DIFF.md) distinguish current functionality from the remaining work.
+[Strategy](docs/en/strategy.md) / [戦略](docs/ja/strategy.md) records current strategies and specifications. CORE.md holds long-term philosophy and requires explicit human approval before edits. Other Markdown filenames under docs use lowercase snake_case.
+
+[Competitor research / 競合調査](docs/ja/competitor_tradeoff.md) restores the historical observations without their old adoption decisions. **Automated requirement verification and Git-like model diffs are mandatory capabilities.** The [design and acceptance proposals](docs/en/verification_and_diff.md) / [日本語](docs/ja/verification_and_diff.md) distinguish current functionality from the remaining work.
 
 ## Shared engineering instructions
 
-[AGENTS.md](AGENTS.md) is the common entry point for every human and agent. The canonical [NASA SE](docs/engineering/nasa-se.md) and [SpaceX-style SE](docs/engineering/spacex-se.md) guides live outside tool directories. Codex, Claude and Cursor entry points refer to the same files. Other agents should read AGENTS.md explicitly if their tool does not discover it automatically.
+[AGENTS.md](AGENTS.md) is the common entry point for every human and agent. The canonical [NASA SE](docs/engineering/nasa_se.md) and [SpaceX-style SE](docs/engineering/spacex_se.md) guides live outside tool directories. Codex, Claude and Cursor entry points refer to the same files. Other agents should read AGENTS.md explicitly if their tool does not discover it automatically.
 
 Use **ISO/IEC/IEEE 29148:2018 as the first requirements standard** and **ASD-STE100 where applicable** for English requirements and technical documents. See the shared [standards policy](docs/engineering/standards.md) for authority, sources and application limits.
 
@@ -122,11 +124,11 @@ onepiece --store .onepiece sysml check /tmp/cube-api.json
 onepiece --store .onepiece sysml serve --port 9000
 ```
 
-The foreground API binds to `127.0.0.1`. Start with `GET /projects`, follow `defaultBranch` to `Branch.head`, then retrieve elements and relationships at that Commit. The export preserves all source revisions and includes a standard `commit_request` value for external import. See [API scope and migration](docs/en/SYSML_API.md) / [日本語](docs/ja/SYSML_API.md). No remote write or service startup is automatic.
+The foreground API binds to `127.0.0.1`. Start with `GET /projects`, follow `defaultBranch` to `Branch.head`, then retrieve elements and relationships at that Commit. The export preserves all source revisions and includes a standard `commit_request` value for external import. See [API scope and migration](docs/en/sysml_api.md) / [日本語](docs/ja/sysml_api.md). No remote write or service startup is automatic.
 
 ## Engineering integration
 
-The [system model](docs/en/SYSTEM_MODEL.md) describes the minimal structure and semantics. Integration adapters and project records can be added without changing the generic envelope. The balancing-cube adapter preserves original GPU/CPU evidence, historical supplemental CPU time-step evidence, and later CPU replays as distinct sources. A six-second numerical experiment does not verify a thirty-second hardware requirement.
+The [system model](docs/en/system_model.md) describes the minimal structure and semantics. Integration adapters and project records can be added without changing the generic envelope. The balancing-cube adapter preserves original GPU/CPU evidence, historical supplemental CPU time-step evidence, and later CPU replays as distinct sources. A six-second numerical experiment does not verify a thirty-second hardware requirement.
 
 The standalone HTML report is a projection of canonical records. The runtime execution platform, engineering-agent task state and immutable evidence record have separate responsibilities; there is no second authoritative requirement or KDP copy inside the agent prompt.
 

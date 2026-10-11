@@ -14,4 +14,4 @@ description: >-
 
 Read [AGENTS.md](../../AGENTS.md) and [Engineering standards](../../docs/engineering/standards.md) first.
 
-Use the shared [SpaceX-style systems engineering practice](../../docs/engineering/spacex-se.md). That file is the canonical guide for all agents and humans. This compatibility entry point contains no separate engineering policy.
+Use the shared [SpaceX-style systems engineering practice](../../docs/engineering/spacex_se.md). That file is the canonical guide for all agents and humans. This compatibility entry point contains no separate engineering policy.
