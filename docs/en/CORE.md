@@ -45,6 +45,12 @@ The following is **adapted from common industry practice** (including the widely
 
 
 
+## Mandatory platform capabilities
+
+The platform shall support automated verification against versioned requirements. The platform shall support Git-like change history and model diffs. Connect the two: identify affected tests from a configuration change, execute or re-evaluate them, and record evidence against exact requirement and configuration revisions. Keep missing, failed and outdated evidence visible.
+
+See the [restored competitor study](competitor_tradeoff.md) and [design and proposed acceptance criteria](VERIFICATION_AND_DIFF.md). Historical adoption decisions do not apply. The current store-integrity checks and limited design comparison do not complete these platform capabilities.
+
 ## Core artifact types
 
 **First-class artifacts** at the center of the product (each versioned, reviewable, and baselined when needed):

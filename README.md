@@ -6,6 +6,8 @@ The graph has an [OMG Systems Modeling API 1.0 read and exchange boundary](docs/
 
 [理念 / Philosophy](docs/ja/CORE.md) · [System model](docs/en/SYSTEM_MODEL.md) · [システムモデル](docs/ja/SYSTEM_MODEL.md) · [Development history](docs/en/DEVELOPMENT_PROGRESS.md)
 
+[Competitor research / 競合調査](docs/ja/competitor_tradeoff.md) restores the historical observations without their old adoption decisions. **Automated requirement verification and Git-like model diffs are mandatory capabilities.** The [design and acceptance proposals](docs/en/VERIFICATION_AND_DIFF.md) / [日本語](docs/ja/VERIFICATION_AND_DIFF.md) distinguish current functionality from the remaining work.
+
 ## Shared engineering instructions
 
 [AGENTS.md](AGENTS.md) is the common entry point for every human and agent. The canonical [NASA SE](docs/engineering/nasa-se.md) and [SpaceX-style SE](docs/engineering/spacex-se.md) guides live outside tool directories. Codex, Claude and Cursor entry points refer to the same files. Other agents should read AGENTS.md explicitly if their tool does not discover it automatically.

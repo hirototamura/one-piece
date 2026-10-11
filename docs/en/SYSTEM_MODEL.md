@@ -24,6 +24,8 @@ Verification concerns specified requirements; validation concerns intended purpo
 
 ## Portable storage
 
+Automated requirement verification and Git-like model diffs are mandatory platform capabilities. A change must identify affected verification cases and retain the applicability of each result to exact source revisions. Existing integrity checks and the HTML design comparison cover part of this intent. See [scope and proposed acceptance criteria](VERIFICATION_AND_DIFF.md) for the remaining verification execution, semantic diff and re-execution work.
+
 Track compact canonical JSON in Git. Content-addressed evidence bundles carry databases, trajectories, HTML and video as GitHub Release assets. Release publication does not approve a requirement or design. Fetch verifies hashes, and the same pack restores offline. Reports are projections of records; LLMs read structured context instead of parsing HTML.
 
 Project-scoped `check` and `bundle` require the selected project's artifacts; use an unscoped `check` to audit every project's evidence. Metadata-only clones can be restored repeatedly, including after another Git clone, without rewriting canonical records. Bundles store unusually compressible entries uncompressed so that valid evidence also respects the import expansion-ratio guard.
