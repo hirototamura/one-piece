@@ -1,5 +1,7 @@
 # Central philosophy of One Piece Engineering
 
+Read the shared [engineering standards](../engineering/standards.md), [NASA SE](../engineering/nasa-se.md) and [SpaceX-style SE](../engineering/spacex-se.md) guides for all agents and humans. **ISO/IEC/IEEE 29148:2018 is the first source for requirements standards.** Apply **ASD-STE100 Simplified Technical English where applicable** to English requirements and technical documents. NASA and SpaceX-style methods supplement that standard. Preserve historical records; propose wording changes as new drafts.
+
 This file records the central philosophy of One Piece Engineering.
 
 ## Project mission

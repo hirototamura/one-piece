@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "one-piece-engineering"
-version = "0.1.1"
+version = "0.2.0"
 description = "Versioned system models and engineering evidence, with rebuildable indexes"
 requires-python = ">=3.11"
 license = {text = "Apache-2.0"}
-dependencies = []
+dependencies = ["jsonschema>=4.18"]
 
 [project.optional-dependencies]
 test = ["pytest>=8", "jsonschema>=4"]
@@ -21,4 +21,4 @@ onepiece = "onepiece.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-onepiece = ["record.schema.json"]
+onepiece = ["record.schema.json", "standards/omg/SystemsModelingAPI/1.0/*.json"]

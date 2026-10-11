@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -44,6 +45,19 @@ def parser() -> argparse.ArgumentParser:
     baseline.add_argument("--revision", default="1")
     baseline.add_argument("--human-actor", required=True, help="human identity; never use for automatic agent decisions")
     baseline.add_argument("--reason", required=True)
+    sysml = sub.add_parser("sysml", help="OMG Systems Modeling API 1.0 read and exchange boundary")
+    operations = sysml.add_subparsers(dest="sysml_command", required=True)
+    export = operations.add_parser("export", help="export a frozen graph and a standard CommitRequest")
+    export.add_argument("output", type=Path)
+    export.add_argument("--project", required=True)
+    validate = operations.add_parser("check", help="check official schemas and exact annotation/graph consistency")
+    validate.add_argument("source", type=Path)
+    restore = operations.add_parser("import", help="restore this adapter's exchange profile; artifacts still require verified bytes")
+    restore.add_argument("source", type=Path)
+    restore.add_argument("--sha256", required=True)
+    restore.add_argument("--artifacts-root", type=Path)
+    serve = operations.add_parser("serve", help="explicitly start a local read-only API; never runs in the background")
+    serve.add_argument("--port", type=int, default=9000)
     sub.add_parser("reindex", help="rebuild disposable SQLite from canonical versioned JSON")
     return p
 
@@ -83,6 +97,33 @@ def main(argv: list[str] | None = None) -> int:
             result = {"path": str(report(store, args.output, project_id=args.project))}
         elif args.command == "baseline":
             result = store.baseline(args.project, id=args.id, revision=args.revision, actor={"type": "human", "id": args.human_actor}, reason=args.reason)
+        elif args.command == "sysml":
+            from .sysml import ReadProvider, export_view, records_from_view
+            if args.sysml_command == "export":
+                view = export_view(store, args.project)
+                # Validate before publication, including round-trip graph equality.
+                records_from_view(view)
+                args.output.parent.mkdir(parents=True, exist_ok=True)
+                payload = canonical_bytes(view) + b"\n"
+                args.output.write_bytes(payload)
+                result = {"path": str(args.output.resolve()), "sha256": hashlib.sha256(payload).hexdigest(),
+                          "project_id": view["project"]["@id"], "commit_id": view["commit"]["@id"],
+                          "records": sum(e["@type"] == "Comment" for e in view["elements"]), "elements": len(view["elements"])}
+            elif args.sysml_command in {"check", "import"}:
+                raw = args.source.read_bytes()
+                if args.sysml_command == "import":
+                    if hashlib.sha256(raw).hexdigest() != args.sha256:
+                        raise RecordError("Exchange SHA-256 mismatch")
+                records = records_from_view(json.loads(raw))
+                result = store.import_records(records, artifacts_root=args.artifacts_root) if args.sysml_command == "import" else {"ok": True, "records": len(records)}
+            else:
+                from wsgiref.simple_server import make_server
+                if not 1 <= args.port <= 65535:
+                    raise RecordError("Port must be between 1 and 65535")
+                with make_server("127.0.0.1", args.port, ReadProvider(store.records())) as server:
+                    print(json.dumps({"url": f"http://127.0.0.1:{args.port}/projects", "read_only": True}), flush=True)
+                    server.serve_forever()
+                return 0
         elif args.command == "reindex":
             result = store.rebuild_index()
         else:

@@ -1,5 +1,7 @@
 # One Piece Engineering の中枢理念
 
+人間とすべてのエージェントは共通の[標準方針](../engineering/standards.md)、[NASA SE](../engineering/nasa-se.md)、[SpaceX-style SE](../engineering/spacex-se.md)を参照する。**要求標準の第一参照はISO/IEC/IEEE 29148:2018**とする。英語の要求・技術文書には**適用可能な範囲でASD-STE100 Simplified Technical English**を使う。NASA／SpaceXの方法論はこれを補完する。過去の原文は維持し、文言の変更は新しい草案として提案する。
+
 本ファイルに One Piece Engineering の中枢理念を記す。
 
 ## プロジェクトのミッション

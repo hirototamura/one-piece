@@ -2,13 +2,19 @@
 
 A local, versioned system model and engineering evidence core. Requirements, Key Design Parameters (KDPs), detailed model parameters, designs, experiments and decisions share stable IDs and explicit revision references. Humans and Engineering Agents consume the same records.
 
-The graph is **inspired by SysML v2**. This project does not implement the SysML language or claim standard API conformance. Simulation evidence and CPU/GPU numerical agreement do not establish physical-world validation.
+The graph has an [OMG Systems Modeling API 1.0 read and exchange boundary](docs/en/SYSML_API.md). Its scope is ProjectService Read and ElementNavigationService, using standard annotation and Dependency payloads. This project does not implement the full SysML language or all API services. Simulation evidence and CPU/GPU numerical agreement do not establish physical-world validation.
 
 [理念 / Philosophy](docs/ja/CORE.md) · [System model](docs/en/SYSTEM_MODEL.md) · [システムモデル](docs/ja/SYSTEM_MODEL.md) · [Development history](docs/en/DEVELOPMENT_PROGRESS.md)
 
+## Shared engineering instructions
+
+[AGENTS.md](AGENTS.md) is the common entry point for every human and agent. The canonical [NASA SE](docs/engineering/nasa-se.md) and [SpaceX-style SE](docs/engineering/spacex-se.md) guides live outside tool directories. Codex, Claude and Cursor entry points refer to the same files. Other agents should read AGENTS.md explicitly if their tool does not discover it automatically.
+
+Use **ISO/IEC/IEEE 29148:2018 as the first requirements standard** and **ASD-STE100 where applicable** for English requirements and technical documents. See the shared [standards policy](docs/engineering/standards.md) for authority, sources and application limits.
+
 ## Install and run
 
-Python 3.11 or newer. The runtime uses the standard library; no database server is required.
+Python 3.11 or newer. JSON Schema validation uses `jsonschema`; no database server or web framework is required.
 
 ```sh
 python -m pip install -e '.[test]'
@@ -105,6 +111,16 @@ onepiece --store .onepiece baseline --project cube --id BASE-001 --human-actor e
 ```
 
 This local CLI records the declared actor; it is not an identity-authentication service. Agents must not invoke the human operation for automatic loop decisions. Baselines do not imply hardware acceptance. A record claiming physical verification needs explicit physical-test evidence and artifact bytes; numerical or missing evidence cannot make that claim.
+
+## Standard API and exchange
+
+```sh
+onepiece --store .onepiece sysml export /tmp/cube-api.json --project balancing-cube
+onepiece --store .onepiece sysml check /tmp/cube-api.json
+onepiece --store .onepiece sysml serve --port 9000
+```
+
+The foreground API binds to `127.0.0.1`. Start with `GET /projects`, follow `defaultBranch` to `Branch.head`, then retrieve elements and relationships at that Commit. The export preserves all source revisions and includes a standard `commit_request` value for external import. See [API scope and migration](docs/en/SYSML_API.md) / [日本語](docs/ja/SYSML_API.md). No remote write or service startup is automatic.
 
 ## Engineering integration
 

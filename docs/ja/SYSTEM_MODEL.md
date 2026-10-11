@@ -4,7 +4,7 @@ One-Pieceは要求、KDP（Key Design Parameter）、詳細パラメータ、構
 
 ## 最小のグラフ
 
-SysML v2の要求・構造・属性・検証の考え方を参考にする。SysMLテキストのパーサーや標準APIの実装ではない。各ノードは安定ID、revision、kind、product_node、data、出典を持つ。リンクは対象のIDとrevisionを指定する。
+[OMG Systems Modeling API 1.0の参照境界](SYSML_API.md)を使う。対象はProjectService ReadとElementNavigationServiceで、元グラフを標準の注釈と名前付きDependencyで保持する。SysMLテキストのパーサーやネイティブの要求メタモデルへの完全な意味変換は対象外である。各ノードは安定ID、revision、kind、product_node、data、出典を持つ。リンクは対象のIDとrevisionを指定する。
 
 - `derive`：派生要求から親要求。
 - `satisfy`：設計・製品から満たそうとする要求。対応関係の宣言であり、このリンクだけで合格を主張しない。
@@ -32,8 +32,8 @@ Verificationは指定した要求と条件への適合、Validationは意図し�
 
 ## 参考
 
-- [NASA SE Engine](../../.cursor/agents/nasa-se.md)：反復と階層的再帰、双方向トレース、構成管理、VerificationとValidationの区別。
-- [SpaceX-style SE](../../.cursor/agents/spacex-se.md)：上位意図を保ち、下位KDPを証拠付きでトレードし、安価な開発試験で学ぶ。
+- [NASA SE Engine](../engineering/nasa-se.md)：反復と階層的再帰、双方向トレース、構成管理、VerificationとValidationの区別。
+- [SpaceX-style SE](../engineering/spacex-se.md)：上位意図を保ち、下位KDPを証拠付きでトレードし、安価な開発試験で学ぶ。
 - [OMG SysML v2](https://www.omg.org/spec/SysML/2.0/)：構成・属性・要求・検証の参考。
 - [ENPIRE](https://arxiv.org/html/2606.19980v2)：環境構築と、その環境を固定した改善ループを分離する。
 

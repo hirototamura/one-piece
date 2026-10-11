@@ -31,7 +31,7 @@ jobs:
           import onepiece
           from pathlib import Path
           assert not Path(onepiece.__file__).resolve().is_relative_to(Path('src').resolve())
-          assert onepiece.__version__ == '0.1.1'
+          assert onepiece.__version__ == '0.2.0'
           PY
           python -m pytest -q --junitxml=wheel-tests.xml
       - uses: actions/upload-artifact@v4
