@@ -474,7 +474,7 @@ class Store:
             if active is not None:
                 snapshot_ref = active["data"]["simulation_snapshot_ref"]
         # Requirements, KDPs, and assumptions retain their exact units/uncertainty even when evidence is bounded.
-        always = {"requirement", "kdp", "parameter", "model_parameter", "simulation_snapshot", "campaign_summary", "verification_coverage", "design_parameter", "assumption", "risk", "interface", "product", "system_model", "baseline"}
+        always = {"requirement", "kdp", "parameter", "model_parameter", "simulation_snapshot", "campaign_summary", "verification_coverage", "design_parameter", "assumption", "risk", "interface", "product", "specification", "system_model", "baseline"}
         snapshot = None
         if snapshot_ref is not None:
             snapshot = next((r for r in records if r["kind"] == "simulation_snapshot" and ref(r) == snapshot_ref), None)

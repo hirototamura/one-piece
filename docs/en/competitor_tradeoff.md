@@ -25,6 +25,6 @@ SysGit describes `.sysml` files stored in Git, branching and merging, and textua
 
 ## Mandatory product intent
 
-The user requires two capabilities: **automated verification against requirements**, and **Git-like change and diff management**. Link these capabilities: a change identifies affected tests, execution produces evidence, and each result refers to exact requirement and configuration revisions. A previous pass must not transfer to a changed configuration without an applicability check.
+The user requires two capabilities: **automated verification against requirements**, and **Git-like change and diff management**. Link these capabilities: a change identifies affected tests, execution produces evidence, and each result refers to exact requirement and configuration revisions. A previous pass shall not transfer to a changed configuration without an applicability check.
 
 One-Piece owns records and evidence. Engineering Agents executes bounded tests. ISO/IEC/IEEE 29148:2018 remains the first requirements reference. Preserve the SysML API boundary. See [design and acceptance criteria](verification_and_diff.md) and the [Japanese study](../ja/competitor_tradeoff.md).

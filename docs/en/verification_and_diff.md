@@ -2,7 +2,7 @@
 
 The user identified both capabilities as mandatory on 2026-10-11. The [competitor study](competitor_tradeoff.md) supplies context. Its old adoption decisions are not a source of requirements. The detailed acceptance criteria below are design proposals, not implemented features or adopted engineering baselines. Formal project requirements shall use the canonical versioned JSON record contract after review. These notes do not create a second requirement store.
 
-Use [ISO/IEC/IEEE 29148:2018 first](../engineering/standards.md). A requirement's source status, a test outcome, and a human baseline decision are separate facts.
+Use [ISO/IEC/IEEE 29148:2018 first, followed by NASA standards and then compatible ASD-STE100 guidance](../engineering/standards.md). A requirement's source status, a test outcome, and a human baseline decision are separate facts.
 
 ## Automated requirement verification
 
@@ -10,7 +10,7 @@ The intended flow is:
 
 `changed configuration → affected verification cases → bounded execution → deterministic evaluation → versioned evidence → requirement applicability`
 
-One-Piece shall retain the requirement revision, verification case, evaluation rules, execution configuration and evidence. Engineering Agents shall execute the registered test adapter within its budget. A test adapter may call MuJoCo or another approved analysis tool. A requirement ID or an LLM-generated sentence alone shall not select an executable command.
+One-Piece shall retain the requirement revision, verification case, evaluation rules, execution configuration and evidence. Engineering Agents shall execute the registered test adapter in its budget. A test adapter may call MuJoCo or another approved analysis tool. A requirement ID or an LLM-generated sentence alone shall not select an executable command.
 
 Proposed acceptance criteria:
 
@@ -37,7 +37,7 @@ Proposed acceptance criteria:
 - Report which requirements and tests a change can affect. Mark unsupported or uncertain impact analysis explicitly. A diff identifies change; it does not prove causation or compliance.
 - Conflicting edits to a requirement or evaluation rule require an explicit resolution record. Do not overwrite an existing revision or silently select a threshold.
 
-The minimum demonstration shall change a parameter value, a unit, a requirement limit and an edge revision. It shall also add and remove a record. The comparison must show each change. A repeated comparison must be deterministic. Compare against the retained baseline without modifying it.
+The minimum demonstration shall change a parameter value, a unit, a requirement limit and an edge revision. It shall also add and remove a record. The comparison shall show each change. A repeated comparison shall be deterministic. Compare against the retained baseline without modifying it.
 
 ## Current implementation and remaining work
 

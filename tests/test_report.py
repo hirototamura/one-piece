@@ -66,3 +66,77 @@ def test_current_projection_pins_campaign_summary_and_reference_versions(tmp_pat
     projected = current_records(records, snapshot)
     assert next(r for r in projected if r['id'] == 'summary') == old
     assert next(r for r in projected if r['id'] == 'best') == design
+
+
+def test_report_displays_translated_drafts_without_reusing_old_revision_evidence(tmp_path):
+    store = Store(tmp_path / "store")
+    old_product = make_record(project_id="cube", id="cube.system", kind="product", revision="source",
+                              data={"name": "Historical cube"}, created_at="2026-01-01T00:00:00+00:00")
+    product = make_record(project_id="cube", id="cube.system", kind="product", revision="english",
+                          data={"name": "Balancing cube", "translations": {"ja": {"name": "倒立キューブ"}}},
+                          created_at="2026-10-11T00:00:00+00:00")
+    original = make_record(project_id="cube", id="R-HOLD", kind="requirement", revision="source",
+                           data={"name": "Historical hold", "status": "confirmed"},
+                           links=[{"type": "allocate", "target": {"id": old_product["id"], "revision": old_product["revision"]}}],
+                           created_at="2026-01-01T00:00:00+00:00")
+    english = "The cube must keep vertex contact for 30 s."
+    japanese = "キューブは30 sの間、頂点の接触を維持しなければならない。"
+    revised = make_record(project_id="cube", id="R-HOLD", kind="requirement", revision="english",
+                          data={"name": "Vertex contact", "statement": english, "status": "draft",
+                                "source_status": "confirmed", "verification_status": "not_run",
+                                "verification_method": "test", "rationale": "Keep the required contact.",
+                                "conditions": ["Use the approved hardware configuration."],
+                                "acceptance_criteria": {"duration": {"value": 30, "unit": "s"}},
+                                "unresolved_items": [{"id": "OPEN-1", "description": "Define the contact tolerance.", "owner": "human"}],
+                                "translations": {"ja": {"name": "頂点接触", "statement": japanese,
+                                                         "rationale": "要求した接触を維持する。",
+                                                         "conditions": ["承認した実機構成を使用する。"],
+                                                         "acceptance_criteria": {"保持時間": {"value": 30, "unit": "s"}},
+                                                         "unresolved_items": [{"id": "OPEN-1", "description": "接触の許容差を定義する。", "owner": "human"}]}}},
+                          created_at="2026-10-11T00:00:00+00:00")
+    evidence = make_record(project_id="cube", id="old.evidence", kind="evaluation",
+                           links=[{"type": "verify", "target": {"id": original["id"], "revision": original["revision"]}}])
+    current_evidence = make_record(project_id="cube", id="current.evidence", kind="analysis_result",
+                                   links=[{"type": "verify", "target": {"id": revised["id"], "revision": revised["revision"]}}])
+    planned = make_record(project_id="cube", id="hold.test", kind="verification_case",
+                          data={"requirement_refs": [{"id": revised["id"], "revision": revised["revision"]}], "status": "planned"})
+    group = make_record(project_id="cube", id="cube.req.system", kind="requirement",
+                        data={"name": "System requirements", "record_role": "requirement_group", "status": "draft",
+                              "translations": {"ja": {"name": "システム要求"}}})
+    store.import_records([old_product, product, original, revised, evidence, current_evidence, planned, group])
+    html = report(store, tmp_path / "report", "cube").read_text()
+    data = json.loads(html.split('<script type="application/json" id="data">')[1].split('</script>')[0])
+    view = data["requirement_views"]["R-HOLD@english"]
+    assert view["english"]["statement"] == english
+    assert view["japanese"]["statement"] == japanese
+    assert view["english"]["acceptance_criteria"]["duration"] == {"value": 30, "unit": "s"}
+    assert view["japanese"]["unresolved_items"][0]["id"] == "OPEN-1"
+    assert view["statement_status"] == "draft" and view["source_status"] == "confirmed"
+    assert view["verification_status"] == "not_run"
+    assert view["evidence_refs"] == [{"id": "current.evidence", "revision": "1"}]
+    assert view["count_scope"] == "current_record_projection_only"
+    assert view["historical_evidence_count"] == 1
+    assert view["historical_target_refs"] == [{"id": "R-HOLD", "revision": "source"}]
+    assert view["planned_case_refs"] == [{"id": "hold.test", "revision": "1"}]
+    assert data["requirement_views"]["cube.req.system@1"]["is_group"] is True
+    assert data["requirement_views"]["cube.req.system@1"]["english"]["statement"] is None
+    # Historical graph nodes use their own record revision and retain allocation.
+    trace = {(r["id"], r["revision"]): r for r in data["trace_records"]}
+    assert trace[("R-HOLD", "source")] == original
+    assert trace[("cube.system", "source")] == old_product
+    assert ("R-HOLD", "english") not in trace
+    assert data["missing_trace_targets"] == []
+    assert 'lang="en"' in html and 'lang="ja"' in html
+    assert "旧版への証拠を現在版へ付け替えません" in html
+
+
+def test_trace_projection_does_not_replace_missing_revision_with_current_id():
+    from onepiece.report import _trace_projection
+
+    current = make_record(project_id="cube", id="R-HOLD", kind="requirement", revision="current")
+    source = make_record(project_id="cube", id="test", kind="test_case",
+                         links=[{"type": "verify", "target": {"id": "R-HOLD", "revision": "missing"}}])
+    historical, missing = _trace_projection([current, source], [current, source])
+    assert historical == []
+    assert missing == [{"source": {"id": "test", "revision": "1"}, "project_id": "cube", "type": "verify",
+                        "target": {"id": "R-HOLD", "revision": "missing"}}]

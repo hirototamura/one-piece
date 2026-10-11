@@ -1,6 +1,8 @@
 # SpaceX-style systems engineering practice
 
-Read [Engineering standards](standards.md) first. ISO/IEC/IEEE 29148:2018 is the first reference for requirements. This guide supplies engineering methods; it does not override that standard, project authority, or the shared record contract. Apply ASD-STE100 to English requirements and technical documents where applicable.
+For new One-Piece requirement statements, use `shall` in English. Apply the [shared source priority](standards.md). SpaceX-style methods supplement the requirements standards; they do not change the selected requirement modal.
+
+Read [Engineering standards](standards.md) first. ISO/IEC/IEEE 29148:2018 is the primary requirements source. NASA standards and systems engineering guidance follow it; ASD-STE100 applies to English writing where compatible. This guide supplies additional engineering methods; it does not override those sources, project authority, or the shared record contract.
 
 This shared guide applies to every human and agent that uses SpaceX-style systems engineering practice. It is grounded in:
 

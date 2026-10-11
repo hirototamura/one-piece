@@ -1,6 +1,8 @@
 # NASA systems engineering practice
 
-Read [Engineering standards](standards.md) first. ISO/IEC/IEEE 29148:2018 is the first reference for requirements. This guide supplies engineering methods; it does not override that standard, project authority, or the shared record contract. Apply ASD-STE100 to English requirements and technical documents where applicable.
+For new One-Piece requirements, use `shall` in English requirement statements. Apply the [shared source priority](standards.md): ISO/IEC/IEEE 29148:2018 first, applicable NASA standards and guidance second, and ASD-STE100 third where compatible. NASA Appendix C identifies `shall` as the requirement modal. ASD-STE100 Issue 9 lists `shall` as unapproved; use its other writing rules where compatible, without claiming full STE compliance.
+
+Read [Engineering standards](standards.md) first. ISO/IEC/IEEE 29148:2018 is the primary requirements source. NASA systems engineering standards and this guide provide the next level of requirements and engineering practice. ASD-STE100 applies to English writing where it does not conflict with these sources. This guide does not override ISO, project authority, or the shared record contract.
 
 This shared guide applies to every human and agent that uses NASA systems engineering practice. It is grounded in the *NASA Systems Engineering Handbook* (NASA SP-2016-6105 Rev2) and NPR 7123.1’s **Systems Engineering Engine (SE Engine)**.
 

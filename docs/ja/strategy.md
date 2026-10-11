@@ -4,11 +4,17 @@
 
 ## 標準と共通の方法論
 
-人間とすべてのエージェントは共通の[標準方針](../engineering/standards.md)、[NASA SE](../engineering/nasa_se.md)、[SpaceX-style SE](../engineering/spacex_se.md)を参照する。**要求標準の第一参照はISO/IEC/IEEE 29148:2018**とする。英語の要求・技術文書には**適用可能な範囲でASD-STE100 Simplified Technical English**を使う。NASA／SpaceXの方法論はこれを補完する。過去の原文は維持し、文言の変更は新しい草案として提案する。
+人間とすべてのエージェントは共通の[標準方針](../engineering/standards.md)、[NASA SE](../engineering/nasa_se.md)、[SpaceX-style SE](../engineering/spacex_se.md)を参照する。優先順位は**ISO/IEC/IEEE 29148:2018、適用するNASAの標準・要求記述ガイド、ASD-STE100 Simplified Technical English（上位の出典と両立する範囲）**の順とする。英語の要求文には`shall`を使う。SpaceX-styleの方法論はこの優先順位を補完する。過去の原文は維持し、文言の変更は新しい草案として提案する。
 
 ## 必須のプラットフォーム能力
 
-要求への自動適合検証と、Gitのような履歴・モデルdiff管理を必須の製品能力とする。構成の差分から影響する試験を特定し、再実行または根拠付き再評価を行い、要求・構成の特定版へ証拠を記録する。未実行・失敗・変更後に適用できない証拠を明示する。[競合調査](competitor_tradeoff.md)の旧採用判定は適用しない。[設計と受入条件の草案](verification_and_diff.md)に現状と未実装部分を記す。
+要求への自動適合検証と、Gitのような履歴・モデルdiff管理を必須の製品能力とする。構成の変更ごとに、影響する試験を特定する。試験を実行するか、保存したデータを再評価する。各結果を要求・構成の厳密な版へ対応づける。未実行・失敗・変更後に適用できない証拠を明示する。[競合調査](competitor_tradeoff.md)の旧採用判定は適用しない。[設計と受入条件の草案](verification_and_diff.md)に現状と未実装部分を記す。
+
+## 要求の言語とモデルの改訂
+
+要求は英語で書き、その英語を日本語へ翻訳する。[共通の執筆プロファイル](../engineering/standards.md)を使い、出典の厳密な版を維持する。
+
+[Cubeの要求草案](balancing_cube_requirements.md)では、試験義務と整理用コンテナを区別する。要求の承認や、旧証拠の新版への適用は行わない。
 
 ## 関連する仕様
 
