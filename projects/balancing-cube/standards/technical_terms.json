@@ -1,0 +1,326 @@
+[
+  {
+    "term": "reaction wheel",
+    "definition": "A wheel that changes a body's angular momentum when the wheel speed changes.",
+    "translation_ja": {
+      "term": "リアクションホイール",
+      "definition": "回転速度の変化によって機体の角運動量を変えるホイール。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "vertex balance",
+    "definition": "An upright cube state with one vertex in contact with the floor.",
+    "translation_ja": {
+      "term": "頂点倒立",
+      "definition": "1つの頂点を床に接触させてCubeが立つ状態。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "fixed part",
+    "definition": "The cube structure and attached components that do not rotate relative to that structure.",
+    "translation_ja": {
+      "term": "固定部",
+      "definition": "Cubeの構造と、その構造に対して回転しない取付部品。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "center-of-mass fraction",
+    "definition": "A center-of-mass coordinate divided by the cube side length.",
+    "translation_ja": {
+      "term": "重心座標の比率",
+      "definition": "重心座標をCubeの一辺の長さで除した値。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "standard uncertainty",
+    "definition": "Measurement uncertainty expressed as a standard deviation.",
+    "translation_ja": {
+      "term": "標準不確かさ",
+      "definition": "標準偏差として表す測定の不確かさ。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "standard deviation",
+    "definition": "A measure of the spread of values about their mean.",
+    "translation_ja": {
+      "term": "標準偏差",
+      "definition": "平均値の周りで値がどの程度ばらつくかを示す量。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "axial inertia",
+    "definition": "The moment of inertia about the wheel rotation axis.",
+    "translation_ja": {
+      "term": "軸方向慣性モーメント",
+      "definition": "ホイールの回転軸周りの慣性モーメント。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "transverse inertia",
+    "definition": "The moment of inertia about an axis perpendicular to the wheel rotation axis.",
+    "translation_ja": {
+      "term": "横方向慣性モーメント",
+      "definition": "ホイールの回転軸に垂直な軸周りの慣性モーメント。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "torque envelope",
+    "definition": "The model boundary for available motor torque as a function of speed.",
+    "translation_ja": {
+      "term": "トルク包絡",
+      "definition": "回転速度に対して利用可能なモータートルクを示すモデル上の境界。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "torque envelope intercept",
+    "definition": "The available torque envelope value at zero motor speed.",
+    "translation_ja": {
+      "term": "トルク包絡の切片",
+      "definition": "モーター回転速度がゼロのときの、利用可能なトルク包絡の値。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "torque constant",
+    "definition": "The ratio of motor torque to winding current under specified conditions.",
+    "translation_ja": {
+      "term": "トルク定数",
+      "definition": "指定条件でのモータートルクと巻線電流の比。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "no-load speed",
+    "definition": "The motor speed with no applied output load under specified conditions.",
+    "translation_ja": {
+      "term": "無負荷速度",
+      "definition": "指定条件で出力負荷を加えないときのモーター回転速度。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "rolling friction length",
+    "definition": "The contact-model length coefficient that relates normal force to rolling resistance torque.",
+    "translation_ja": {
+      "term": "転がり摩擦長さ",
+      "definition": "垂直荷重と転がり抵抗トルクを関係づける、接触モデルの長さ係数。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "torsional friction length",
+    "definition": "The contact-model length coefficient that relates normal force to torsional resistance torque.",
+    "translation_ja": {
+      "term": "ねじり摩擦長さ",
+      "definition": "垂直荷重とねじり抵抗トルクを関係づける、接触モデルの長さ係数。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "contact stiffness",
+    "definition": "The ratio of a contact-load change to its displacement change in a stated test range.",
+    "translation_ja": {
+      "term": "接触剛性",
+      "definition": "指定した試験範囲での接触荷重変化と変位変化の比。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "bifilar pendulum",
+    "definition": "A body suspended by two parallel lines for a moment-of-inertia measurement.",
+    "translation_ja": {
+      "term": "二本つり振り子",
+      "definition": "慣性モーメントの測定のために、平行な2本の線でつり下げた物体。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "torsional pendulum",
+    "definition": "A body that oscillates about a rotation axis for a rotational measurement.",
+    "translation_ja": {
+      "term": "ねじり振り子",
+      "definition": "回転量を測定するために回転軸周りで振動する物体。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "attitude",
+    "definition": "The orientation of the cube relative to a defined reference frame.",
+    "translation_ja": {
+      "term": "姿勢",
+      "definition": "定義した基準座標系に対するCubeの向き。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "yaw",
+    "definition": "The rotation coordinate about the defined vertical reference axis.",
+    "translation_ja": {
+      "term": "ヨー",
+      "definition": "定義した鉛直基準軸周りの回転座標。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "MCU",
+    "definition": "Microcontroller unit.",
+    "translation_ja": {
+      "term": "MCU",
+      "definition": "マイクロコントローラ。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "IMU",
+    "definition": "Inertial measurement unit.",
+    "translation_ja": {
+      "term": "IMU",
+      "definition": "慣性計測装置。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "GPIO",
+    "definition": "General-purpose input and output interface on a microcontroller.",
+    "translation_ja": {
+      "term": "GPIO",
+      "definition": "マイクロコントローラの汎用入出力インターフェース。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "CAD",
+    "definition": "Computer-aided design.",
+    "translation_ja": {
+      "term": "CAD",
+      "definition": "コンピュータ支援設計。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "slicer",
+    "definition": "Software that converts a model into instructions for a 3D printer.",
+    "translation_ja": {
+      "term": "スライサー",
+      "definition": "モデルを3Dプリンタの動作指示に変換するソフトウェア。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "Cube",
+    "definition": "The prototype system with a housing and 3 reaction wheels.",
+    "translation_ja": {
+      "term": "Cube",
+      "definition": "筐体と3個のリアクションホイールを持つ試作システム。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "vertex position",
+    "definition": "The upright attitude with one Cube vertex in contact with the floor.",
+    "translation_ja": {
+      "term": "頂点姿勢",
+      "definition": "Cubeの一つの頂点が床に接触した状態の倒立姿勢。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "hold interval",
+    "definition": "The first 30 s after manual release in the proposed hardware test.",
+    "translation_ja": {
+      "term": "保持区間",
+      "definition": "提案する実機試験において、手動解放後の最初の30 s。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "tilt angle",
+    "definition": "The angular distance from the vertex position. The test procedure must define its reference frame.",
+    "translation_ja": {
+      "term": "傾斜角",
+      "definition": "頂点姿勢からの角度差。試験手順で基準座標系を定義する必要がある。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "RMS",
+    "definition": "Root mean square. For N samples x, RMS is sqrt(sum(x*x)/N).",
+    "translation_ja": {
+      "term": "RMS",
+      "definition": "二乗平均平方根。N個のサンプルxに対し、RMSはsqrt(sum(x*x)/N)である。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "yaw rate",
+    "definition": "The angular velocity about the specified vertical reference axis.",
+    "translation_ja": {
+      "term": "ヨー角速度",
+      "definition": "指定した鉛直基準軸周りの角速度。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "contact point",
+    "definition": "The Cube vertex contact location relative to the floor reference frame. The hardware measurement method is unresolved.",
+    "translation_ja": {
+      "term": "接地点",
+      "definition": "床の基準座標系に対するCube頂点の接触位置。実機での測定方法は未確定である。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "KDP",
+    "definition": "Key Design Parameter. A parameter that has an important effect on the design.",
+    "translation_ja": {
+      "term": "KDP",
+      "definition": "主要設計パラメータ。設計に重要な影響を持つパラメータ。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "model error",
+    "definition": "The difference between model results and independent physical measurements under the same test conditions.",
+    "translation_ja": {
+      "term": "モデル誤差",
+      "definition": "同じ試験条件でのモデル結果と独立した実測値の差。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "approved limit",
+    "definition": "A limit that a human has approved for the specified component revision and conditions. No such approval is inferred here.",
+    "translation_ja": {
+      "term": "承認済みの限界",
+      "definition": "指定した部品の版と条件について人間が承認した限界値。ここで承認を推定することはない。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "build volume",
+    "definition": "The space in which a 3D printer can make a part under specified print conditions.",
+    "translation_ja": {
+      "term": "造形範囲",
+      "definition": "指定された造形条件で、3Dプリンタが部品を製作できる空間。"
+    },
+    "category": "technical_name"
+  },
+  {
+    "term": "cost",
+    "definition": "The prototype expenditure in JPY. The included items and budget need human definition.",
+    "translation_ja": {
+      "term": "費用",
+      "definition": "JPYで表す試作の支出。含める項目と予算は人間が定義する必要がある。"
+    },
+    "category": "technical_name"
+  }
+]
