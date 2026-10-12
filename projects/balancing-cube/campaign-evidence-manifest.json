@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0",
+  "format": "onepiece-metadata-clone-evidence-packs",
+  "project_id": "balancing-cube",
+  "packs": [
+    {
+      "filename": "balancing-cube-campaign-evidence-20261012-part01.zip",
+      "sha256": "29f26ddbe378b469930477cf6f0f6f6c3193da6599a9b0e198138ad5ca13d83e",
+      "size_bytes": 77594655,
+      "records": 6600,
+      "url": "https://github.com/hirototamura/one-piece/releases/download/evidence-balancing-cube-20261012-qwen-memory/balancing-cube-campaign-evidence-20261012-part01.zip"
+    },
+    {
+      "filename": "balancing-cube-campaign-evidence-20261012-part02.zip",
+      "sha256": "77360823e00dcbe018711058dc052abe32991bc08ffd1ac055f01a1c1a922d4d",
+      "size_bytes": 81284585,
+      "records": 268,
+      "url": "https://github.com/hirototamura/one-piece/releases/download/evidence-balancing-cube-20261012-qwen-memory/balancing-cube-campaign-evidence-20261012-part02.zip"
+    },
+    {
+      "filename": "balancing-cube-campaign-evidence-20261012-part03.zip",
+      "sha256": "b0aee6779d8fdf1ee769b2469c925bdecd859fad41b55382c8c7e0ccc1f48d97",
+      "size_bytes": 67962546,
+      "records": 61,
+      "url": "https://github.com/hirototamura/one-piece/releases/download/evidence-balancing-cube-20261012-qwen-memory/balancing-cube-campaign-evidence-20261012-part03.zip"
+    }
+  ],
+  "run_ids": [
+    "cube-5de4f4ef0dbd411c8aa3",
+    "cube-ab10fca28a864216bcb0",
+    "cube-f405234bd3834862925d"
+  ],
+  "canonical_records": 6929,
+  "selected_records": 122,
+  "canonical_commits": 88,
+  "metadata_checkout_required": true,
+  "roundtrip_verified": true,
+  "duplicate_delivery_verified": true,
+  "physical_validation": false,
+  "adopted_human_baseline": null,
+  "retrieval": "Clone this PR branch with its canonical JSON metadata, then fetch every pack with its expected SHA-256. These packs rehydrate a metadata checkout; they are not stand-alone empty-store imports."
+}

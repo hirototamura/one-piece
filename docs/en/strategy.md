@@ -24,6 +24,7 @@ The [Cube requirement drafts](balancing_cube_requirements.md) separate test obli
 - [SysML API](sysml_api.md): supported standard services and exchange mapping.
 - [Verification and diff](verification_and_diff.md): current scope and proposed acceptance criteria.
 - [Competitor research](competitor_tradeoff.md): observations without historical adoption decisions.
+- [Report collection and campaigns](report_collection.md): derived bilingual views, preview ownership and scoped numerical evidence.
 
 Add concrete strategy, specification decisions and current implementation priorities here. Link supporting technical detail from this file. Keep canonical engineering requirements and evidence in versioned JSON. Do not move current implementation scope or milestones into CORE.md.
 

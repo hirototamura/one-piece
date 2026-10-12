@@ -44,7 +44,7 @@ For offline use, download the evidence ZIP on a connected machine, transfer it, 
 
 The final offline acceptance is `cube.acceptance.offline-20261010@2`. It records the code revision, test outputs, four saved-K CPU reproductions, two Fake LLM rounds with actual CPU physics, round-two retrieval of persisted feedback, evolved search-policy data, and unchanged original hashes. ECLSS remains independently tested through its existing two-run workflow. The evidence index also records metadata-only clone restoration, canonical JSON preservation and duplicate-delivery checks.
 
-The Fake LLM proposals did not improve the numerical reference. CPU-only proposals remain provisional. New GPU execution, real LLM improvement, hardware measurements and physical validation have not been performed. Six-second numerical results do not verify the draft thirty-second hardware holding requirement. Unstructured acceptance criteria in historical revisions remain explicit warnings; imported historical states do not approve the new hierarchy.
+The Fake LLM proposals did not improve the numerical reference. CPU-only proposals remain provisional. At that offline acceptance checkpoint, new GPU execution and real LLM improvement had not been performed. The later Qwen campaigns below add numerical CPU/GPU execution evidence. Hardware measurements and physical validation remain unperformed. Six-second numerical results do not verify the draft thirty-second hardware holding requirement. Unstructured acceptance criteria in historical revisions remain explicit warnings; imported historical states do not approve the new hierarchy.
 
 The system graph uses `derive / satisfy / verify / allocate / constrain`; `satisfy` records intent and `verify` carries scoped evidence. The [system-model guide](../../docs/ja/system_model.md) explains the NASA/SpaceX principles, and the [Engineering Agents guide](https://github.com/hirototamura/engineering_agents/blob/codex/mujoco-evidence-loop/docs/ja/mujoco-one-piece.md) describes the bounded ENPIRE-inspired pipeline. It evolves hypothesis, priority KDPs and suggested search step (advisory), with hardware/software changes limited to the approved MVP variables.
 
@@ -55,3 +55,33 @@ The system graph uses `derive / satisfy / verify / allocate / constrain`; `satis
 The 4,445 previously published records remain immutable history, including earlier offline acceptance runs. The 2,175 appended revisions bring canonical history to 6,620 records; current projections contain one revision per ID. The exact comparison design and campaign_summary are outside context count limits, so acceptance candidates cannot hide the best original design or 31/9/6 summary. New acceptance runs use a separate temporary store; their logs are published in the new Release verification ZIP. The original 0.1.0 Release remains an archive, not the current install target.
 
 CI builds and tests the installed 0.1.1 wheel on Python 3.11/3.12. Engineering Agents uses that Release wheel with its SHA-256 pin and makes MuJoCo CPU integration tests mandatory with zero dependency skips. Requested-but-unavailable GPU execution is inconclusive and has a nonzero process exit; no GPU or physical result is inferred.
+
+## Qwen memory campaigns and bilingual collection
+
+The [campaign evidence index](campaign-evidence-manifest.json) adds three real-LLM
+run families (122 records) to the 6,807-record history: an interrupted attempt,
+ten completed rounds, and twenty completed rounds. The published metadata has
+6,929 records. Unpublished local acceptance/Fake LLM runs are excluded.
+See [report collection and campaign limits](../../docs/en/report_collection.md).
+
+The historical evidence index above remains unchanged. For this expanded Git
+checkout, restore **all three** new packs before checking or running the store:
+
+```sh
+python - <<'PY'
+import json
+from onepiece import Store
+m = json.load(open('projects/balancing-cube/campaign-evidence-manifest.json'))
+s = Store('projects/balancing-cube/store')
+for pack in m['packs']:
+    print(s.fetch(pack['url'], expected_sha256=pack['sha256']))
+assert s.check('balancing-cube')['ok']
+PY
+```
+
+Each pack stays within the existing ZIP safety limits. References resolve against
+the canonical JSON metadata from this checkout. The packs restore artifact bytes;
+they do not replace Git metadata or change record revisions.
+The export helper reproduces the selection and checks clone restoration and
+idempotent import. The translated collection and screenshots are derived outputs
+maintained by Engineering Agents, not canonical model data.
