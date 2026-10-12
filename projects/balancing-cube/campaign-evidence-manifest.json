@@ -38,5 +38,11 @@
   "duplicate_delivery_verified": true,
   "physical_validation": false,
   "adopted_human_baseline": null,
-  "retrieval": "Clone this PR branch with its canonical JSON metadata, then fetch every pack with its expected SHA-256. These packs rehydrate a metadata checkout; they are not stand-alone empty-store imports."
+  "retrieval": "Clone this PR branch with its canonical JSON metadata, then fetch every pack with its expected SHA-256. These packs rehydrate a metadata checkout; they are not stand-alone empty-store imports.",
+  "verification": {
+    "filename": "engineering-pr-verification-20261012.zip",
+    "sha256": "2c0e6210a2d46ffc27c64955dfdf13a14bcf1bc9cffe7c8ccc0ae095f2f95257",
+    "size_bytes": 76074,
+    "url": "https://github.com/hirototamura/one-piece/releases/download/evidence-balancing-cube-20261012-qwen-memory/engineering-pr-verification-20261012.zip"
+  }
 }
