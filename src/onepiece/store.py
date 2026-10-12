@@ -14,6 +14,7 @@ import urllib.parse
 import urllib.request
 import zipfile
 import zlib
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable
 
@@ -63,12 +64,16 @@ def _bundle_compression(chunks: Iterable[bytes]) -> int:
     return zipfile.ZIP_STORED if size > max(compressed, 1) * MAX_ZIP_EXPANSION_RATIO else zipfile.ZIP_DEFLATED
 
 
+def _created_at(record):
+    return datetime.fromisoformat(record["created_at"].replace("Z", "+00:00")).astimezone(timezone.utc)
+
+
 def current_records(records, snapshot=None):
     """A revision projection; canonical history is never deleted or rewritten."""
     selected = {}
     for record in records:
         key = record["project_id"], record["id"]
-        if key not in selected or (record["created_at"], record["revision"]) > (selected[key]["created_at"], selected[key]["revision"]):
+        if key not in selected or (_created_at(record), record["revision"]) > (_created_at(selected[key]), selected[key]["revision"]):
             selected[key] = record
     if snapshot is not None:
         by_ref = {_key(r): r for r in records}
@@ -81,7 +86,7 @@ def current_records(records, snapshot=None):
                 raise IntegrityError("Missing pinned context record")
             selected[key[:2]] = by_ref[key]
         selected[_key(snapshot)[:2]] = snapshot
-    return sorted(selected.values(), key=lambda r: (r["created_at"], r["id"], r["revision"]))
+    return sorted(selected.values(), key=lambda r: (_created_at(r), r["id"], r["revision"]))
 
 
 def _data_refs(value, path="data"):
@@ -494,7 +499,7 @@ class Store:
                 if pinned is None or pinned["kind"] != "design":
                     raise IntegrityError("Missing exact comparison design in context")
                 records = [r for r in records if r["id"] != pinned["id"]] + [pinned]
-                records.sort(key=lambda r: (r["created_at"], r["id"], r["revision"]))
+                records.sort(key=lambda r: (_created_at(r), r["id"], r["revision"]))
                 pinned_keys.add(pinned_key)
         design_kinds = {"design", "design_candidate", "candidate"}
         evidence_kinds = {"evidence", "evaluation", "artifact", "simulation_run", "trial", "verification", "analysis_result"}

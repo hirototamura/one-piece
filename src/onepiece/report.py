@@ -99,7 +99,7 @@ def report(store, output: str | Path, project_id: str | None = None) -> Path:
     replay = {"cases": []}
     trial_views = {}
     new_replays = []
-    by_ref = {(r["id"], r["revision"]): r for r in records}
+    by_ref = {(r["project_id"], r["id"], r["revision"]): r for r in records}
     for record in records:
         for artifact in record["artifacts"]:
             obj = store.artifact_path(artifact)
@@ -123,20 +123,21 @@ def report(store, output: str | Path, project_id: str | None = None) -> Path:
                      "criteria": {c["metric"]: 1 for c in t["screening"] if not c["passed"]}}
                     for t in trials]
                 reference = record["data"].get("candidate_ref") or {}
-                design = by_ref.get((reference.get("id"), reference.get("revision")))
+                design = by_ref.get((record["project_id"], reference.get("id"), reference.get("revision")))
                 if trials and design and trials[0].get("frames"):
                     trial = trials[0]
                     fields = {"time_s", "position_m", "quaternion_wxyz", "wheel_angle_rad",
                               "tilt_total_deg", "pivot_displacement_mm"}
                     new_replays.append({
-                        "id": record["id"], "label": "新規固定dt CPU · " + result["candidate_id"] + " / " + result["stage"],
+                        "id": record["project_id"] + ":" + record["id"], "project_id": record["project_id"],
+                        "label": "新規固定dt CPU · " + result["candidate_id"] + " / " + result["stage"],
                         "candidate_id": result["candidate_id"], "domain_id": trial["domain_id"],
                         "condition_id": trial["condition_id"], "seed": trial["seed"],
                         "physics_timestep_s": trial["physics_timestep_s"],
                         "used_half_timestep_adjudication": False,
                         "geometry": design["data"]["mechanical_config"]["physics"],
                         "frames": [{k: v for k, v in f.items() if k in fields} for f in trial["frames"]],
-                        "trajectory_origin": {"record_ref": reference, "evaluation_id": record["id"],
+                        "trajectory_origin": {"project_id": record["project_id"], "record_ref": reference, "evaluation_id": record["id"],
                                               "artifact_sha256": artifact["sha256"], "backend": trial["backend"]},
                         "source_summary": trial["summary"], "summary": trial["summary"],
                         "summary_comparison": "Rendered from the saved native CPU trajectory; no additional physics execution",

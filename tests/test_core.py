@@ -372,3 +372,28 @@ def test_context_pins_requirement_revision_and_does_not_mix_superseded_trace(tmp
     store.import_records([old, new, snapshot])
     context = store.context("cube", snapshot_ref=ref(snapshot))
     assert old in context["records"] and new not in context["records"]
+
+
+@pytest.mark.parametrize('older_at,newer_at,older_revision,newer_revision', [
+    ('2026-01-01T01:00:00+02:00', '2025-12-31T23:30:00Z', '1', '2'),
+    ('2026-01-01T10:00:00Z', '2026-01-01T06:30:00-04:00', '1', '2'),
+    ('2026-01-01T10:00:00.1Z', '2026-01-01T10:00:00.12+00:00', '1', '2'),
+    ('2026-01-01T10:00:00+00:00', '2026-01-01T06:00:00-04:00', '1', '2'),
+])
+def test_current_revisions_and_active_context_compare_timestamp_instants(tmp_path, older_at, newer_at,
+                                                                       older_revision, newer_revision):
+    from onepiece.store import current_records
+    snapshots = [make_record(project_id='cube', id='snapshot', revision=rev, kind='simulation_snapshot',
+                             created_at=at) for rev, at in [(older_revision, older_at), (newer_revision, newer_at)]]
+    active = [make_record(project_id='cube', id='active', revision=rev, kind='system_model', created_at=at,
+                          data={'simulation_snapshot_ref': ref(snap)})
+              for rev, at, snap in zip([older_revision, newer_revision], [older_at, newer_at], snapshots)]
+    store = Store(tmp_path / 'store')
+    store.import_records([*snapshots, *active])
+    original = {p: p.read_bytes() for p in store.commits.glob('*/*.json')}
+    current = {r['id']: r for r in current_records(store.records())}
+    assert current['active'] == active[-1]
+    assert current['snapshot'] == snapshots[-1]
+    context = store.context('cube')
+    assert context['snapshot_ref'] == ref(snapshots[-1])
+    assert all(p.read_bytes() == content for p, content in original.items())

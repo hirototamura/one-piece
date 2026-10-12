@@ -140,3 +140,47 @@ def test_trace_projection_does_not_replace_missing_revision_with_current_id():
     assert historical == []
     assert missing == [{"source": {"id": "test", "revision": "1"}, "project_id": "cube", "type": "verify",
                         "target": {"id": "R-HOLD", "revision": "missing"}}]
+
+
+def test_multi_project_replay_resolves_design_and_provenance_within_its_project(tmp_path):
+    import hashlib
+    store = Store(tmp_path / 'store')
+    records, objects, project_hashes = [], {}, {}
+    for project, side in [('alpha', .18), ('beta', .32)]:
+        design = make_record(project_id=project, id='same-design', revision='1', kind='design_candidate',
+                             data={'mechanical_config': {'physics': {'cube_side_m': side}}})
+        trial = {'domain_id': 'nominal', 'condition_id': 'hold', 'seed': 42,
+                 'screening': [], 'physics_timestep_s': .001, 'backend': {'backend': 'native_mujoco_cpu'},
+                 'frames': [{'time_s': .001, 'position_m': [side, 0, 0]}], 'summary': {'score': side}}
+        result = {'candidate_id': 'same-design', 'stage': 'validation', 'records': [trial]}
+        content = json.dumps(result).encode()
+        sha = hashlib.sha256(content).hexdigest()
+        objects[sha] = content
+        project_hashes[project] = sha
+        evaluation = make_record(project_id=project, id='same-run', kind='simulation_run',
+            data={'candidate_ref': {'id': 'same-design', 'revision': '1'}},
+            artifacts=[{'path': 'result.json', 'sha256': sha, 'size_bytes': len(content)}])
+        records.extend([design, evaluation])
+    store.import_records(records, artifact_objects=objects)
+    output = report(store, tmp_path / 'report')
+    data = json.loads(output.read_text().split('<script type="application/json" id="data">')[1].split('</script>')[0])
+    cases = data['replay']['cases']
+    assert len(cases) == 2 and len({case['id'] for case in cases}) == 2
+    for case in cases:
+        side = .18 if case['project_id'] == 'alpha' else .32
+        assert case['geometry']['cube_side_m'] == side
+        assert case['frames'][0]['position_m'][0] == side
+        assert case['trajectory_origin']['project_id'] == case['project_id']
+        assert case['trajectory_origin']['artifact_sha256'] == project_hashes[case['project_id']]
+
+
+def test_report_current_projection_uses_timezone_instants(tmp_path):
+    store = Store(tmp_path / 'store')
+    older = make_record(project_id='cube', id='req', revision='1', kind='requirement',
+        created_at='2026-01-01T01:00:00+02:00', data={'statement': 'Older statement'})
+    newer = make_record(project_id='cube', id='req', revision='2', kind='requirement',
+        created_at='2025-12-31T23:30:00Z', data={'statement': 'Newer statement'})
+    store.import_records([older, newer])
+    output = report(store, tmp_path / 'report')
+    data = json.loads(output.read_text().split('<script type="application/json" id="data">')[1].split('</script>')[0])
+    assert data['records'] == [newer]
