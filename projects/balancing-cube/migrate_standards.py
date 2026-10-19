@@ -578,6 +578,10 @@ def write_documents(records):
     """Generate human text from the imported records; do not author a second SSOT."""
     active = max((r for r in records if r["id"] == "cube.system-model.active"),
                  key=lambda r: (r["created_at"], r["revision"]))
+    if active["data"].get("approval_state") == "human_reviewed":
+        import runpy
+        runpy.run_path(str(ROOT / "review_requirements.py"))["write_documents"](records)
+        return
     snapshot_ref = active["data"]["simulation_snapshot_ref"]
     by_ref = {(r["id"], r["revision"]): r for r in records}
     snapshot = by_ref[(snapshot_ref["id"], snapshot_ref["revision"])]

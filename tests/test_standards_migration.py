@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import copy
 import json
+from datetime import datetime
 from pathlib import Path
 import re
 import runpy
@@ -26,8 +27,13 @@ def history():
     # Do not construct a Store for the tracked project: that could rebuild its
     # local index and would make CI depend on downloaded artifact objects.
     records = {}
+    # This fixture exercises the October 11 migration, not the current model.
+    # Keep later reviewed baselines from changing its historical entry context.
+    cutoff = datetime.fromisoformat('2026-10-11T05:48:54+00:00')
     for path in sorted((PROJECT_ROOT / "store/commits").glob("*/records.json")):
         for record in json.loads(path.read_text(encoding="utf-8")):
+            if datetime.fromisoformat(record['created_at'].replace('Z','+00:00')) > cutoff:
+                continue
             key = record["project_id"], record["id"], record["revision"]
             if key in records:
                 assert canonical_bytes(records[key]) == canonical_bytes(record)

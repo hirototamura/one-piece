@@ -16,7 +16,7 @@ See the [restored competitor study](competitor_tradeoff.md) and [design and prop
 
 Write English requirements first, then translate them into Japanese. Use the [shared writing profile](../engineering/standards.md) and retain exact source revisions.
 
-The [Cube requirement drafts](balancing_cube_requirements.md) separate test obligations from organizational containers. They do not approve requirements or extend old evidence to new revisions.
+The [Cube requirements](balancing_cube_requirements.md) separate test obligations from organizational containers. Human review on 2026-10-19 accepted 22 statements and the allocation split into 8 functions and 10 components. The versioned review decision and hashed baseline record that scope. Old evidence keeps its original revision targets; planned verification cases remain unrun. See [v0.3.0 release notes](reviewed_cube_release.md).
 
 ## Supporting specifications
 

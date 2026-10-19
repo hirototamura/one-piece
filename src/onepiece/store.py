@@ -78,7 +78,9 @@ def current_records(records, snapshot=None):
     if snapshot is not None:
         by_ref = {_key(r): r for r in records}
         refs = snapshot["data"].get("context_refs", {})
-        pinned = refs.get("requirements", []) + refs.get("kdps", [])
+        pinned = []
+        for category in ("requirements", "kdps", "functions", "products", "verification_cases"):
+            pinned += refs.get(category, [])
         pinned += [r for r in [refs.get("campaign_summary"), snapshot["data"].get("comparison_design_ref")] if r]
         for reference in pinned:
             key = (snapshot["project_id"], reference["id"], reference["revision"])
@@ -171,6 +173,7 @@ class Store:
                 valid |= relation == "satisfy" and sk in {"design", "product", "design_candidate", "candidate"} and tk == "requirement"
                 valid |= relation == "verify" and sk in {"evidence", "verification", "evaluation", "simulation_run", "analysis_result", "verification_coverage"} and tk in {"requirement", "test_case", "verification_case"}
                 valid |= relation == "allocate" and sk in {"requirement", "function", "kdp", "parameter", "model_parameter", "design_parameter"} and tk == "product"
+                valid |= relation == "allocate" and sk == "requirement" and tk == "function"
                 valid |= relation == "constrain" and sk in {"constraint", "requirement", "specification"} and tk in {"parameter", "model_parameter", "kdp", "design_parameter", "design", "product", "model", "simulation_snapshot"}
                 if not valid:
                     raise IntegrityError(f"Invalid {relation} direction: {sk} → {tk}")
@@ -480,6 +483,7 @@ class Store:
                 snapshot_ref = active["data"]["simulation_snapshot_ref"]
         # Requirements, KDPs, and assumptions retain their exact units/uncertainty even when evidence is bounded.
         always = {"requirement", "kdp", "parameter", "model_parameter", "simulation_snapshot", "campaign_summary", "verification_coverage", "design_parameter", "assumption", "risk", "interface", "product", "specification", "system_model", "baseline"}
+        always |= {"function", "verification_case", "review_decision"}
         snapshot = None
         if snapshot_ref is not None:
             snapshot = next((r for r in records if r["kind"] == "simulation_snapshot" and ref(r) == snapshot_ref), None)
