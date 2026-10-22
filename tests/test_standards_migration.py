@@ -2,8 +2,8 @@
 from __future__ import annotations
 
 import copy
-import json
 from datetime import datetime
+import json
 from pathlib import Path
 import re
 import runpy
@@ -23,16 +23,17 @@ def migration():
 
 
 @pytest.fixture(scope="module")
-def history():
+def history(migration):
     # Do not construct a Store for the tracked project: that could rebuild its
     # local index and would make CI depend on downloaded artifact objects.
     records = {}
-    # This fixture exercises the October 11 migration, not the current model.
-    # Keep later reviewed baselines from changing its historical entry context.
-    cutoff = datetime.fromisoformat('2026-10-11T05:48:54+00:00')
+    # This is a historical migration fixture, not the live project context.
+    # Later model selections must win in production without changing what the
+    # October 11 migration was expected to select at the time.
+    cutoff = datetime.fromisoformat(migration["SHALL_CREATED_AT"])
     for path in sorted((PROJECT_ROOT / "store/commits").glob("*/records.json")):
         for record in json.loads(path.read_text(encoding="utf-8")):
-            if datetime.fromisoformat(record['created_at'].replace('Z','+00:00')) > cutoff:
+            if datetime.fromisoformat(record["created_at"].replace("Z", "+00:00")) > cutoff:
                 continue
             key = record["project_id"], record["id"], record["revision"]
             if key in records:

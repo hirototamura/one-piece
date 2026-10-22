@@ -24,6 +24,7 @@ dist/
 
 # Compact canonical JSON is tracked; artifact bytes and derived indexes are not.
 projects/**/store/index.sqlite*
+projects/**/store/index *.sqlite*
 projects/**/store/.write.lock
 projects/**/store/.index-*
 projects/**/store/.fetch-*
