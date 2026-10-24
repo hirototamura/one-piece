@@ -28,9 +28,9 @@
   "software_checks": {
     "onepiece_installed_wheel": {
       "version": "0.4.0",
-      "passed": 112,
+      "passed": 114,
       "skipped": 0,
-      "sha256": "3d89369bfa249b6238c005965ef94491f42a095fbed59866bebe69ed154f8d9b"
+      "sha256": "f1573468de96b327647251e85ec8f9dc2b6eeb548ca5755365ce26443120f241"
     },
     "engineering_agents": {
       "passed": 1189,

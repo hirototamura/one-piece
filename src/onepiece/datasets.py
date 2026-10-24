@@ -45,12 +45,14 @@ def safe_target(root: Path, relative: str) -> Path:
     target = root.joinpath(*safe_relative(relative).parts)
     if any(p.is_symlink() for p in (target, *target.parents)) or not target.resolve().is_relative_to(root.resolve()):
         raise RecordError(f"Dataset path traverses a symlink or escapes destination: {relative}")
+    if any(p.exists() and not p.is_dir() for p in target.parents):
+        raise FileExistsError(f"Preserve existing non-directory parent of dataset path: {relative}")
     return target
 
 
 def _included(path: Path) -> bool:
     return not (any(p in EXCLUDED or p.startswith((".venv", ".env")) for p in path.parts)
-                or path.name.startswith("index.sqlite") or path.name.endswith(".sqlite")
+                or re.fullmatch(r"index(?: \d+)?\.sqlite(?:-.*)?", path.name)
                 or path.name.startswith((".write.lock", ".index-", ".fetch-")))
 
 

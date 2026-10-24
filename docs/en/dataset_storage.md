@@ -14,8 +14,9 @@ Their existing public/private visibility is preserved; new evidence stays privat
 The archive retains run outputs, acceptance receipts, historical source packs,
 browser captures and validation helper scripts. Each top-level run or fixture is
 independently retrievable. Git metadata, symlinks, virtual environments, build
-directories, caches and disposable SQLite indexes are excluded. Original local
-inputs are retained. An archive does not establish a verification pass or an
+directories, caches and disposable SQLite indexes are excluded. Primary
+measurement databases are retained; a `.sqlite` suffix alone does not make a file a cache.
+All original local inputs are retained. An archive does not establish a verification pass or an
 adopted engineering baseline.
 
 ## Use from another environment

@@ -117,3 +117,29 @@ def test_list_cli_needs_neither_network_nor_record_store(collection, tmp_path, m
     assert main(["datasets", "list", str(assets / "catalog.json"), "--query", "trial"]) == 0
     assert [d["id"] for d in json.loads(capsys.readouterr().out)["datasets"]] == ["trial"]
     assert not (tmp_path / ".onepiece").exists()
+
+
+def test_primary_sqlite_data_is_archived_while_disposable_index_is_excluded(collection, tmp_path):
+    source, _, _ = collection
+    raw = b"SQLite format 3\x00primary experimental measurements"
+    (source / "trial/measurements.sqlite").write_bytes(raw)
+    assets = tmp_path / "raw-data-assets"
+    packed = pack_datasets(source, assets, repository="owner/private", release="raw-data", catalog_id="raw-data")
+    catalog = load_catalog(Path(packed["catalog"]))
+    trial = next(d for d in catalog["datasets"] if d["id"] == "trial")
+    assert any(f["path"].endswith("measurements.sqlite") for f in trial["files"])
+    assert not any(f["path"].endswith("index.sqlite") for f in trial["files"])
+    destination = tmp_path / "raw-data-restore"
+    fetch_datasets(catalog, destination, ids=["trial"], cache=tmp_path / "cache", assets_dir=assets)
+    assert (destination / "integration-validation/trial/measurements.sqlite").read_bytes() == raw
+
+
+def test_parent_file_conflict_stops_before_download_or_partial_install(collection, tmp_path):
+    _, assets, catalog = collection
+    destination = tmp_path / "workspace"
+    destination.mkdir()
+    (destination / "integration-validation").write_text("existing human data")
+    with pytest.raises(FileExistsError, match="non-directory parent"):
+        fetch_datasets(catalog, destination, ids=["trial"], cache=tmp_path / "cache", assets_dir=assets)
+    assert not (tmp_path / "cache").exists()
+    assert (destination / "integration-validation").read_text() == "existing human data"
