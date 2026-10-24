@@ -1,0 +1,43 @@
+name: Python record core
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  wheel-tests:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install build pytest jsonschema pyyaml
+      - run: python -m build --wheel
+      - run: python -m pip install dist/*.whl
+      - name: Test installed wheel, with no source-path substitution
+        env:
+          ONEPIECE_TEST_INSTALLED: "1"
+        run: |
+          python - <<'PY'
+          import onepiece
+          from pathlib import Path
+          assert not Path(onepiece.__file__).resolve().is_relative_to(Path('src').resolve())
+          assert onepiece.__version__ == '0.4.0'
+          PY
+          python -m pytest -q --junitxml=wheel-tests.xml
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: wheel-tests-${{ matrix.python-version }}
+          path: |
+            dist/*.whl
+            wheel-tests.xml

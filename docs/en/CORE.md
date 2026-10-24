@@ -2,6 +2,8 @@
 
 This file records the central philosophy of One Piece Engineering.
 
+Current strategies and specifications are in [strategy.md](strategy.md).
+
 ## Project mission
 
 Engineer systems that can reach space and evolve on their own.

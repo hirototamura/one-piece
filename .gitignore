@@ -1,10 +1,9 @@
-# Env & secrets
+# Env & secrets (retain original repository exclusions)
 .env
 .env.*
 !.env.example
 
 # OS & editors
-.DS_Store
 *.swp
 .idea/
 .vscode/*
@@ -12,3 +11,25 @@
 
 # Logs
 *.log
+
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+build/
+dist/
+.onepiece/
+
+# Compact canonical JSON is tracked; artifact bytes and derived indexes are not.
+projects/**/store/index.sqlite*
+projects/**/store/index *.sqlite*
+projects/**/store/.write.lock
+projects/**/store/.index-*
+projects/**/store/.fetch-*
+projects/**/store/commits/.import-*
+projects/**/store/commits/*/objects/
+projects/**/report/
+projects/**/explorer/
+.dataset-cache/

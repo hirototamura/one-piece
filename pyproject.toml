@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "one-piece-engineering"
+version = "0.4.0"
+description = "Versioned system models and engineering evidence, with rebuildable indexes"
+requires-python = ">=3.11"
+license = {text = "Apache-2.0"}
+dependencies = ["jsonschema>=4.18"]
+
+[project.optional-dependencies]
+test = ["pytest>=8", "jsonschema>=4"]
+dev = ["pytest>=8", "jsonschema>=4"]
+explorer = ["pyyaml>=6"]
+
+[project.scripts]
+onepiece = "onepiece.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+onepiece = ["record.schema.json", "standards/omg/SystemsModelingAPI/1.0/*.json", "explorer_assets/*.html", "explorer_assets/*.js", "explorer_assets/*.css", "explorer_assets/*.json"]

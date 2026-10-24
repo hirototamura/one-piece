@@ -2,6 +2,8 @@
 
 本ファイルに One Piece Engineering の中枢理念を記す。
 
+具体的な戦略・仕様は[strategy.md](strategy.md)を参照する。
+
 ## プロジェクトのミッション
 
 宇宙に出て自己進化できるシステムを工学する。

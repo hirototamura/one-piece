@@ -1,0 +1,19 @@
+{
+  "standard": "OMG Systems Modeling API and Services 1.0",
+  "specification": "https://www.omg.org/spec/SystemsModelingAPI/1.0/",
+  "retrieved_on": "2026-10-11",
+  "documents": [
+    {
+      "file": "OpenAPI.json",
+      "url": "https://www.omg.org/spec/SystemsModelingAPI/20250201/OpenAPI.json",
+      "sha256": "17e7e8586df6c51ada09d802f48bec6dd68d141454fae05d3f45e9b9879e01ab",
+      "size_bytes": 7568661
+    },
+    {
+      "file": "Schema.json",
+      "url": "https://www.omg.org/spec/SystemsModelingAPI/20250201/Schema.json",
+      "sha256": "cd1d74359d275fdb5c9182a390daffbff51c9c8c30f2a8955b2d9e4eb7589274",
+      "size_bytes": 3533868
+    }
+  ]
+}

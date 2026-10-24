@@ -1,0 +1,296 @@
+{
+  "D-BUDGET": {
+    "name": "First prototype budget",
+    "method": "The user sets the budget.",
+    "note": "The value is not measured. A check of the value is not complete. The current model does not use this parameter. More work is necessary for power, temperature and manufacturing fit.",
+    "source": "",
+    "translations": {"ja": {"name": "初回試作の予算", "method": "ユーザーが予算を設定する。", "note": "値は未測定である。値の確認は完了していない。現行モデルはこのパラメータを使用しない。電力、温度、製作時の適合性には追加の作業が必要である。", "source": ""}}
+  },
+  "D-CORNER-R": {
+    "name": "Vertex contact radius",
+    "method": "Measure the shape of a printed test piece. Measure its deformation under load.",
+    "note": "",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "頂点の接触半径", "method": "印刷した試験片の形状を測定する。荷重による変形を測定する。", "note": "", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "D-SIDE": {
+    "name": "Cube side length",
+    "method": "Measure the printed cube with calipers.",
+    "note": "",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "Cubeの一辺の長さ", "method": "印刷後のCubeをノギスで測定する。", "note": "", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "D-SPEED-LIMIT": {
+    "name": "Assembly rotational speed limit",
+    "method": "Do checks of the retention structure, dynamic balance, stress and containment conditions.",
+    "note": "This independent limit is less than the motor no-load speed. The assumed rim speed of 11.6 m/s has no hardware verification.",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "組立体の回転速度上限", "method": "保持構造、動釣合い、応力、封じ込め条件を確認する。", "note": "この独立した上限はモーターの無負荷速度より小さい。仮定した周速11.6 m/sには、実機での検証がない。", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "D-WHEEL-MASS": {
+    "name": "Rotating mass per axis",
+    "method": "Weigh the wheel and the rotating connection parts.",
+    "note": "",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "1軸当たりの回転部質量", "method": "ホイールと回転する結合部品を秤量する。", "note": "", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "D-WHEEL-RADIUS": {
+    "name": "Effective wheel outer radius",
+    "method": "Measure the radius with calipers. Do a check of the assembly clearance.",
+    "note": "",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "ホイールの有効外半径", "method": "ノギスで半径を測定する。組付け時の間隙を確認する。", "note": "", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "F-CONTROL-PERIOD": {
+    "name": "Reference control period",
+    "method": "",
+    "note": "The reference implementation uses 15 ms. A change to the proposed 200 Hz hardware rate makes a new controller revision and experiment contract necessary.",
+    "source": "https://github.com/remrc/Self-Balancing-Cube/tree/master/esp32_cube_enc",
+    "translations": {"ja": {"name": "比較基準の制御周期", "method": "", "note": "参照実装は15 msを使用する。提案中の実機の制御周波数200 Hzに変更する場合は、制御器と実験規約の版を更新する必要がある。", "source": "https://github.com/remrc/Self-Balancing-Cube/tree/master/esp32_cube_enc"}}
+  },
+  "F-SIM-DT": {
+    "name": "MuJoCo integration time step",
+    "method": "",
+    "note": "",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "MuJoCoの積分時間刻み", "method": "", "note": "", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-BUS-I": {
+    "name": "Bus current",
+    "method": "Use a calibrated current measurement. Record each measurement on the common time base.",
+    "note": "The value is not measured. A check of the value is not complete. The current model does not use this parameter. More work is necessary for power, temperature and manufacturing fit.",
+    "source": "",
+    "translations": {"ja": {"name": "バス電流", "method": "校正済みの電流計測を使用する。各測定値を共通の時間基準で記録する。", "note": "値は未測定である。値の確認は完了していない。現行モデルはこのパラメータを使用しない。電力、温度、製作時の適合性には追加の作業が必要である。", "source": ""}}
+  },
+  "I-BUS-V": {
+    "name": "Bus voltage under load",
+    "method": "Use a calibrated voltage measurement.",
+    "note": "The value is not measured. A check of the value is not complete. The current model does not use this parameter. More work is necessary for power, temperature and manufacturing fit.",
+    "source": "",
+    "translations": {"ja": {"name": "負荷時のバス電圧", "method": "校正済みの電圧計測を使用する。", "note": "値は未測定である。値の確認は完了していない。現行モデルはこのパラメータを使用しない。電力、温度、製作時の適合性には追加の作業が必要である。", "source": ""}}
+  },
+  "I-CAMERA-U": {
+    "name": "External attitude standard uncertainty",
+    "method": "Calibrate the camera intrinsic parameters. Use a fixture with known angles. Do a check of the marker positions.",
+    "note": "The value is not measured. A check of the value is not complete. The current model does not use this parameter. More work is necessary for power, temperature and manufacturing fit.",
+    "source": "",
+    "translations": {"ja": {"name": "外部姿勢計測の標準不確かさ", "method": "カメラの内部パラメータを校正する。既知の角度を持つ治具を使用する。マーカーの位置を確認する。", "note": "値は未測定である。値の確認は完了していない。現行モデルはこのパラメータを使用しない。電力、温度、製作時の適合性には追加の作業が必要である。", "source": ""}}
+  },
+  "I-COM-X": {
+    "name": "Fixed-part x center-of-mass fraction",
+    "method": "Hang the assembly in three directions, or measure the reaction forces at the support points.",
+    "note": "The S2 model uses only x = y = z. Records can hold asymmetric measurements. The simulator does not accept these measurements before changes to the equilibrium attitude and observation models.",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "固定部重心のx座標／一辺の長さ", "method": "組立体を3方向につり下げるか、支持点の反力を測定する。", "note": "S2モデルはx = y = zのみを使用する。記録には非対称の測定値を保持できる。平衡姿勢と観測モデルを変更する前は、シミュレータはこれらの測定値を受け入れない。", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-COM-Y": {
+    "name": "Fixed-part y center-of-mass fraction",
+    "method": "Hang the assembly in three directions, or measure the reaction forces at the support points.",
+    "note": "The S2 model uses only x = y = z. Records can hold asymmetric measurements. The simulator does not accept these measurements before changes to the equilibrium attitude and observation models.",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "固定部重心のy座標／一辺の長さ", "method": "組立体を3方向につり下げるか、支持点の反力を測定する。", "note": "S2モデルはx = y = zのみを使用する。記録には非対称の測定値を保持できる。平衡姿勢と観測モデルを変更する前は、シミュレータはこれらの測定値を受け入れない。", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-COM-Z": {
+    "name": "Fixed-part z center-of-mass fraction",
+    "method": "Hang the assembly in three directions, or measure the reaction forces at the support points.",
+    "note": "The S2 model uses only x = y = z. Records can hold asymmetric measurements. The simulator does not accept these measurements before changes to the equilibrium attitude and observation models.",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "固定部重心のz座標／一辺の長さ", "method": "組立体を3方向につり下げるか、支持点の反力を測定する。", "note": "S2モデルはx = y = zのみを使用する。記録には非対称の測定値を保持できる。平衡姿勢と観測モデルを変更する前は、シミュレータはこれらの測定値を受け入れない。", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-CONTACT-COMPLIANCE": {
+    "name": "Hardware vertex contact stiffness",
+    "method": "Measure load and displacement in a load test.",
+    "note": "The value is not measured. A check of the value is not complete. The current model does not use this parameter. More work is necessary for power, temperature and manufacturing fit.",
+    "source": "",
+    "translations": {"ja": {"name": "実機頂点の接触剛性", "method": "荷重試験で荷重と変位を測定する。", "note": "値は未測定である。値の確認は完了していない。現行モデルはこのパラメータを使用しない。電力、温度、製作時の適合性には追加の作業が必要である。", "source": ""}}
+  },
+  "I-DELAY": {
+    "name": "Observation-to-control delay",
+    "method": "Measure the MCU sample time, receive time and processing completion time.",
+    "note": "",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "観測から制御までの遅延", "method": "MCUのサンプル時刻、受信時刻、処理完了時刻を実測する。", "note": "", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-DRIVE-TEMP": {
+    "name": "Motor and driver temperature",
+    "method": "Use attached temperature sensors. Record the ambient temperature.",
+    "note": "The value is not measured. A check of the value is not complete. The current model does not use this parameter. More work is necessary for power, temperature and manufacturing fit.",
+    "source": "",
+    "translations": {"ja": {"name": "モーターとドライバの温度", "method": "貼付した温度センサーを使用する。周囲温度を記録する。", "note": "値は未測定である。値の確認は完了していない。現行モデルはこのパラメータを使用しない。電力、温度、製作時の適合性には追加の作業が必要である。", "source": ""}}
+  },
+  "I-FRAME-MASS": {
+    "name": "Total fixed-part mass",
+    "method": "Weigh the complete unit and the rotating parts separately.",
+    "note": "This mass includes motor fixed parts, power components and circuit boards. Record the three wheels separately. Do not count added parts twice.",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "固定部の総質量", "method": "完成機と回転部を分けて秤量する。", "note": "この質量はモーター固定部、電源部品、基板を含む。3枚のホイールは別に計上する。追加部品を二重計上しない。", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-GYRO-NOISE": {
+    "name": "Assumed angular-rate noise standard deviation",
+    "method": "Measure gyro residuals and vibration with the unit stationary and rotating.",
+    "note": "",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "仮定した角速度観測ノイズの標準偏差", "method": "静止時と回転時にジャイロ残差と振動を測定する。", "note": "", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-INERTIA-X": {
+    "name": "Fixed-part x-axis inertia",
+    "method": "Compare the inertia from CAD with a bifilar pendulum measurement.",
+    "note": "",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "固定部のx軸周り慣性モーメント", "method": "CADによる慣性モーメントを二本つり振り子の測定値と比較する。", "note": "", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-INERTIA-Y": {
+    "name": "Fixed-part y-axis inertia",
+    "method": "Compare the inertia from CAD with a bifilar pendulum measurement.",
+    "note": "",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "固定部のy軸周り慣性モーメント", "method": "CADによる慣性モーメントを二本つり振り子の測定値と比較する。", "note": "", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-INERTIA-Z": {
+    "name": "Fixed-part z-axis inertia",
+    "method": "Compare the inertia from CAD with a bifilar pendulum measurement.",
+    "note": "",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "固定部のz軸周り慣性モーメント", "method": "CADによる慣性モーメントを二本つり振り子の測定値と比較する。", "note": "", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-MU": {
+    "name": "Floor-to-vertex sliding friction coefficient",
+    "method": "Pull a test piece under a known normal load. Use the same material and surface finish as the cube contact.",
+    "note": "The normal load Fz alone does not determine the friction coefficient.",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "床と頂点の間の滑り摩擦係数", "method": "既知の垂直荷重のもとで試験片を引く。Cubeの接触部と同じ材料と表面仕上げを使用する。", "note": "垂直荷重Fzだけでは摩擦係数は求められない。", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-NOLOAD-SPEED": {
+    "name": "Motor no-load speed",
+    "method": "Measure the speed with an encoder at specified voltage and temperature.",
+    "note": "",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "モーターの無負荷回転速度", "method": "指定した電圧と温度でエンコーダを使用して速度を測定する。", "note": "", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-PEAK-TORQUE": {
+    "name": "Available torque envelope intercept",
+    "method": "Use a bench for one axis. Measure torque with a torque arm. Record load, speed, voltage and temperature.",
+    "note": "",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "利用可能なトルク包絡の切片", "method": "1軸の試験台を使用する。トルクアームでトルクを測定する。荷重、回転速度、電圧、温度を記録する。", "note": "", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-PRINT-MATERIAL": {
+    "name": "Print material density",
+    "method": "Record the material and print settings. Weigh a printed test piece.",
+    "note": "The value is not measured. A check of the value is not complete. The current model does not use this parameter. More work is necessary for power, temperature and manufacturing fit.",
+    "source": "",
+    "translations": {"ja": {"name": "印刷材料の密度", "method": "材料と印刷条件を記録する。印刷した試験片を秤量する。", "note": "値は未測定である。値の確認は完了していない。現行モデルはこのパラメータを使用しない。電力、温度、製作時の適合性には追加の作業が必要である。", "source": ""}}
+  },
+  "I-PRINT-X": {
+    "name": "Borrowed printer x build limit",
+    "method": "Do a check of the borrowed printer specification and the slicer settings.",
+    "note": "The value is not measured. A check of the value is not complete. The current model does not use this parameter. More work is necessary for power, temperature and manufacturing fit.",
+    "source": "",
+    "translations": {"ja": {"name": "借用プリンタのx方向造形上限", "method": "借用するプリンタの仕様とスライサー設定を確認する。", "note": "値は未測定である。値の確認は完了していない。現行モデルはこのパラメータを使用しない。電力、温度、製作時の適合性には追加の作業が必要である。", "source": ""}}
+  },
+  "I-PRINT-Y": {
+    "name": "Borrowed printer y build limit",
+    "method": "Do a check of the borrowed printer specification and the slicer settings.",
+    "note": "The value is not measured. A check of the value is not complete. The current model does not use this parameter. More work is necessary for power, temperature and manufacturing fit.",
+    "source": "",
+    "translations": {"ja": {"name": "借用プリンタのy方向造形上限", "method": "借用するプリンタの仕様とスライサー設定を確認する。", "note": "値は未測定である。値の確認は完了していない。現行モデルはこのパラメータを使用しない。電力、温度、製作時の適合性には追加の作業が必要である。", "source": ""}}
+  },
+  "I-PRINT-Z": {
+    "name": "Borrowed printer z build limit",
+    "method": "Do a check of the borrowed printer specification and the slicer settings.",
+    "note": "The value is not measured. A check of the value is not complete. The current model does not use this parameter. More work is necessary for power, temperature and manufacturing fit.",
+    "source": "",
+    "translations": {"ja": {"name": "借用プリンタのz方向造形上限", "method": "借用するプリンタの仕様とスライサー設定を確認する。", "note": "値は未測定である。値の確認は完了していない。現行モデルはこのパラメータを使用しない。電力、温度、製作時の適合性には追加の作業が必要である。", "source": ""}}
+  },
+  "I-ROLLING": {
+    "name": "Contact rolling friction length",
+    "method": "Compare contact resistance at different loads.",
+    "note": "",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "接触部の転がり摩擦長さ", "method": "異なる荷重で接触抵抗を比較する。", "note": "", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-SYNC-U": {
+    "name": "MCU-to-video time standard uncertainty",
+    "method": "Record a GPIO LED at the start, middle and end of the test. Calculate the clock mapping and its residuals.",
+    "note": "The value is not measured. A check of the value is not complete. The current model does not use this parameter. More work is necessary for power, temperature and manufacturing fit.",
+    "source": "",
+    "translations": {"ja": {"name": "MCUと映像の時刻対応の標準不確かさ", "method": "試験の開始、中間、終了時にGPIOで点灯するLEDを撮影する。時計間の写像とその残差を計算する。", "note": "値は未測定である。値の確認は完了していない。現行モデルはこのパラメータを使用しない。電力、温度、製作時の適合性には追加の作業が必要である。", "source": ""}}
+  },
+  "I-TILT-NOISE": {
+    "name": "Assumed attitude noise standard deviation",
+    "method": "Measure the residual between IMU attitude and external attitude with the unit stationary and with the drive active.",
+    "note": "The current model adds noise to the true attitude. It is not a physical model of an accelerometer or an attitude estimator.",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "仮定した姿勢観測ノイズの標準偏差", "method": "静止時と駆動時にIMU姿勢と外部姿勢の残差を測定する。", "note": "現行モデルは真の姿勢にノイズを加える。加速度計や姿勢推定器の物理モデルではない。", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-TORQUE-KT": {
+    "name": "Effective torque constant",
+    "method": "Measure winding current and torque with a torque arm.",
+    "note": "The value is not measured. A check of the value is not complete. The current model does not use this parameter. More work is necessary for power, temperature and manufacturing fit.",
+    "source": "",
+    "translations": {"ja": {"name": "実効トルク定数", "method": "巻線電流とトルクアームによるトルクを測定する。", "note": "値は未測定である。値の確認は完了していない。現行モデルはこのパラメータを使用しない。電力、温度、製作時の適合性には追加の作業が必要である。", "source": ""}}
+  },
+  "I-TORQUE-THRESHOLD": {
+    "name": "Unverified comparison torque threshold",
+    "method": "Measure temperature rise and duration. Use the results to replace this threshold with a torque limit from tests.",
+    "note": "This threshold is not a continuous torque rating. For the RS385 candidate, the rated load point is a temporary comparison value.",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "未検証の比較用トルクしきい値", "method": "温度上昇と継続時間を測定する。その結果を用いて、このしきい値を試験から求めたトルク上限に置き換える。", "note": "このしきい値は連続トルク定格ではない。RS385候補では、定格負荷点を暫定的な比較値として使用する。", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-TORSION": {
+    "name": "Contact torsional friction length",
+    "method": "Measure torsional resistance with the same vertex and floor.",
+    "note": "Use zero as the comparison reference. Do a check for artificial yaw restraint from the floor contact.",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "接触部のねじり摩擦長さ", "method": "同じ頂点と床でねじり抵抗を測定する。", "note": "ゼロを比較基準にする。床との接触による人工的なヨーの拘束がないか確認する。", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-WHEEL-J": {
+    "name": "Effective axial inertia per wheel",
+    "method": "Use a known torque and measured angular acceleration, or use a torsional pendulum.",
+    "note": "A value calculated from dimensions is not a measurement. Calculate the effective inertia with the rotor and coupling included.",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "ホイール1軸当たりの有効軸方向慣性モーメント", "method": "既知のトルクと測定した角加速度を使用するか、ねじり振り子を使用する。", "note": "寸法から計算した値は測定値ではない。ローターとカップリングを含めた有効慣性モーメントを計算する。", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "I-WHEEL-JT": {
+    "name": "Wheel transverse inertia",
+    "method": "Make an estimate of inertia from CAD and measured mass. Record the uncertainty.",
+    "note": "",
+    "source": "Assumed Phase 1 value and S2 setting. No physical measurement.",
+    "translations": {"ja": {"name": "ホイールの横方向慣性モーメント", "method": "CADと実測質量から慣性モーメントを推定する。不確かさを記録する。", "note": "", "source": "Phase 1の仮定値とS2の仮設定。実測なし。"}}
+  },
+  "cube.actuation": {
+    "name": "Motors, power and drive limits",
+    "method": "",
+    "note": "",
+    "source": "",
+    "translations": {"ja": {"name": "モーター・電源・駆動制約", "method": "", "note": "", "source": ""}}
+  },
+  "cube.gnc": {
+    "name": "Attitude estimation, control and measurement",
+    "method": "",
+    "note": "",
+    "source": "",
+    "translations": {"ja": {"name": "姿勢推定・制御・計測", "method": "", "note": "", "source": ""}}
+  },
+  "cube.mechanical": {
+    "name": "Frame, mass properties, contact and wheels",
+    "method": "",
+    "note": "",
+    "source": "",
+    "translations": {"ja": {"name": "筐体・質量特性・接触・ホイール", "method": "", "note": "", "source": ""}}
+  },
+  "cube.system": {
+    "name": "Cube for vertex balance with three reaction wheels",
+    "method": "",
+    "note": "",
+    "source": "",
+    "translations": {"ja": {"name": "3つのリアクションホイールで頂点倒立するCube", "method": "", "note": "", "source": ""}}
+  },
+  "cube.verification": {
+    "name": "Numerical and hardware verification platform",
+    "method": "",
+    "note": "",
+    "source": "",
+    "translations": {"ja": {"name": "数値評価・実機検証基盤", "method": "", "note": "", "source": ""}}
+  }
+}

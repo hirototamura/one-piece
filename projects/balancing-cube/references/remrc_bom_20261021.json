@@ -1,0 +1,980 @@
+{
+  "schema_version": "1.0",
+  "source_filename": "Self_Balancing_Cube_BOM.xlsx",
+  "source_sha256": "3070a80b6d6aa3dfdd1d1a6346ceae676c5c405461adabbfb063b438dc3ddd51",
+  "source_range": "BOM!A8:K39",
+  "source_notes": [
+    "Self-Balancing Cube 部品表",
+    "改良版 Thingiverse 6695891 ＋ ESP32 encoder版 ／ 調査日：2026-10-12 ／ 部品番号は本BOM独自の管理番号",
+    "造形材：PLA予定、白・黒（Bambu Lab想定）。Basic／Matte等の銘柄と部品ごとの色は未確定。",
+    "黄色の実測欄へ g/個 を入力。一式品は g/式。参考重量は括弧表示。数量は参考値で、選択部品・未確定行を含むため合算しない。",
+    "購入URL・候補メーカーは調達候補。購入済み型番・現物寸法で更新。根拠は部品番号セルのメモ。印刷品のメーカー欄は対象外。"
+  ],
+  "parts": [
+    {
+      "part_id": "P-001",
+      "category_ja": "3Dプリント",
+      "name_ja": "外装パネル",
+      "quantity_reference": 3,
+      "manufacturer_ja": "—",
+      "material_ja": "PLA（予定）\n白／黒 未割当",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "cubli_side_3x.stl\n掲載条件：積層0.2 mm、充填50–60%、サポートなし。",
+      "purchase_candidate_url": "—",
+      "open_items_ja": "ファイル名末尾の3xを参考数量として記載。 実際の造形条件・色は製作時に確定。",
+      "source_cells": {
+        "part_id": "BOM!A8",
+        "category_ja": "BOM!B8",
+        "name_ja": "BOM!C8",
+        "quantity_reference": "BOM!D8",
+        "manufacturer_ja": "BOM!E8",
+        "material_ja": "BOM!F8",
+        "measured_mass_g": "BOM!G8",
+        "reference_mass_g": "BOM!H8",
+        "specification_ja": "BOM!I8",
+        "purchase_candidate_url": "BOM!J8",
+        "open_items_ja": "BOM!K8"
+      },
+      "source_notes": {
+        "A8": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891/files\nhttps://www.thingiverse.com/thing:6695891"
+      }
+    },
+    {
+      "part_id": "P-002",
+      "category_ja": "3Dプリント",
+      "name_ja": "リアクションホイール側パネル",
+      "quantity_reference": 3,
+      "manufacturer_ja": "—",
+      "material_ja": "PLA（予定）\n白／黒 未割当",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "cubli_rw_side_3x.stl\n掲載条件：積層0.2 mm、充填50–60%、サポートなし。",
+      "purchase_candidate_url": "—",
+      "open_items_ja": "ファイル名末尾の3xを参考数量として記載。 実際の造形条件・色は製作時に確定。",
+      "source_cells": {
+        "part_id": "BOM!A9",
+        "category_ja": "BOM!B9",
+        "name_ja": "BOM!C9",
+        "quantity_reference": "BOM!D9",
+        "manufacturer_ja": "BOM!E9",
+        "material_ja": "BOM!F9",
+        "measured_mass_g": "BOM!G9",
+        "reference_mass_g": "BOM!H9",
+        "specification_ja": "BOM!I9",
+        "purchase_candidate_url": "BOM!J9",
+        "open_items_ja": "BOM!K9"
+      },
+      "source_notes": {
+        "A9": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891/files\nhttps://www.thingiverse.com/thing:6695891"
+      }
+    },
+    {
+      "part_id": "P-004",
+      "category_ja": "3Dプリント",
+      "name_ja": "モーターホルダー",
+      "quantity_reference": 3,
+      "manufacturer_ja": "—",
+      "material_ja": "PLA（予定）\n白／黒 未割当",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "cubli_motor_holder_3x.stl\n掲載条件：積層0.2 mm、充填50–60%、サポートなし。",
+      "purchase_candidate_url": "—",
+      "open_items_ja": "採用モーターの取り付け形状を確認。 実際の造形条件・色は製作時に確定。",
+      "source_cells": {
+        "part_id": "BOM!A10",
+        "category_ja": "BOM!B10",
+        "name_ja": "BOM!C10",
+        "quantity_reference": "BOM!D10",
+        "manufacturer_ja": "BOM!E10",
+        "material_ja": "BOM!F10",
+        "measured_mass_g": "BOM!G10",
+        "reference_mass_g": "BOM!H10",
+        "specification_ja": "BOM!I10",
+        "purchase_candidate_url": "BOM!J10",
+        "open_items_ja": "BOM!K10"
+      },
+      "source_notes": {
+        "A10": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891/files\nhttps://www.thingiverse.com/thing:6695891"
+      }
+    },
+    {
+      "part_id": "P-005",
+      "category_ja": "3Dプリント",
+      "name_ja": "リアクションホイール（通常穴）",
+      "quantity_reference": 3,
+      "manufacturer_ja": "—",
+      "material_ja": "PLA（予定）\n白／黒 未割当",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "cubli_reaction_wheel_3x.stl\n掲載条件：積層0.2 mm、充填50–60%、サポートなし。",
+      "purchase_candidate_url": "—",
+      "open_items_ja": "P-006と選択。両方を合算しない。ウェイト用ねじ等の重量は別扱い。 実際の造形条件・色は製作時に確定。",
+      "source_cells": {
+        "part_id": "BOM!A11",
+        "category_ja": "BOM!B11",
+        "name_ja": "BOM!C11",
+        "quantity_reference": "BOM!D11",
+        "manufacturer_ja": "BOM!E11",
+        "material_ja": "BOM!F11",
+        "measured_mass_g": "BOM!G11",
+        "reference_mass_g": "BOM!H11",
+        "specification_ja": "BOM!I11",
+        "purchase_candidate_url": "BOM!J11",
+        "open_items_ja": "BOM!K11"
+      },
+      "source_notes": {
+        "A11": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891/files\nhttps://www.thingiverse.com/thing:6695891"
+      }
+    },
+    {
+      "part_id": "P-006",
+      "category_ja": "3Dプリント",
+      "name_ja": "リアクションホイール（6 mm穴）",
+      "quantity_reference": 3,
+      "manufacturer_ja": "—",
+      "material_ja": "PLA（予定）\n白／黒 未割当",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "cubli_reaction_wheel_6mm_hole_3x.stl\n掲載条件：積層0.2 mm、充填50–60%、サポートなし。",
+      "purchase_candidate_url": "—",
+      "open_items_ja": "P-005と選択。2025-09-21更新の6 mm穴版。軸への固定方法を確認。 実際の造形条件・色は製作時に確定。",
+      "source_cells": {
+        "part_id": "BOM!A12",
+        "category_ja": "BOM!B12",
+        "name_ja": "BOM!C12",
+        "quantity_reference": "BOM!D12",
+        "manufacturer_ja": "BOM!E12",
+        "material_ja": "BOM!F12",
+        "measured_mass_g": "BOM!G12",
+        "reference_mass_g": "BOM!H12",
+        "specification_ja": "BOM!I12",
+        "purchase_candidate_url": "BOM!J12",
+        "open_items_ja": "BOM!K12"
+      },
+      "source_notes": {
+        "A12": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891/files\nhttps://www.thingiverse.com/thing:6695891"
+      }
+    },
+    {
+      "part_id": "P-007",
+      "category_ja": "3Dプリント",
+      "name_ja": "LEDカバー",
+      "quantity_reference": 3,
+      "manufacturer_ja": "—",
+      "material_ja": "PLA（予定）\n白／黒 未割当",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "cubli_led_cover_3x.stl\n掲載条件：積層0.2 mm、充填50–60%、サポートなし。",
+      "purchase_candidate_url": "—",
+      "open_items_ja": "LED使用時。白／黒の割り当てと透光性を確認。 実際の造形条件・色は製作時に確定。",
+      "source_cells": {
+        "part_id": "BOM!A13",
+        "category_ja": "BOM!B13",
+        "name_ja": "BOM!C13",
+        "quantity_reference": "BOM!D13",
+        "manufacturer_ja": "BOM!E13",
+        "material_ja": "BOM!F13",
+        "measured_mass_g": "BOM!G13",
+        "reference_mass_g": "BOM!H13",
+        "specification_ja": "BOM!I13",
+        "purchase_candidate_url": "BOM!J13",
+        "open_items_ja": "BOM!K13"
+      },
+      "source_notes": {
+        "A13": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891/files\nhttps://www.thingiverse.com/thing:6695891"
+      }
+    },
+    {
+      "part_id": "P-008",
+      "category_ja": "3Dプリント",
+      "name_ja": "バッテリーホルダー",
+      "quantity_reference": 2,
+      "manufacturer_ja": "—",
+      "material_ja": "PLA（予定）\n白／黒 未割当",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "cubli_battery_holder_2x.stl\n掲載条件：積層0.2 mm、充填50–60%、サポートなし。",
+      "purchase_candidate_url": "—",
+      "open_items_ja": "P-009～P-011との使用組合せ・電池寸法を確認。 実際の造形条件・色は製作時に確定。",
+      "source_cells": {
+        "part_id": "BOM!A14",
+        "category_ja": "BOM!B14",
+        "name_ja": "BOM!C14",
+        "quantity_reference": "BOM!D14",
+        "manufacturer_ja": "BOM!E14",
+        "material_ja": "BOM!F14",
+        "measured_mass_g": "BOM!G14",
+        "reference_mass_g": "BOM!H14",
+        "specification_ja": "BOM!I14",
+        "purchase_candidate_url": "BOM!J14",
+        "open_items_ja": "BOM!K14"
+      },
+      "source_notes": {
+        "A14": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891/files\nhttps://www.thingiverse.com/thing:6695891"
+      }
+    },
+    {
+      "part_id": "P-009",
+      "category_ja": "3Dプリント",
+      "name_ja": "バッテリーホルダー2",
+      "quantity_reference": 1,
+      "manufacturer_ja": "—",
+      "material_ja": "PLA（予定）\n白／黒 未割当",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "cubli_battery_holder_2_1x.stl\n掲載条件：積層0.2 mm、充填50–60%、サポートなし。",
+      "purchase_candidate_url": "—",
+      "open_items_ja": "末尾は1x。P-008～P-011の使用組合せを確認。 実際の造形条件・色は製作時に確定。",
+      "source_cells": {
+        "part_id": "BOM!A15",
+        "category_ja": "BOM!B15",
+        "name_ja": "BOM!C15",
+        "quantity_reference": "BOM!D15",
+        "manufacturer_ja": "BOM!E15",
+        "material_ja": "BOM!F15",
+        "measured_mass_g": "BOM!G15",
+        "reference_mass_g": "BOM!H15",
+        "specification_ja": "BOM!I15",
+        "purchase_candidate_url": "BOM!J15",
+        "open_items_ja": "BOM!K15"
+      },
+      "source_notes": {
+        "A15": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891/files\nhttps://www.thingiverse.com/thing:6695891"
+      }
+    },
+    {
+      "part_id": "P-010",
+      "category_ja": "3Dプリント",
+      "name_ja": "コントローラーホルダー",
+      "quantity_reference": 1,
+      "manufacturer_ja": "—",
+      "material_ja": "PLA（予定）\n白／黒 未割当",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "cubli_controller_holder_1x.stl\n掲載条件：積層0.2 mm、充填50–60%、サポートなし。",
+      "purchase_candidate_url": "—",
+      "open_items_ja": "P-008～P-011の使用組合せ・基板寸法を確認。 実際の造形条件・色は製作時に確定。",
+      "source_cells": {
+        "part_id": "BOM!A16",
+        "category_ja": "BOM!B16",
+        "name_ja": "BOM!C16",
+        "quantity_reference": "BOM!D16",
+        "manufacturer_ja": "BOM!E16",
+        "material_ja": "BOM!F16",
+        "measured_mass_g": "BOM!G16",
+        "reference_mass_g": "BOM!H16",
+        "specification_ja": "BOM!I16",
+        "purchase_candidate_url": "BOM!J16",
+        "open_items_ja": "BOM!K16"
+      },
+      "source_notes": {
+        "A16": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891/files\nhttps://www.thingiverse.com/thing:6695891"
+      }
+    },
+    {
+      "part_id": "P-011",
+      "category_ja": "3Dプリント",
+      "name_ja": "バッテリー・コントローラーホルダー",
+      "quantity_reference": 1,
+      "manufacturer_ja": "—",
+      "material_ja": "PLA（予定）\n白／黒 未割当",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "cubli_battery_and_controller_holder_1x.stl\n掲載条件：積層0.2 mm、充填50–60%、サポートなし。",
+      "purchase_candidate_url": "—",
+      "open_items_ja": "センサー向きを含め改良版の組立に照合。保持部品の全数使用は未確定。 実際の造形条件・色は製作時に確定。",
+      "source_cells": {
+        "part_id": "BOM!A17",
+        "category_ja": "BOM!B17",
+        "name_ja": "BOM!C17",
+        "quantity_reference": "BOM!D17",
+        "manufacturer_ja": "BOM!E17",
+        "material_ja": "BOM!F17",
+        "measured_mass_g": "BOM!G17",
+        "reference_mass_g": "BOM!H17",
+        "specification_ja": "BOM!I17",
+        "purchase_candidate_url": "BOM!J17",
+        "open_items_ja": "BOM!K17"
+      },
+      "source_notes": {
+        "A17": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891/files\nhttps://www.thingiverse.com/thing:6695891"
+      }
+    },
+    {
+      "part_id": "E-001",
+      "category_ja": "購入品",
+      "name_ja": "ブラシレスDCモーター",
+      "quantity_reference": 3,
+      "manufacturer_ja": "Nidec（ニデック）",
+      "material_ja": "複合材\n詳細未確認",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "24H404H160（作者回答）\n8端子。駆動回路・エンコーダ内蔵。PWM、方向、ブレーキ入力。",
+      "purchase_candidate_url": "https://www.getthatpart.com/ricoh-c6503-adf-document-feeder-oem-brushless-dc-drive-motor-assy-new",
+      "open_items_ja": "同型番の販売例。付属ブラケット・ギヤ・ハーネスと日本への発送は要確認。販売ページの1 lbは組立体／配送条件のため単体重量に採用せず。",
+      "source_cells": {
+        "part_id": "BOM!A18",
+        "category_ja": "BOM!B18",
+        "name_ja": "BOM!C18",
+        "quantity_reference": "BOM!D18",
+        "manufacturer_ja": "BOM!E18",
+        "material_ja": "BOM!F18",
+        "measured_mass_g": "BOM!G18",
+        "reference_mass_g": "BOM!H18",
+        "specification_ja": "BOM!I18",
+        "purchase_candidate_url": "BOM!J18",
+        "open_items_ja": "BOM!K18"
+      },
+      "source_notes": {
+        "A18": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891/comments\n作者回答：2024-07-31、2024-11-06\nhttps://github.com/remrc/Self-Balancing-Cube/blob/main/pictures/nidec.jpg"
+      }
+    },
+    {
+      "part_id": "E-002",
+      "category_ja": "購入品",
+      "name_ja": "ESP32開発ボード",
+      "quantity_reference": 1,
+      "manufacturer_ja": "基板：未確定\n搭載モジュール：Espressif",
+      "material_ja": "基板・電子部品\n詳細未確認",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "ESP-WROOM-32搭載、30ピン形状（回路図）\nBluetooth Classic対応のESP32構成。",
+      "purchase_candidate_url": "https://store.mrdiy.ca/p/esp32-devkit-v1-30pin-board/",
+      "open_items_ja": "販売例は30ピンDevKit v1。基板メーカー・外形・穴位置・ピン配置を採用品で確認。S3/C3等に無条件で置換しない。",
+      "source_cells": {
+        "part_id": "BOM!A19",
+        "category_ja": "BOM!B19",
+        "name_ja": "BOM!C19",
+        "quantity_reference": "BOM!D19",
+        "manufacturer_ja": "BOM!E19",
+        "material_ja": "BOM!F19",
+        "measured_mass_g": "BOM!G19",
+        "reference_mass_g": "BOM!H19",
+        "specification_ja": "BOM!I19",
+        "purchase_candidate_url": "BOM!J19",
+        "open_items_ja": "BOM!K19"
+      },
+      "source_notes": {
+        "A19": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube/blob/fb729c6294c7c45055f66be4568914f3d207608f/schematic.pdf\nhttps://github.com/remrc/Self-Balancing-Cube"
+      }
+    },
+    {
+      "part_id": "E-003",
+      "category_ja": "購入品",
+      "name_ja": "6軸IMUセンサーモジュール",
+      "quantity_reference": 1,
+      "manufacturer_ja": "基板：未確定\nIC：InvenSense（TDK）",
+      "material_ja": "基板・電子部品\n詳細未確認",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "MPU6050（GY-521形状）\n3軸加速度＋3軸ジャイロ、I²C。",
+      "purchase_candidate_url": "https://store.shopping.yahoo.co.jp/microfan/gy-521.html",
+      "open_items_ja": "販売店はマイクロファン。モジュール製造元は未確認。新版のセンサー取り付け方向に合わせる。",
+      "source_cells": {
+        "part_id": "BOM!A20",
+        "category_ja": "BOM!B20",
+        "name_ja": "BOM!C20",
+        "quantity_reference": "BOM!D20",
+        "manufacturer_ja": "BOM!E20",
+        "material_ja": "BOM!F20",
+        "measured_mass_g": "BOM!G20",
+        "reference_mass_g": "BOM!H20",
+        "specification_ja": "BOM!I20",
+        "purchase_candidate_url": "BOM!J20",
+        "open_items_ja": "BOM!K20"
+      },
+      "source_notes": {
+        "A20": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube/blob/fb729c6294c7c45055f66be4568914f3d207608f/schematic.pdf\nhttps://github.com/remrc/Self-Balancing-Cube"
+      }
+    },
+    {
+      "part_id": "E-004",
+      "category_ja": "購入品",
+      "name_ja": "LiPoバッテリー（3S一式）",
+      "quantity_reference": 1,
+      "manufacturer_ja": "未確定\n候補ブランド：Turnigy",
+      "material_ja": "リチウムポリマー電池\n詳細未確認",
+      "measured_mass_g": null,
+      "reference_mass_g": 49,
+      "specification_ja": "要求：3S1P、11.1 V、500 mAh。\n候補：Turnigy 500mAh 3S 20C、56×30×19 mm。",
+      "purchase_candidate_url": "https://hobbyking.com/en_us/turnigy-500mah-3s-20c-lipo-pack.html",
+      "open_items_ja": "数量1は3S一式。作者機の分散配置を再現する場合はセル形状・構成を別途照合。候補3Sパックの収納適合は未確認。49 gは候補品のみの値。",
+      "source_cells": {
+        "part_id": "BOM!A21",
+        "category_ja": "BOM!B21",
+        "name_ja": "BOM!C21",
+        "quantity_reference": "BOM!D21",
+        "manufacturer_ja": "BOM!E21",
+        "material_ja": "BOM!F21",
+        "measured_mass_g": "BOM!G21",
+        "reference_mass_g": "BOM!H21",
+        "specification_ja": "BOM!I21",
+        "purchase_candidate_url": "BOM!J21",
+        "open_items_ja": "BOM!K21"
+      },
+      "source_notes": {
+        "A21": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube\nhttps://hobbyking.com/en_us/turnigy-500mah-3s-20c-lipo-pack.html"
+      }
+    },
+    {
+      "part_id": "E-005",
+      "category_ja": "購入品",
+      "name_ja": "5 Vレギュレーター（IC1）",
+      "quantity_reference": 1,
+      "manufacturer_ja": "未確定\n候補：日清紡マイクロデバイス",
+      "material_ja": "樹脂・半導体・端子\n詳細未確認",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "原指定：7805等、5 V出力。\n候補：NJM7805FA、TO-220F、最大1.5 A。",
+      "purchase_candidate_url": "https://akizukidenshi.com/catalog/g/g108678/",
+      "open_items_ja": "候補の定格電流は放熱条件に依存。採用品データシートに従い放熱・周辺コンデンサーを確定。",
+      "source_cells": {
+        "part_id": "BOM!A22",
+        "category_ja": "BOM!B22",
+        "name_ja": "BOM!C22",
+        "quantity_reference": "BOM!D22",
+        "manufacturer_ja": "BOM!E22",
+        "material_ja": "BOM!F22",
+        "measured_mass_g": "BOM!G22",
+        "reference_mass_g": "BOM!H22",
+        "specification_ja": "BOM!I22",
+        "purchase_candidate_url": "BOM!J22",
+        "open_items_ja": "BOM!K22"
+      },
+      "source_notes": {
+        "A22": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube\nhttps://github.com/remrc/Self-Balancing-Cube/blob/fb729c6294c7c45055f66be4568914f3d207608f/schematic.pdf"
+      }
+    },
+    {
+      "part_id": "E-006",
+      "category_ja": "購入品",
+      "name_ja": "5 Vアクティブブザー（buz1）",
+      "quantity_reference": 1,
+      "manufacturer_ja": "未確定\n候補：UNIVERSAL (CHANGZHOU)",
+      "material_ja": "複合材\n詳細未確認",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "要求：5 V、発振回路内蔵。\n候補：UGCM1205XP、直径12×9.5 mm。",
+      "purchase_candidate_url": "https://akizukidenshi.com/catalog/g/g109800/",
+      "open_items_ja": "パッシブブザーと区別。GPIO27からQ1経由で駆動。",
+      "source_cells": {
+        "part_id": "BOM!A23",
+        "category_ja": "BOM!B23",
+        "name_ja": "BOM!C23",
+        "quantity_reference": "BOM!D23",
+        "manufacturer_ja": "BOM!E23",
+        "material_ja": "BOM!F23",
+        "measured_mass_g": "BOM!G23",
+        "reference_mass_g": "BOM!H23",
+        "specification_ja": "BOM!I23",
+        "purchase_candidate_url": "BOM!J23",
+        "open_items_ja": "BOM!K23"
+      },
+      "source_notes": {
+        "A23": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube\nhttps://github.com/remrc/Self-Balancing-Cube/blob/fb729c6294c7c45055f66be4568914f3d207608f/schematic.pdf"
+      }
+    },
+    {
+      "part_id": "E-007",
+      "category_ja": "購入品",
+      "name_ja": "ブザー駆動トランジスタ（Q1）",
+      "quantity_reference": 1,
+      "manufacturer_ja": "未確定",
+      "material_ja": "半導体・樹脂・端子\n詳細未確認",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "NPN小信号トランジスタ。\n2N2222A-TO92は作者が使用可と回答。",
+      "purchase_candidate_url": "未選定",
+      "open_items_ja": "回路図に型番記載なし。購入品のE/B/C配列とブザー電流に対する定格を確認して選定。",
+      "source_cells": {
+        "part_id": "BOM!A24",
+        "category_ja": "BOM!B24",
+        "name_ja": "BOM!C24",
+        "quantity_reference": "BOM!D24",
+        "manufacturer_ja": "BOM!E24",
+        "material_ja": "BOM!F24",
+        "measured_mass_g": "BOM!G24",
+        "reference_mass_g": "BOM!H24",
+        "specification_ja": "BOM!I24",
+        "purchase_candidate_url": "BOM!J24",
+        "open_items_ja": "BOM!K24"
+      },
+      "source_notes": {
+        "A24": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube/blob/fb729c6294c7c45055f66be4568914f3d207608f/schematic.pdf\nhttps://www.thingiverse.com/thing:6695891/comments\n作者回答：2024-07-23"
+      }
+    },
+    {
+      "part_id": "E-008",
+      "category_ja": "購入品",
+      "name_ja": "抵抗 10 kΩ（R2）",
+      "quantity_reference": 1,
+      "manufacturer_ja": "未確定\n候補：SHIH HAO",
+      "material_ja": "候補：炭素皮膜",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "10 kΩ、0.25 W。\n候補型番：RD25S 10K。",
+      "purchase_candidate_url": "https://akizukidenshi.com/catalog/g/g125103/",
+      "open_items_ja": "バッテリー電圧分圧用。数量は1本、販売単位は100本入り。",
+      "source_cells": {
+        "part_id": "BOM!A25",
+        "category_ja": "BOM!B25",
+        "name_ja": "BOM!C25",
+        "quantity_reference": "BOM!D25",
+        "manufacturer_ja": "BOM!E25",
+        "material_ja": "BOM!F25",
+        "measured_mass_g": "BOM!G25",
+        "reference_mass_g": "BOM!H25",
+        "specification_ja": "BOM!I25",
+        "purchase_candidate_url": "BOM!J25",
+        "open_items_ja": "BOM!K25"
+      },
+      "source_notes": {
+        "A25": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube/blob/fb729c6294c7c45055f66be4568914f3d207608f/schematic.pdf"
+      }
+    },
+    {
+      "part_id": "E-009",
+      "category_ja": "購入品",
+      "name_ja": "抵抗 33 kΩ（R3）",
+      "quantity_reference": 1,
+      "manufacturer_ja": "未確定\n候補：FAITHFUL LINK",
+      "material_ja": "候補：炭素皮膜",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "33 kΩ、0.25 W。\n候補型番：CF25J33KB。",
+      "purchase_candidate_url": "https://akizukidenshi.com/catalog/g/g125333/",
+      "open_items_ja": "バッテリー電圧分圧用。数量は1本、販売単位は100本入り。",
+      "source_cells": {
+        "part_id": "BOM!A26",
+        "category_ja": "BOM!B26",
+        "name_ja": "BOM!C26",
+        "quantity_reference": "BOM!D26",
+        "manufacturer_ja": "BOM!E26",
+        "material_ja": "BOM!F26",
+        "measured_mass_g": "BOM!G26",
+        "reference_mass_g": "BOM!H26",
+        "specification_ja": "BOM!I26",
+        "purchase_candidate_url": "BOM!J26",
+        "open_items_ja": "BOM!K26"
+      },
+      "source_notes": {
+        "A26": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube/blob/fb729c6294c7c45055f66be4568914f3d207608f/schematic.pdf"
+      }
+    },
+    {
+      "part_id": "E-010",
+      "category_ja": "購入品",
+      "name_ja": "抵抗 6.8 kΩ（R4）",
+      "quantity_reference": 1,
+      "manufacturer_ja": "未確定\n候補：SHIH HAO",
+      "material_ja": "候補：炭素皮膜",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "6.8 kΩ、0.25 W。\n候補型番：RD25S 6K8。",
+      "purchase_candidate_url": "https://akizukidenshi.com/catalog/g/g125682/",
+      "open_items_ja": "Q1ベース抵抗。数量は1本、販売単位は100本入り。",
+      "source_cells": {
+        "part_id": "BOM!A27",
+        "category_ja": "BOM!B27",
+        "name_ja": "BOM!C27",
+        "quantity_reference": "BOM!D27",
+        "manufacturer_ja": "BOM!E27",
+        "material_ja": "BOM!F27",
+        "measured_mass_g": "BOM!G27",
+        "reference_mass_g": "BOM!H27",
+        "specification_ja": "BOM!I27",
+        "purchase_candidate_url": "BOM!J27",
+        "open_items_ja": "BOM!K27"
+      },
+      "source_notes": {
+        "A27": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube/blob/fb729c6294c7c45055f66be4568914f3d207608f/schematic.pdf"
+      }
+    },
+    {
+      "part_id": "E-011",
+      "category_ja": "購入品",
+      "name_ja": "コンデンサー 100 nF（C2）",
+      "quantity_reference": 1,
+      "manufacturer_ja": "未確定\n候補：Supertech Electronic",
+      "material_ja": "候補：積層セラミック",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "100 nF（0.1 μF）、図面耐圧35 V。\n候補：RD15W104K1HL2L-10、50 V、X7R。",
+      "purchase_candidate_url": "https://akizukidenshi.com/catalog/g/g104064/",
+      "open_items_ja": "候補は図面以上の耐圧。数量は1個、販売単位は10個入り。",
+      "source_cells": {
+        "part_id": "BOM!A28",
+        "category_ja": "BOM!B28",
+        "name_ja": "BOM!C28",
+        "quantity_reference": "BOM!D28",
+        "manufacturer_ja": "BOM!E28",
+        "material_ja": "BOM!F28",
+        "measured_mass_g": "BOM!G28",
+        "reference_mass_g": "BOM!H28",
+        "specification_ja": "BOM!I28",
+        "purchase_candidate_url": "BOM!J28",
+        "open_items_ja": "BOM!K28"
+      },
+      "source_notes": {
+        "A28": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube/blob/fb729c6294c7c45055f66be4568914f3d207608f/schematic.pdf"
+      }
+    },
+    {
+      "part_id": "E-012",
+      "category_ja": "購入品",
+      "name_ja": "電解コンデンサー 100 μF（C3）",
+      "quantity_reference": 1,
+      "manufacturer_ja": "未確定\n候補：ルビコン",
+      "material_ja": "アルミ電解",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "100 μF、35 V。\n候補：35ZLH100MEFC6.3X11、105℃、直径6.3×11 mm。",
+      "purchase_candidate_url": "https://akizukidenshi.com/catalog/g/g102724/",
+      "open_items_ja": "極性あり。5 V電源側。リードを切断した実装状態で重量を測定。",
+      "source_cells": {
+        "part_id": "BOM!A29",
+        "category_ja": "BOM!B29",
+        "name_ja": "BOM!C29",
+        "quantity_reference": "BOM!D29",
+        "manufacturer_ja": "BOM!E29",
+        "material_ja": "BOM!F29",
+        "measured_mass_g": "BOM!G29",
+        "reference_mass_g": "BOM!H29",
+        "specification_ja": "BOM!I29",
+        "purchase_candidate_url": "BOM!J29",
+        "open_items_ja": "BOM!K29"
+      },
+      "source_notes": {
+        "A29": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube/blob/fb729c6294c7c45055f66be4568914f3d207608f/schematic.pdf"
+      }
+    },
+    {
+      "part_id": "E-013",
+      "category_ja": "購入品・任意",
+      "name_ja": "フルカラーLED（WS2812B）",
+      "quantity_reference": 3,
+      "manufacturer_ja": "未確定\n候補基板：秋月電子通商",
+      "material_ja": "基板・LED\n詳細未確認",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "最新版コード：WS2812B×3、GPIO19。\n候補：AE-WS2812Bモジュール。",
+      "purchase_candidate_url": "https://akizukidenshi.com/catalog/g/g108414",
+      "open_items_ja": "作者はLEDを任意と説明。LEDカバー内の寸法と基板形状を照合。回路図には省略されている。",
+      "source_cells": {
+        "part_id": "BOM!A30",
+        "category_ja": "BOM!B30",
+        "name_ja": "BOM!C30",
+        "quantity_reference": "BOM!D30",
+        "manufacturer_ja": "BOM!E30",
+        "material_ja": "BOM!F30",
+        "measured_mass_g": "BOM!G30",
+        "reference_mass_g": "BOM!H30",
+        "specification_ja": "BOM!I30",
+        "purchase_candidate_url": "BOM!J30",
+        "open_items_ja": "BOM!K30"
+      },
+      "source_notes": {
+        "A30": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube/blob/fb729c6294c7c45055f66be4568914f3d207608f/esp32_cube_enc/ESP32.h\nhttps://www.thingiverse.com/thing:6695891/comments\n作者回答：2025-01-05"
+      }
+    },
+    {
+      "part_id": "H-001",
+      "category_ja": "購入品・要確定",
+      "name_ja": "M2ねじ（長さ別に要分割）",
+      "quantity_reference": null,
+      "manufacturer_ja": "未確定",
+      "material_ja": "未確定",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "M2。長さ・頭形状・材質・表面処理・本数は未指定。",
+      "purchase_candidate_url": "未選定",
+      "open_items_ja": "作者はM2/M3/M4を使用と回答し、ボルト一覧はないと明記。外装・モーター固定・ホイールのウェイトを用途別に確認して行分割。",
+      "source_cells": {
+        "part_id": "BOM!A31",
+        "category_ja": "BOM!B31",
+        "name_ja": "BOM!C31",
+        "quantity_reference": "BOM!D31",
+        "manufacturer_ja": "BOM!E31",
+        "material_ja": "BOM!F31",
+        "measured_mass_g": "BOM!G31",
+        "reference_mass_g": "BOM!H31",
+        "specification_ja": "BOM!I31",
+        "purchase_candidate_url": "BOM!J31",
+        "open_items_ja": "BOM!K31"
+      },
+      "source_notes": {
+        "A31": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891/comments\n作者回答：2024-10-27"
+      }
+    },
+    {
+      "part_id": "H-002",
+      "category_ja": "購入品・要確定",
+      "name_ja": "M3ねじ（長さ別に要分割）",
+      "quantity_reference": null,
+      "manufacturer_ja": "未確定",
+      "material_ja": "未確定",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "M3。長さ・頭形状・材質・表面処理・本数は未指定。",
+      "purchase_candidate_url": "未選定",
+      "open_items_ja": "作者はM2/M3/M4を使用と回答し、ボルト一覧はないと明記。外装・モーター固定・ホイールのウェイトを用途別に確認して行分割。",
+      "source_cells": {
+        "part_id": "BOM!A32",
+        "category_ja": "BOM!B32",
+        "name_ja": "BOM!C32",
+        "quantity_reference": "BOM!D32",
+        "manufacturer_ja": "BOM!E32",
+        "material_ja": "BOM!F32",
+        "measured_mass_g": "BOM!G32",
+        "reference_mass_g": "BOM!H32",
+        "specification_ja": "BOM!I32",
+        "purchase_candidate_url": "BOM!J32",
+        "open_items_ja": "BOM!K32"
+      },
+      "source_notes": {
+        "A32": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891/comments\n作者回答：2024-10-27"
+      }
+    },
+    {
+      "part_id": "H-003",
+      "category_ja": "購入品・要確定",
+      "name_ja": "M4ねじ（長さ別に要分割）",
+      "quantity_reference": null,
+      "manufacturer_ja": "未確定",
+      "material_ja": "未確定",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "M4。長さ・頭形状・材質・表面処理・本数は未指定。",
+      "purchase_candidate_url": "未選定",
+      "open_items_ja": "作者はM2/M3/M4を使用と回答し、ボルト一覧はないと明記。外装・モーター固定・ホイールのウェイトを用途別に確認して行分割。",
+      "source_cells": {
+        "part_id": "BOM!A33",
+        "category_ja": "BOM!B33",
+        "name_ja": "BOM!C33",
+        "quantity_reference": "BOM!D33",
+        "manufacturer_ja": "BOM!E33",
+        "material_ja": "BOM!F33",
+        "measured_mass_g": "BOM!G33",
+        "reference_mass_g": "BOM!H33",
+        "specification_ja": "BOM!I33",
+        "purchase_candidate_url": "BOM!J33",
+        "open_items_ja": "BOM!K33"
+      },
+      "source_notes": {
+        "A33": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891/comments\n作者回答：2024-10-27"
+      }
+    },
+    {
+      "part_id": "H-004",
+      "category_ja": "購入品・要確認",
+      "name_ja": "ナット・ワッシャ類（必要時）",
+      "quantity_reference": null,
+      "manufacturer_ja": "未確定",
+      "material_ja": "未確定",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "ねじ・ウェイトの固定方法に応じて規格別に確定。",
+      "purchase_candidate_url": "未選定",
+      "open_items_ja": "補完管理行。採用品・必要数は未確認。ホイールウェイトを含む締結部品はH-001～003との二重計上を避ける。",
+      "source_cells": {
+        "part_id": "BOM!A34",
+        "category_ja": "BOM!B34",
+        "name_ja": "BOM!C34",
+        "quantity_reference": "BOM!D34",
+        "manufacturer_ja": "BOM!E34",
+        "material_ja": "BOM!F34",
+        "measured_mass_g": "BOM!G34",
+        "reference_mass_g": "BOM!H34",
+        "specification_ja": "BOM!I34",
+        "purchase_candidate_url": "BOM!J34",
+        "open_items_ja": "BOM!K34"
+      },
+      "source_notes": {
+        "A34": "根拠（2026-10-12確認）\nhttps://www.thingiverse.com/thing:6695891\n組立確認用の補完項目"
+      }
+    },
+    {
+      "part_id": "W-001",
+      "category_ja": "購入品・要確認",
+      "name_ja": "モーター用コネクター付きハーネス",
+      "quantity_reference": 3,
+      "manufacturer_ja": "未確定",
+      "material_ja": "導体・被覆・端子\n詳細未確認",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "24H404H160の8端子に対応。数量は1モーターにつき1本想定。",
+      "purchase_candidate_url": "未選定",
+      "open_items_ja": "モーター付属時は別購入不要。コネクター型式・ピッチ・長さは現物確認。写真の線色のみで端子を判定しない。",
+      "source_cells": {
+        "part_id": "BOM!A35",
+        "category_ja": "BOM!B35",
+        "name_ja": "BOM!C35",
+        "quantity_reference": "BOM!D35",
+        "manufacturer_ja": "BOM!E35",
+        "material_ja": "BOM!F35",
+        "measured_mass_g": "BOM!G35",
+        "reference_mass_g": "BOM!H35",
+        "specification_ja": "BOM!I35",
+        "purchase_candidate_url": "BOM!J35",
+        "open_items_ja": "BOM!K35"
+      },
+      "source_notes": {
+        "A35": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube/blob/main/pictures/nidec.jpg\n数量は接続構成からの推定"
+      }
+    },
+    {
+      "part_id": "W-002",
+      "category_ja": "購入品・要確認",
+      "name_ja": "バッテリー接続コネクター・リード",
+      "quantity_reference": null,
+      "manufacturer_ja": "未確定",
+      "material_ja": "導体・樹脂\n詳細未確認",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "電池側コネクターに適合する相手側。バランス線は電池構成に応じる。",
+      "purchase_candidate_url": "未選定",
+      "open_items_ja": "補完管理行。型式・極性・必要本数・付属範囲を採用電池で確定。",
+      "source_cells": {
+        "part_id": "BOM!A36",
+        "category_ja": "BOM!B36",
+        "name_ja": "BOM!C36",
+        "quantity_reference": "BOM!D36",
+        "manufacturer_ja": "BOM!E36",
+        "material_ja": "BOM!F36",
+        "measured_mass_g": "BOM!G36",
+        "reference_mass_g": "BOM!H36",
+        "specification_ja": "BOM!I36",
+        "purchase_candidate_url": "BOM!J36",
+        "open_items_ja": "BOM!K36"
+      },
+      "source_notes": {
+        "A36": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube/blob/fb729c6294c7c45055f66be4568914f3d207608f/schematic.pdf\n組立確認用の補完項目"
+      }
+    },
+    {
+      "part_id": "W-003",
+      "category_ja": "購入品・要確定",
+      "name_ja": "電源・信号配線",
+      "quantity_reference": null,
+      "manufacturer_ja": "未確定",
+      "material_ja": "候補：銅＋絶縁被覆",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "電源線・信号線を線径と長さ別に管理。",
+      "purchase_candidate_url": "未選定",
+      "open_items_ja": "補完管理行。実装長・電流に応じて選定。ハーネス付属線と重複させない。実測は使用した配線一式でも可。",
+      "source_cells": {
+        "part_id": "BOM!A37",
+        "category_ja": "BOM!B37",
+        "name_ja": "BOM!C37",
+        "quantity_reference": "BOM!D37",
+        "manufacturer_ja": "BOM!E37",
+        "material_ja": "BOM!F37",
+        "measured_mass_g": "BOM!G37",
+        "reference_mass_g": "BOM!H37",
+        "specification_ja": "BOM!I37",
+        "purchase_candidate_url": "BOM!J37",
+        "open_items_ja": "BOM!K37"
+      },
+      "source_notes": {
+        "A37": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube/blob/fb729c6294c7c45055f66be4568914f3d207608f/schematic.pdf\n組立確認用の補完項目"
+      }
+    },
+    {
+      "part_id": "W-004",
+      "category_ja": "購入品・要確認",
+      "name_ja": "配線実装用基板／ユニバーサル基板",
+      "quantity_reference": null,
+      "manufacturer_ja": "未確定",
+      "material_ja": "未確定",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "製作方法に応じて採用。回路図から専用基板型番は特定できず。",
+      "purchase_candidate_url": "未選定",
+      "open_items_ja": "補完管理行。基板外形・穴位置をホルダーと照合。空中配線等なら不要。",
+      "source_cells": {
+        "part_id": "BOM!A38",
+        "category_ja": "BOM!B38",
+        "name_ja": "BOM!C38",
+        "quantity_reference": "BOM!D38",
+        "manufacturer_ja": "BOM!E38",
+        "material_ja": "BOM!F38",
+        "measured_mass_g": "BOM!G38",
+        "reference_mass_g": "BOM!H38",
+        "specification_ja": "BOM!I38",
+        "purchase_candidate_url": "BOM!J38",
+        "open_items_ja": "BOM!K38"
+      },
+      "source_notes": {
+        "A38": "根拠（2026-10-12確認）\nhttps://github.com/remrc/Self-Balancing-Cube/blob/fb729c6294c7c45055f66be4568914f3d207608f/schematic.pdf\n組立方法に依存する補完項目"
+      }
+    },
+    {
+      "part_id": "W-005",
+      "category_ja": "購入品・要確認",
+      "name_ja": "絶縁・固定材料",
+      "quantity_reference": null,
+      "manufacturer_ja": "未確定",
+      "material_ja": "未確定",
+      "measured_mass_g": null,
+      "reference_mass_g": null,
+      "specification_ja": "熱収縮チューブ、絶縁テープ、固定材等。採用時に材料別に分割。",
+      "purchase_candidate_url": "未選定",
+      "open_items_ja": "補完管理行。完成品に残る使用量のみ計上。工具・はんだごて・充電器は本体BOMの対象外。",
+      "source_cells": {
+        "part_id": "BOM!A39",
+        "category_ja": "BOM!B39",
+        "name_ja": "BOM!C39",
+        "quantity_reference": "BOM!D39",
+        "manufacturer_ja": "BOM!E39",
+        "material_ja": "BOM!F39",
+        "measured_mass_g": "BOM!G39",
+        "reference_mass_g": "BOM!H39",
+        "specification_ja": "BOM!I39",
+        "purchase_candidate_url": "BOM!J39",
+        "open_items_ja": "BOM!K39"
+      },
+      "source_notes": {
+        "A39": "根拠（2026-10-12確認）\n組立方法に依存する補完項目"
+      }
+    }
+  ],
+  "measured_mass_count": 0,
+  "source_repository": {
+    "url": "https://github.com/remrc/Self-Balancing-Cube",
+    "commit": "fb729c6294c7c45055f66be4568914f3d207608f",
+    "firmware_folder": "esp32_cube_enc"
+  },
+  "cad_source": {
+    "url": "https://www.thingiverse.com/thing:6695891",
+    "status": "STL names transcribed from supplied workbook; geometry not downloaded or measured"
+  },
+  "selection_rules": [
+    {
+      "members": [
+        "P-005",
+        "P-006"
+      ],
+      "rule": "exactly_one_wheel_variant",
+      "selection": "P-005",
+      "status": "provisional reference only; mounting fit not verified"
+    },
+    {
+      "members": [
+        "P-008",
+        "P-009",
+        "P-010",
+        "P-011"
+      ],
+      "rule": "assembly combination unresolved; do not sum"
+    },
+    {
+      "members": [
+        "P-007",
+        "E-013"
+      ],
+      "rule": "optional lighting; excluded from numerical reference"
+    }
+  ]
+}

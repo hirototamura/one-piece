@@ -1,0 +1,39 @@
+# One-Piece minimum system model
+
+One-Piece is the single source of truth for requirements, Key Design Parameters, detailed model parameters, configurations, evidence and decisions. Human HTML and Engineering Agents consume the same versioned records. The balancing-cube project is in concept/development simulation.
+
+## Graph contract
+
+This small graph uses an [OMG Systems Modeling API 1.0 boundary](sysml_api.md) for ProjectService Read and ElementNavigationService. It preserves the source graph as standard annotations and named Dependencies. It is not a SysML parser or a complete native SysML semantic transformation. Nodes have stable IDs, revisions, kinds, product nodes, data and provenance. Edges pin a target ID and revision.
+
+- `derive`: derived requirement → parent requirement.
+- `satisfy`: design/product → intended requirement; correspondence, not proof of a pass.
+- `verify`: verification/evidence → requirement/test case; evidence carries outcome and applicability.
+- `allocate`: requirement → responsible function or product; function/KDP → responsible product node. Function allocation is distinct from a satisfaction or verification claim.
+- `constrain`: requirement/specification → constrained parameter/design.
+
+Both directions are traversable. Requirements branch from mission to system, then to operational and subsystem requirements. The minimal product structure includes Cube, mechanics/actuation, sensing/estimation, control, power and the enabling verification platform.
+
+## Source of truth and evidence
+
+Append immutable JSON record revisions; reject changed content with an existing ID/revision. SQLite is a rebuildable index. Publish an import atomically only after validation. Preserve detailed model values, KDP units, uncertainty, model-path bindings and source approval state. Every run pins its requirements, model, controller and evaluation contract.
+
+Assumptions remain assumptions and drafts remain drafts. Historical source labels do not establish new human approval. A numerical comparison reference is not an adopted baseline. Humans establish requirements, evaluation contracts and adopted baselines.
+
+Verification concerns specified requirements; validation concerns intended purpose and environment. CPU/GPU agreement does not establish physical fidelity. A six-second numerical trial does not verify a thirty-second hardware hold requirement. Historical half-step evidence is retained, but new runs never perform half-step adjudication. Conditions already exposed to improvers are development-test feedback.
+
+## Portable storage
+
+Automated requirement verification and Git-like model diffs are mandatory platform capabilities. A change shall identify affected verification cases and retain the applicability of each result to exact source revisions. Existing integrity checks and the HTML design comparison cover part of this intent. See [scope and proposed acceptance criteria](verification_and_diff.md) for the remaining verification execution, semantic diff and re-execution work.
+
+Track compact canonical JSON in Git. Content-addressed evidence bundles carry databases, trajectories, HTML and video as GitHub Release assets. Release publication does not approve a requirement or design. Fetch verifies hashes, and the same pack restores offline. Reports are projections of records; LLMs read structured context instead of parsing HTML.
+
+Project-scoped `check` and `bundle` require the selected project's artifacts; use an unscoped `check` to audit every project's evidence. Metadata-only clones can be restored repeatedly, including after another Git clone, without rewriting canonical records. Bundles store unusually compressible entries uncompressed so that valid evidence also respects the import expansion-ratio guard.
+
+References: [NASA SE](../engineering/nasa_se.md), [SpaceX-style SE](../engineering/spacex_se.md), [OMG SysML v2](https://www.omg.org/spec/SysML/2.0/), [ENPIRE](https://arxiv.org/html/2606.19980v2).
+
+Current balancing-cube projections use `cube.simulation.snapshot@reviewed-20261019-1` through an explicit active system-model reference. Snapshot context pins requirements, KDPs, functions, products and verification cases to exact revisions. The comparison design and campaign summary stay outside context limits. Engineering Agents retains its explicit `fixed-dt-mvp-2` execution default until a different snapshot is selected.
+
+The requirement source priority is ISO/IEC/IEEE 29148:2018, applicable NASA standards and requirements guidance, then ASD-STE100 where compatible. English requirements use `shall` under the NASA requirement convention. The [reviewed English requirements](balancing_cube_requirements.md) are the source for aligned Japanese translations. The current model has 22 test obligations, 7 organizational containers and 22 planned verification cases. Containers retain kind `requirement` for record compatibility, but `record_role: requirement_group` and a null statement exclude them from test obligations. Compound manufacturing and drive requirements have atomic child requirements. The reviewed allocation split has 8 functions and 10 components: 5 functions and 7 components onboard, and 3 functions and 3 tools in the external verification context. Requirements allocate to responsible functions or components; functions allocate to their implementing components. Only the mission and total budget retain whole-system allocation. Shared constraints can allocate to several components.
+
+Human review on 2026-10-19 established `status: reviewed` and `approval_state: human_reviewed` for this requirement and allocation baseline. The review decision records the user's authorization and accepted scope; the baseline hashes its exact members. It does not adopt a hardware design. New proposals still start as drafts. `source_status` preserves the earlier statement state. Requirement statement status is separate from physical verification. `hardware_verification_required` describes planned hardware work; it is not a pass flag. Numerical evaluations and design intents retain their original revision targets. Historical revisions keep their original fields, exact graph targets and source digests. All 22 revised verification cases remain `not_run`; unresolved items remain visible. See [release notes](reviewed_cube_release.md).
