@@ -8,6 +8,7 @@ from __future__ import annotations
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 from pathlib import Path, PurePosixPath
 import re
 import shutil
@@ -232,6 +233,23 @@ def _archive(dataset: dict, cache: Path, assets_dir: Path | None) -> Path:
     return path
 
 
+def _install_file(source: Path, target: Path) -> None:
+    """Publish a complete file atomically, without replacing an existing target."""
+    target.parent.mkdir(parents=True, exist_ok=True)
+    descriptor, name = tempfile.mkstemp(prefix=".onepiece-restore-", dir=target.parent)
+    temporary = Path(name)
+    try:
+        with os.fdopen(descriptor, "wb") as dst, source.open("rb") as src:
+            shutil.copyfileobj(src, dst)
+            dst.flush()
+            os.fsync(dst.fileno())
+        # Both paths are on the destination filesystem. link() fails if a human
+        # created the target during the copy and never exposes a partial file.
+        os.link(temporary, target)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
 def fetch_datasets(catalog: dict, destination: Path, *, ids: list[str], cache: Path,
                    assets_dir: Path | None = None, path_prefix: str | None = None) -> dict:
     """Fetch selected datasets and validate every selected byte before installing files."""
@@ -297,9 +315,7 @@ def fetch_datasets(catalog: dict, destination: Path, *, ids: list[str], cache: P
                 raise FileExistsError(f"Destination changed during fetch: {target}")
         for source, item in staged:
             target = safe_target(destination, item["path"])
-            target.parent.mkdir(parents=True, exist_ok=True)
-            with source.open("rb") as src, target.open("xb") as dst:
-                shutil.copyfileobj(src, dst)
+            _install_file(source, target)
             restored += 1
     return {"ok": True, "catalog_id": catalog["id"], "datasets": [d["id"] for d in selected],
             "verified_files": len(entries), "restored_files": restored, "destination": str(destination)}

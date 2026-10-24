@@ -50,6 +50,8 @@ Both archive and individual file sizes/hashes are checked. ZIP contents must
 match the catalog, symlinks and unsafe paths are rejected, and selected files
 are validated in staging before installation. Raw ZIP/tar source packages are
 restored as evidence files; they are not automatically unpacked or executed.
+Each file is installed atomically; an interrupted copy leaves no partial target
+and a retry reuses the verified download cache.
 
 Dataset retrieval restores historical workspace files. It does not import them
 into the canonical store. Use the existing `onepiece import`/`fetch` commands to

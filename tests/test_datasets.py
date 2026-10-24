@@ -3,6 +3,7 @@ import copy
 import hashlib
 import json
 from pathlib import Path
+import shutil
 import stat
 import zipfile
 
@@ -143,3 +144,20 @@ def test_parent_file_conflict_stops_before_download_or_partial_install(collectio
         fetch_datasets(catalog, destination, ids=["trial"], cache=tmp_path / "cache", assets_dir=assets)
     assert not (tmp_path / "cache").exists()
     assert (destination / "integration-validation").read_text() == "existing human data"
+
+
+def test_interrupted_install_leaves_no_partial_target_and_retry_uses_cache(collection, tmp_path, monkeypatch):
+    _, assets, catalog = collection
+    destination, cache = tmp_path / "workspace", tmp_path / "cache"
+    original_copy = shutil.copyfileobj
+    def interrupted(src, dst):
+        dst.write(src.read(3))
+        raise OSError("simulated interrupted file copy")
+    monkeypatch.setattr(shutil, "copyfileobj", interrupted)
+    with pytest.raises(OSError, match="interrupted"):
+        fetch_datasets(catalog, destination, ids=["trial"], cache=cache, assets_dir=assets)
+    assert not list(destination.rglob("*.*"))
+    monkeypatch.setattr(shutil, "copyfileobj", original_copy)
+    result = fetch_datasets(catalog, destination, ids=["trial"], cache=cache)
+    assert result["restored_files"] == 2
+    assert verify_datasets(catalog, destination, ids=["trial"])["ok"]
