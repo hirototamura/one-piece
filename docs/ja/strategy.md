@@ -18,6 +18,8 @@
 
 ## 関連する仕様
 
+- [要求エクスプローラー](requirements_explorer.md)：正本の版選択、グラフ確認、ブラウザー内の改訂案。
+- [データの保存と取得](dataset_storage.md)：Git の取得カタログと、環境をまたいで共有する固定した Release 証拠。
 - [システムモデル](system_model.md)：版付き記録、トレース関係、証拠の適用範囲。
 - [SysML API](sysml_api.md)：対応する標準サービスと交換形式。
 - [自動検証とdiff](verification_and_diff.md)：現在の範囲と受入条件の草案。

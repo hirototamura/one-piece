@@ -31,3 +31,5 @@ projects/**/store/.fetch-*
 projects/**/store/commits/.import-*
 projects/**/store/commits/*/objects/
 projects/**/report/
+projects/**/explorer/
+.dataset-cache/

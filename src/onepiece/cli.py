@@ -4,7 +4,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import subprocess
 import sys
+import zipfile
 from pathlib import Path
 
 from .model import RecordError, canonical_bytes
@@ -39,6 +41,34 @@ def parser() -> argparse.ArgumentParser:
     report = sub.add_parser("report", help="render the system graph and evidence from canonical records")
     report.add_argument("output", type=Path)
     report.add_argument("--project")
+    explorer = sub.add_parser("explorer", help="build the requirements explorer from a pinned canonical model")
+    explorer_ops = explorer.add_subparsers(dest="explorer_command", required=True)
+    explorer_build = explorer_ops.add_parser("build", help="write a portable static view; proposals remain browser-local")
+    explorer_build.add_argument("output", type=Path)
+    explorer_build.add_argument("--project", default="balancing-cube")
+    explorer_build.add_argument("--model-id", default="cube.system-model.active")
+    explorer_build.add_argument("--model-revision", help="exact revision; omit to select the latest source model")
+    explorer_build.add_argument("--engineering-agents-root", type=Path, help="optional ECLSS/scrubber comparison checkout")
+    datasets = sub.add_parser("datasets", help="catalog and retrieve immutable run evidence from private GitHub Releases")
+    dataset_ops = datasets.add_subparsers(dest="dataset_command", required=True)
+    pack = dataset_ops.add_parser("pack", help="prepare an indexed archive collection; never publishes or deletes inputs")
+    pack.add_argument("source", type=Path)
+    pack.add_argument("output", type=Path)
+    pack.add_argument("--repository", required=True)
+    pack.add_argument("--release", required=True)
+    pack.add_argument("--catalog-id", required=True)
+    listing = dataset_ops.add_parser("list", help="search the local catalog without downloading data")
+    listing.add_argument("catalog", type=Path)
+    listing.add_argument("--query", default="")
+    for operation in ("fetch", "verify"):
+        ds = dataset_ops.add_parser(operation, help="retrieve or check selected dataset files with mandatory manifest hashes")
+        ds.add_argument("catalog", type=Path)
+        ds.add_argument("--id", action="append", required=operation == "fetch", dest="ids")
+        ds.add_argument("--destination", type=Path, required=True)
+        if operation == "fetch":
+            ds.add_argument("--cache", type=Path, default=Path.home() / ".cache/onepiece/datasets")
+            ds.add_argument("--assets-dir", type=Path, help="read already-downloaded assets for offline restoration")
+            ds.add_argument("--path", dest="path_prefix", help="restore only this logical path or directory prefix")
     baseline = sub.add_parser("baseline", help="record a separate, explicit human configuration-baseline action")
     baseline.add_argument("--project", required=True)
     baseline.add_argument("--id", required=True)
@@ -65,6 +95,25 @@ def parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
     try:
+        if args.command == "datasets":
+            from .datasets import fetch_datasets, load_catalog, pack_datasets, select_datasets, verify_datasets
+            if args.dataset_command == "pack":
+                result = pack_datasets(args.source, args.output, repository=args.repository,
+                                       release=args.release, catalog_id=args.catalog_id)
+            else:
+                catalog = load_catalog(args.catalog)
+                if args.dataset_command == "list":
+                    result = {"catalog_id": catalog["id"], "visibility": catalog.get("visibility"),
+                              "datasets": [{"id": d["id"], "tags": d.get("tags", []), "files": len(d["files"]),
+                                            "download_bytes": d["size_bytes"], "sha256": d["sha256"]}
+                                           for d in select_datasets(catalog, query=args.query)]}
+                elif args.dataset_command == "verify":
+                    result = verify_datasets(catalog, args.destination, ids=args.ids)
+                else:
+                    result = fetch_datasets(catalog, args.destination, ids=args.ids, cache=args.cache,
+                                            assets_dir=args.assets_dir, path_prefix=args.path_prefix)
+            print(json.dumps(result, ensure_ascii=False, indent=2))
+            return 0 if result.get("ok", True) else 1
         store = Store(args.store)
         if args.command == "import":
             if args.source.suffix.lower() == ".zip":
@@ -95,6 +144,10 @@ def main(argv: list[str] | None = None) -> int:
         elif args.command == "report":
             from .report import report
             result = {"path": str(report(store, args.output, project_id=args.project))}
+        elif args.command == "explorer":
+            from .explorer import build_explorer
+            result = build_explorer(store, args.output, project_id=args.project, model_id=args.model_id,
+                                    revision=args.model_revision, engineering_agents_root=args.engineering_agents_root)
         elif args.command == "baseline":
             result = store.baseline(args.project, id=args.id, revision=args.revision, actor={"type": "human", "id": args.human_actor}, reason=args.reason)
         elif args.command == "sysml":
@@ -130,7 +183,7 @@ def main(argv: list[str] | None = None) -> int:
             raise RecordError("Unknown command")
         print(json.dumps(result, ensure_ascii=False, indent=2, allow_nan=False))
         return 0 if args.command != "check" or result["ok"] else 1
-    except (OSError, ValueError) as exc:
+    except (OSError, ValueError, subprocess.SubprocessError, zipfile.BadZipFile) as exc:
         print(json.dumps({"ok": False, "error": str(exc)}, ensure_ascii=False), file=sys.stderr)
         return 2
 

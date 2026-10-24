@@ -20,6 +20,8 @@ The [Cube requirements](balancing_cube_requirements.md) separate test obligation
 
 ## Supporting specifications
 
+- [Requirements explorer](requirements_explorer.md): canonical revision selection, graph inspection and browser-local review proposals.
+- [Dataset storage](dataset_storage.md): Git-tracked retrieval catalogs and immutable Release evidence shared across environments.
 - [System model](system_model.md): versioned records, trace relations and evidence scope.
 - [Cube configuration catalogue](cube_configuration_catalogue.md): reviewed, executable, historical and BOM-reference roles with exact revisions.
 - [SysML API](sysml_api.md): supported standard services and exchange mapping.

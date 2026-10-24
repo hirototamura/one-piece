@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-24",
+  "timezone": "Asia/Tokyo",
+  "scope": "Software and historical-evidence storage validation; not a new design iteration or physical verification.",
+  "release_url": "https://github.com/hirototamura/balancing-cube-simulation/releases/tag/validation-archive-20261024",
+  "visibility_of_new_archives": "private",
+  "catalog": "datasets/integration_validation_20261024.json",
+  "catalog_sha256": "e29ad9e3dcd8127a4d59afb20f87a5bff3c85499f8a83894f9ec6947ddfe2a25",
+  "datasets": 42,
+  "files": 2427,
+  "new_archives": 30,
+  "new_archive_bytes": 1300485490,
+  "reused_archives": 12,
+  "reused_archive_bytes": 1184037795,
+  "remote_new_archive_hashes_verified": true,
+  "original_files_verified": 2427,
+  "clean_restore": {
+    "datasets": [
+      "acceptance-receipts",
+      "cube-final-acceptance",
+      "archive-engineering-pr-verification-20261012.zip"
+    ],
+    "verified_files": 100,
+    "restored_files": 100,
+    "retry_restored_files": 0
+  },
+  "software_checks": {
+    "onepiece_installed_wheel": {
+      "version": "0.4.0",
+      "passed": 112,
+      "skipped": 0,
+      "sha256": "3d89369bfa249b6238c005965ef94491f42a095fbed59866bebe69ed154f8d9b"
+    },
+    "engineering_agents": {
+      "passed": 1189,
+      "skipped": 4,
+      "onepiece_0_4_integration_subset_passed": 98,
+      "strict_docs_build": "passed"
+    },
+    "standalone_simulator": {
+      "passed": 116,
+      "skipped": 8,
+      "subtests_passed": 97
+    }
+  },
+  "explorer_checks": {
+    "model_revision": "reviewed-20261019-1",
+    "requirements": 22,
+    "groups": 7,
+    "linked_parameters": 37,
+    "planned_cases": 22,
+    "browser_console_errors": 0,
+    "checks": [
+      "requirement search",
+      "Japanese source translation",
+      "component graph navigation",
+      "save and clear browser-local proposal"
+    ],
+    "canonical_records_changed": false
+  },
+  "pr_review_threads": {
+    "engineering_agents_82": {
+      "total": 9,
+      "unresolved": 0
+    },
+    "one_piece_12": {
+      "total": 3,
+      "unresolved": 0
+    }
+  }
+}
