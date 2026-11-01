@@ -235,9 +235,13 @@ def test_report_keeps_overlapping_project_views_and_evaluations_separate(tmp_pat
         run = make_record(project_id=project, id="shared-run", kind="simulation_run",
                           data={"candidate_ref": ref(fresh), "numeric_gpu_verified": project == "alpha",
                                 "all_screening_passed": True})
-        records.extend([requirement, design, evidence, fresh, run])
+        product = make_record(project_id=project, id="shared-owner", kind="product", data={"name": "Owner"})
+        parameter = make_record(project_id=project, id="shared-param", kind="parameter",
+                                product_node=product['id'], data={"name": project + " parameter"})
+        records.extend([requirement, design, evidence, fresh, run, product, parameter])
     records.append(make_record(project_id="alpha", id="summary", kind="campaign_summary",
-                               data={"best": {"original_confirmed": ["shared-design"]}}))
+                               data={"best": {"original_confirmed": ["shared-design"]},
+                                     "prior46": {"ids": ["shared-design"]}}))
     store.import_records(records)
     html = report(store, tmp_path / "report").read_text()
     views = _run_report_javascript(html, """
@@ -246,8 +250,15 @@ def test_report_keeps_overlapping_project_views_and_evaluations_separate(tmp_pat
   reqDetail(requirement);
   const design=byKey.get(key({project_id:project,id:'shared-design',revision:'1'}));
   const fresh=byKey.get(key({project_id:project,id:'fresh-design',revision:'1'}));
+  designDetail(design);
+  $('#param-owner').value=idKey(project,'shared-owner');paramRows();
+  $('#design-prior').checked=true;designRows();
   return {project,view:reqView(requirement),detail:$('#reqdetail').innerHTML,bestProject:best.project_id,
-          evaluations:evalFor(design).map(e=>e.project_id),freshStatus:fresh.data.status};
+          evaluations:evalFor(design).map(e=>e.project_id),freshStatus:fresh.data.status,
+          selectors: ['#graph-design','#compare-base','#compare-target'].map(s=>$(s).innerHTML),
+          designDetail:$('#design-detail').innerHTML, requirementRows:$('#reqrows').innerHTML,
+          ownerOptions:$('#param-owner').innerHTML, parameterRows:$('#paramrows').innerHTML,
+          priorDesigns:shown.map(r=>r.project_id),designRows:$('#designrows').innerHTML};
 })
 """)
     for view, status in zip(views, ["draft", "reviewed"]):
@@ -256,6 +267,16 @@ def test_report_keeps_overlapping_project_views_and_evaluations_separate(tmp_pat
         assert view["view"]["statement_status"] == status
         assert view["evaluations"] == [project]
         assert view["bestProject"] == "alpha"
+        assert all(project + " / shared-design · 1" in options for options in view["selectors"])
+        assert project + " / shared-design @1" in view["designDetail"]
+        assert project + " / R-HOLD" in view["requirementRows"]
+        assert project + " / R-HOLD @1" in view["detail"]
+        assert project + " / Owner" in view["ownerOptions"]
+        assert project + " parameter" in view["parameterRows"]
+        assert ("beta" if project == "alpha" else "alpha") + " parameter" not in view["parameterRows"]
+        assert view["priorDesigns"] == ["alpha"]
+        assert "alpha / shared-design @1" in view["designRows"]
+        assert "beta / shared-design @1" not in view["designRows"]
         assert project + ": 1" in view["detail"]
         assert ("beta" if project == "alpha" else "alpha") + ": 1" not in view["detail"]
         assert view["freshStatus"] == ("new_gpu_confirmed_pass" if project == "alpha"
