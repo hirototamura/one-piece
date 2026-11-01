@@ -8,6 +8,11 @@ The graph has an [OMG Systems Modeling API 1.0 read and exchange boundary](docs/
 
 [Strategy](docs/en/strategy.md) / [戦略](docs/ja/strategy.md) records current strategies and specifications. CORE.md holds long-term philosophy and requires explicit human approval before edits. Other Markdown filenames under docs use lowercase snake_case.
 
+[Requirements explorer](docs/en/requirements_explorer.md) builds the interactive
+Cube view from an exact canonical model revision. [Dataset retrieval](docs/en/dataset_storage.md)
+indexes historical validation evidence and retrieves selected, hash-checked
+datasets from private GitHub Releases or offline assets.
+
 [Competitor research / 競合調査](docs/ja/competitor_tradeoff.md) restores the historical observations without their old adoption decisions. **Automated requirement verification and Git-like model diffs are mandatory capabilities.** The [design and acceptance proposals](docs/en/verification_and_diff.md) / [日本語](docs/ja/verification_and_diff.md) distinguish current functionality from the remaining work.
 
 ## Shared engineering instructions

@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101a29" />
+    <meta name="description" content="Explore system requirements, model links, verification plans and open questions." />
+    <title>Systems Requirements Explorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="rail" aria-label="Model navigation">
+        <a class="brand" href="#" aria-label="Systems Requirements Explorer home">
+          <span class="brand-mark"><span></span><span></span><span></span></span>
+          <span><b>ONE-PIECE</b><small>requirements explorer</small></span>
+        </a>
+
+        <div class="rail-label">MODEL LIBRARY</div>
+        <nav class="model-nav" aria-label="System models">
+          <button class="model-link is-active" data-view="cube" aria-label="Balancing Cube requirements" title="Balancing Cube requirements">
+            <span class="model-icon cube-icon">◇</span>
+            <span><b>Balancing Cube</b><small>One-Piece · versioned</small></span>
+            <span class="nav-dot draft-dot"></span>
+          </button>
+          <button class="model-link" data-view="eclss" aria-label="Spacecraft ECLSS contract" title="Spacecraft ECLSS contract">
+            <span class="model-icon">◉</span>
+            <span><b>Spacecraft ECLSS</b><small>scenario contract</small></span>
+            <span class="nav-dot"></span>
+          </button>
+          <button class="model-link" data-view="scrubber" aria-label="Scrubber demo coverage gap" title="Scrubber demo coverage gap">
+            <span class="model-icon">▥</span>
+            <span><b>Scrubber demo</b><small>degradation scenario</small></span>
+            <span class="nav-dot"></span>
+          </button>
+        </nav>
+
+        <div class="rail-divider"></div>
+        <div class="rail-label">IN THIS MODEL</div>
+        <div id="group-nav" class="group-nav"></div>
+
+        <div class="rail-foot">
+          <span class="live-mark"></span>
+          <span><b>Source-linked view</b><small>changes here stay as proposals</small></span>
+        </div>
+      </aside>
+
+      <main class="main-area">
+        <header class="topbar">
+          <div class="breadcrumbs"><span>ENGINEERING</span><i>/</i><b id="crumb-model">BALANCING CUBE</b></div>
+          <div class="top-actions">
+            <label class="search-box" for="global-search">
+              <span aria-hidden="true">⌕</span>
+              <input id="global-search" type="search" placeholder="Search IDs, statements, questions…" autocomplete="off" />
+              <kbd>⌘ K</kbd>
+            </label>
+            <button id="language-toggle" class="language-toggle" type="button" aria-label="Switch language">JA</button>
+            <button id="review-export-top" class="export-top" type="button"><span>↗</span> Export review</button>
+          </div>
+        </header>
+
+        <section id="view-cube" class="view is-visible" aria-labelledby="page-title">
+          <div class="page-wrap">
+            <div class="eyebrow-row"><span class="eyebrow"><span class="tiny-square"></span> VERSIONED SYSTEM MODEL</span><span class="revision-pill" id="model-status-pill">Loading model revision</span></div>
+            <div class="hero-grid">
+              <div>
+                <h1 id="page-title">Make every<br /><em>requirement</em> traceable.</h1>
+                <p class="hero-copy">A system model connects mission intent to measurable obligations, design parameters and evidence. Explore the selected Cube requirements and keep each open question attached to the requirement it affects.</p>
+              </div>
+              <div class="model-stamp">
+                <div class="stamp-orbit"><span class="orbit-core">C</span><span class="orbit-node n1">M</span><span class="orbit-node n2">R</span><span class="orbit-node n3">K</span><span class="orbit-node n4">V</span></div>
+                <div class="stamp-caption"><span>ACTIVE MODEL PROJECTION</span><b>cube.system-model.active</b><small id="model-revision"></small></div>
+              </div>
+            </div>
+
+            <div class="status-banner">
+              <span class="status-symbol">!</span>
+              <div><b id="model-status-title">Loading canonical model state</b><span id="model-status-copy">Approval, test execution and physical verification are separate states.</span></div>
+              <button type="button" class="text-link" data-jump="status-guide">How to read status <span>↗</span></button>
+            </div>
+
+            <div class="stat-row" id="cube-stats"></div>
+
+            <section class="trace-strip" aria-label="Model trace path">
+              <div class="trace-intro"><span class="section-kicker">MODEL LOGIC</span><b>Follow the claim</b></div>
+              <div class="trace-step"><span class="trace-icon mission-icon">◎</span><span><b>Mission</b><small>why it exists</small></span></div><span class="trace-arrow">→</span>
+              <div class="trace-step"><span class="trace-icon req-icon">§</span><span><b>Requirement</b><small>what must hold</small></span></div><span class="trace-arrow">→</span>
+              <div class="trace-step"><span class="trace-icon kdp-icon">⌁</span><span><b>KDP / model</b><small>what shapes it</small></span></div><span class="trace-arrow">→</span>
+              <div class="trace-step"><span class="trace-icon test-icon">⊙</span><span><b>Verification</b><small>how we check</small></span></div><span class="trace-arrow">→</span>
+              <div class="trace-step"><span class="trace-icon evidence-icon">↗</span><span><b>Evidence</b><small>what happened</small></span></div>
+            </section>
+
+            <section class="model-graph-section" aria-labelledby="model-graph-title">
+              <div class="graph-heading">
+                <div><span class="section-kicker">SYSTEM MODEL CONNECTION GRAPH</span><h2 id="model-graph-title">Follow relationships from any object</h2><p>Select an object to see its directly connected objects and the relationship labels between them. The graph includes hierarchy, allocation, design constraints and verification; use the edge filters to control density.</p></div>
+                <button type="button" id="graph-home" class="quiet-button">Mission overview</button>
+              </div>
+              <div id="architecture-panel" class="architecture-panel"></div>
+              <div id="design-coverage" class="design-coverage"></div>
+              <div id="graph-version" class="graph-version"></div>
+              <div class="graph-layout">
+                <div id="model-graph" class="model-graph" aria-live="polite"></div>
+                <aside id="graph-inspector" class="graph-inspector" aria-live="polite"></aside>
+              </div>
+              <p class="graph-note">Each vertex is a versioned model object. Select it to inspect key attributes and incident relationships; expand “All source attributes” for its complete record. The current focus stays on the left and connected objects appear on the right. An outgoing arrow points right (focus → connected object); an incoming arrow points left (connected object → focus). Read the relationship sentence in the inspector to see both endpoints. Double-click or choose “Center graph” to follow one hop at a time.</p>
+              <div class="graph-contract">
+                <span class="section-kicker">RELATIONSHIP SEMANTICS</span>
+                <ul class="graph-relation-legend">
+                  <li><code>derives</code><span>Source requirement or requirement set → derives → derived requirement or requirement set.</span></li>
+                  <li><code>satisfies</code><span>Design or product → satisfies → intended requirement; correspondence is not proof of a pass</span></li>
+                  <li><code>verifies</code><span>Test case or evidence → verifies → requirement</span></li>
+                  <li><code>allocates</code><span>Requirement → allocates → function; function → allocates → component. Shared installation and sourcing requirements can allocate directly to several components.</span></li>
+                  <li><code>performs</code><span>Cube or external verification context → performs → function</span></li>
+                  <li><code>comprises</code><span>Cube or external verification context → comprises → component; physical decomposition is separate from requirement derivation</span></li>
+                  <li><code>constrains</code><span>Requirement → constrains → design parameter</span></li>
+                </ul>
+                <p class="graph-coverage-note"><b>Direction and coverage:</b> graph arrows follow subject → verb → object, independently of hierarchy. For requirement-to-requirement derivation, SysML `«deriveReqt»` has the opposite notation direction (derived/client → source/supplier), which is mapped here to the readable sentence source → derives → derived. Recorded `derive` links are shown as `derives`, including links through requirement sets. Membership and parent fields support breadcrumb navigation; they do not replace recorded derivation links. Verification method is stored as an attribute on each verification case. Product records describe system or subsystem concepts, not a complete parts list.</p>
+              </div>
+            </section>
+
+            <section class="explorer-head">
+              <div><span class="section-kicker">REQUIREMENT SET</span><h2>Explore the obligations</h2><p>Choose a group, then open any requirement to inspect its statement, acceptance rule, links and unresolved items.</p></div>
+              <div class="filters">
+                <label class="filter-control"><span>GROUP</span><select id="group-filter"><option value="all">All groups</option></select></label>
+                <label class="filter-control"><span>SHOW</span><select id="status-filter"><option value="all">All obligations</option><option value="open">Open questions</option><option value="hardware">Hardware verification</option><option value="not-run">Not run</option></select></label>
+              </div>
+            </section>
+
+            <div class="requirements-layout">
+              <section class="requirements-list-wrap" aria-label="Requirements list">
+                <div class="list-toolbar"><span id="list-count"></span><button type="button" id="clear-filters" class="quiet-button">Clear filters</button></div>
+                <div id="requirements-list" class="requirements-list"></div>
+                <div id="no-results" class="no-results" hidden>No requirements match these filters.</div>
+              </section>
+              <article id="requirement-detail" class="detail-card" aria-live="polite"></article>
+            </div>
+
+            <section class="review-callout" id="review-panel">
+              <div class="review-callout-head"><div><span class="section-kicker">CONVERSATION WORKSPACE</span><h2>Shape the next revision</h2><p>Capture proposed wording, a label change, or a question. Your notes are saved in this browser and can be exported into our next conversation.</p></div><span class="local-only"><span class="live-mark"></span> LOCAL DRAFTS ONLY</span></div>
+              <div class="review-grid">
+                <label class="review-field"><span>SELECTED REQUIREMENT</span><div id="review-selected" class="review-selected"></div></label>
+                <label class="review-field"><span>PROPOSED WORDING</span><textarea id="proposal-text" rows="3" placeholder="Edit the statement here as a discussion draft…"></textarea></label>
+                <label class="review-field"><span>RATIONALE / QUESTION</span><textarea id="proposal-note" rows="3" placeholder="What intent, boundary, or test detail needs clarification?"></textarea></label>
+                <label class="review-field review-state-field"><span>PROPOSED LABEL CHANGE · OPTIONAL</span><div class="state-proposal-controls"><select id="proposal-status-field" aria-label="Status field to propose changing"><option value="">No label change</option><option value="status">status · wording state</option><option value="approval_state">approval_state · human review</option><option value="verification_status">verification_status · check state</option><option value="physical_verified">physical_verified · hardware evidence</option></select><input id="proposal-status-value" type="text" placeholder="Proposed value" aria-label="Proposed status value" /></div><small>Proposal only. It will not update the canonical model.</small></label>
+                <div class="review-actions"><span id="draft-save-status">No unsaved proposal</span><button type="button" id="save-draft" class="primary-button">Save proposal <span>→</span></button></div>
+              </div>
+              <div id="saved-drafts" class="saved-drafts"></div>
+            </section>
+
+            <section class="source-footer">
+              <div><span class="section-kicker">SOURCE & AUTHORITY</span><b>Canonical records remain in One-Piece.</b><p>This site is an interactive projection of immutable records. It does not approve wording, update the system model, or claim that a requirement has passed.</p></div>
+              <div class="source-links"><a href="https://github.com/hirototamura/one-piece" target="_blank" rel="noreferrer">One-Piece repository ↗</a><a href="https://github.com/hirototamura/one-piece/blob/v0.3.0/docs/en/system_model.md" target="_blank" rel="noreferrer">Model guide ↗</a><a href="https://github.com/hirototamura/one-piece/blob/v0.3.0/docs/en/balancing_cube_requirements.md" target="_blank" rel="noreferrer">Reviewed requirement text ↗</a></div>
+            </section>
+          </div>
+        </section>
+
+        <section id="view-eclss" class="view" aria-labelledby="eclss-title">
+          <div class="page-wrap compact-wrap">
+            <div class="eyebrow-row"><span class="eyebrow"><span class="tiny-square"></span> ENGINEERING AGENTS · SCENARIO CONFIG</span><span class="revision-pill warm-pill">OPERATIONAL CONTRACT</span></div>
+            <div class="hero-grid eclss-hero"><div><h1 id="eclss-title">A contract written<br />in <em>configuration.</em></h1><p class="hero-copy">The ECLSS loop uses scenario settings as its current design and verification contract. These values are implemented inputs, not an approved One-Piece requirement baseline.</p></div><div class="eclss-visual"><span class="tank tank-co2">CO₂ <b>2.0</b><small>HIGH · kg</small></span><span class="tank tank-o2">O₂ <b>6.0</b><small>LOW · kg</small></span><span class="tank tank-water">H₂O <b>50</b><small>LOW · L</small></span><div class="flowline"></div><small class="flow-label">crew · recovery · balance</small></div></div>
+            <div class="status-banner warm-banner"><span class="status-symbol">i</span><div><b>Configuration ≠ formal requirement wording</b><span>Thresholds and evaluation rules drive the code. Their rationale and acceptance boundaries still need review as system requirements.</span></div><span class="source-path" id="eclss-source"></span></div>
+            <div id="eclss-summary" class="stat-row"></div>
+            <section class="contract-sections">
+              <div class="contract-block"><div class="contract-heading"><span class="contract-index">01</span><div><span class="section-kicker">CREW & RESOURCE PROTECTION</span><h2>Survival objective and operating bands</h2><p>Thresholds classify resource state and trigger action; they do not by themselves define the complete crew-safety acceptance procedure.</p></div></div><div id="eclss-thresholds" class="threshold-grid"></div><div id="eclss-survival" class="survival-rules"></div></div>
+              <div class="contract-block"><div class="contract-heading"><span class="contract-index">02</span><div><span class="section-kicker">DESIGN SPACE</span><h2>Budgets, bounds and decision order</h2><p>Feasibility is labelled separately from survival. Over-budget designs can still run and be shown to the human reviewer.</p></div></div><div id="eclss-design" class="constraint-grid"></div></div>
+              <div class="contract-block"><div class="contract-heading"><span class="contract-index">03</span><div><span class="section-kicker">VERIFICATION CONTRACT</span><h2>How outcomes are scored</h2><p>Every scorecard axis has explicit parameters. The physics gate excludes physically inconsistent runs before scoring.</p></div></div><div id="eclss-evaluation" class="evaluation-grid"></div></div>
+              <details class="raw-config"><summary><span><b>Full scenario and actor configuration</b><small>Every current setting, including simulation conditions, subsystem parameters and actor policy</small></span><span class="details-plus">＋</span></summary><div id="eclss-raw-tree" class="tree-root"></div></details>
+            </section>
+            <section class="source-footer"><div><span class="section-kicker">SOURCE & AUTHORITY</span><b>These settings live in Engineering Agents.</b><p>They define the current ECLSS demonstration model and scorecard. No One-Piece ECLSS requirement set was found in this workspace.</p></div><div class="source-links"><a href="https://github.com/hirototamura/engineering_agents" target="_blank" rel="noreferrer">Engineering Agents ↗</a></div></section>
+          </div>
+        </section>
+
+        <section id="view-scrubber" class="view" aria-labelledby="scrubber-title">
+          <div class="page-wrap compact-wrap">
+            <div class="eyebrow-row"><span class="eyebrow"><span class="tiny-square"></span> ENGINEERING AGENTS · REFERENCE SCENARIO</span><span class="revision-pill muted-pill">NO FORMAL REQUIREMENT SET</span></div>
+            <div class="hero-grid scrubber-hero"><div><h1 id="scrubber-title">A scenario can<br />exist <em>without requirements.</em></h1><p class="hero-copy">The scrubber degradation demo has simulation parameters and an anomaly schedule. We found no explicit acceptance criteria or separate requirement records for this scenario.</p></div><div class="scrubber-mark"><span>CO₂</span><i></i><b>DEGRADE</b><small>STEP 20</small></div></div>
+            <div class="status-banner neutral-banner"><span class="status-symbol">?</span><div><b>Coverage gap</b><span>The model describes what changes during a run; it does not say what outcome qualifies as acceptable. The configuration below is source data, not a pass/fail rule.</span></div></div>
+            <section class="contract-block scrubber-config"><div class="contract-heading"><span class="contract-index">01</span><div><span class="section-kicker">CURRENT SCENARIO INPUTS</span><h2>What the demo defines</h2><p>Open a branch to inspect the exact settings from the source YAML.</p></div></div><div id="scrubber-raw-tree" class="tree-root"></div></section>
+            <section class="gap-prompts"><span class="section-kicker">QUESTIONS TO CLOSE THE GAP</span><div class="prompt-list"><article><b>01</b><span>What is the system's mission and intended operating envelope?</span></article><article><b>02</b><span>Which CO₂, power and crew-safety thresholds must be met, and for how long?</span></article><article><b>03</b><span>What scenario conditions and evidence make each result pass, fail, or inconclusive?</span></article></div><p>These are prompts for our requirements conversation, not conclusions about the system.</p></section>
+            <section class="source-footer"><div><span class="section-kicker">SOURCE</span><b>Scrubber degradation scenario.</b><p id="scrubber-source"></p></div></section>
+          </div>
+        </section>
+
+        <section id="view-basics" class="view" aria-labelledby="basics-title">
+          <div class="page-wrap compact-wrap">
+            <div class="eyebrow-row"><span class="eyebrow"><span class="tiny-square"></span> A FIELD GUIDE</span><span class="revision-pill">MODEL SEMANTICS</span></div>
+            <h1 id="basics-title">A model is a map<br />of <em>claims and proof.</em></h1>
+            <p class="hero-copy basics-intro">The records do more than hold text. They keep exact revisions and make each claim traceable through the products, parameters, tests and evidence that give it meaning.</p>
+            <div class="semantics-grid" id="model-notes">
+              <article><span class="semantic-mark mark-mission">◎</span><span class="section-kicker">TOP LEVEL</span><h2>Mission</h2><p>States why the system exists. A lower-level revision can clarify how to achieve it, but it cannot silently replace the mission.</p><div class="semantic-example">M-VERTEX · hold a vertex position in a physical test</div></article>
+              <article><span class="semantic-mark mark-req">§</span><span class="section-kicker">OBLIGATION</span><h2>Requirement</h2><p>Names one obligation, its conditions, acceptance rule and intended verification method. Groups organize requirements; they are not test obligations.</p><div class="semantic-example">R-HOLD · at least 30 s without external support</div></article>
+              <article><span class="semantic-mark mark-kdp">⌁</span><span class="section-kicker">DESIGN DRIVER</span><h2>KDP / parameter</h2><p>A consequential value with a unit and provenance. A <code>constrain</code> edge shows the parameter's relationship to a requirement; it does not show compliance.</p><div class="semantic-example">R-HOLD → wheel torque, delay and body geometry</div></article>
+              <article><span class="semantic-mark mark-test">⊙</span><span class="section-kicker">CHECK PLAN</span><h2>Verification case</h2><p>Sets the method, conditions and acceptance measure for a check. A planned case stays <b>not run</b> until results are recorded.</p><div class="semantic-example">cube.verify.R-HOLD · planned hardware test</div></article>
+              <article><span class="semantic-mark mark-evidence">↗</span><span class="section-kicker">OBSERVATION</span><h2>Evidence</h2><p>Records what happened under exact conditions and model revisions. Numerical evidence and hardware evidence answer different questions.</p><div class="semantic-example">Simulation agreement does not establish physical fidelity</div></article>
+              <article><span class="semantic-mark mark-review">✎</span><span class="section-kicker">HUMAN AUTHORITY</span><h2>Review state</h2><p>Requirement wording and adoption of a baseline are human decisions. Agents can propose wording or design changes; they cannot approve requirements for themselves.</p><div class="semantic-example">status: reviewed · approval: human reviewed</div></article>
+            </div>
+            <section class="identifier-guide" id="identifier-guide">
+              <div class="guide-section-heading"><span class="section-kicker">IDENTIFIERS & HIERARCHY</span><h2>Record IDs and graph levels answer different questions</h2><p>In this project, letter prefixes are naming conventions for record families. The fields on each record define its exact role; a prefix alone does not say whether it is a group or an atomic obligation.</p></div>
+              <div class="identifier-grid">
+                <article><code>M-</code><b>Mission</b><span>M-VERTEX states the top-level mission.</span></article>
+                <article><code>R-</code><b>Requirement</b><span>R-HOLD and R-DRIFT are measurable obligations. R-DRIVE is a group record.</span></article>
+                <article><code>C-</code><b>Constraint-style obligation</b><span>C-BUDGET and C-FIT-PRINT are obligations. C-FIT is their organizing group.</span></article>
+                <article><code>D-</code><b>Design parameter</b><span>D-CORNER-R is a design value with provenance and units.</span></article>
+                <article><code>I-</code><b>Identification parameter</b><span>I-MU is a value to identify; its provenance can say assumed or unknown.</span></article>
+              </div>
+              <p class="identifier-note"><code>cube.system-model.active</code> is a separate, dot-namespaced record ID with kind <code>system_model</code>. Its <code>simulation_snapshot_ref</code> points to a specific versioned snapshot. Dots and letter prefixes do not create graph levels: grouping uses explicit membership and <code>parent_ref</code>; requirement derivation uses <code>«deriveReqt»</code>. This prefix convention is project-specific, not a universal schema enum.</p>
+            </section>
+            <section class="label-guide" id="status-guide">
+              <div class="guide-section-heading"><span class="section-kicker">STATUS LABELS</span><h2>Read each label on its own axis</h2><p>Several labels can apply to one requirement at the same time. They describe different things, not steps in a single status ladder.</p></div>
+              <div class="label-guide-grid">
+                <article><span class="label-field">Requirement · <code>status</code></span><b class="label-chip label-draft">REVIEWED</b><p>The current wording was reviewed by a person. New proposals start as <code>draft</code>; the earlier wording state is preserved separately as <code>source_status</code>.</p></article>
+                <article><span class="label-field">Human decision · <code>approval_state</code></span><b class="label-chip label-review">HUMAN REVIEWED</b><p>The human accepted this requirement and allocation scope. New proposals can use <code>pending_human_review</code>. This is separate from whether an item has been tested.</p></article>
+                <article><span class="label-field">Verification · <code>verification_status</code></span><b class="label-chip label-run">NOT RUN</b><p>The requirement's check has no recorded execution. Its linked case can separately say <code>status: planned</code> and <code>execution_status: not_run</code>.</p></article>
+                <article><span class="label-field">Physical evidence · <code>physical_verified</code></span><b class="label-chip label-physical">NOT PHYSICALLY VERIFIED</b><p>This display is derived from the field, which is <code>null</code> or <code>false</code> for the current records. It is not a separate stored status string.</p></article>
+                <article><span class="label-field">Parameter provenance · <code>origin</code></span><b class="label-chip label-origin">ASSUMED / UNKNOWN</b><p>For D- and I-parameter records, this describes where a value came from. The current linked set includes assumptions and values whose origin is unknown.</p></article>
+                <article><span class="label-field">Work still needed · <code>hardware_verification_required</code></span><b class="label-chip label-work">HARDWARE CHECK REQUIRED</b><p>A boolean planning flag, not a pass/fail result. Simulation evidence alone does not clear a required physical check.</p></article>
+              </div>
+              <p class="label-caveat"><b>Vocabulary status:</b> these are the values and display labels currently present in the model. The record schema does not define a complete allowed-value list or transition policy. Agree that policy before introducing new official labels.</p>
+            </section>
+            <section class="review-guide" id="review-guide">
+              <div class="guide-section-heading"><span class="section-kicker">REVIEW WORKFLOW</span><h2>How to review and update a draft</h2><p>Use the site to prepare and discuss a change. Canonical records remain in One-Piece and are versioned.</p></div>
+              <ol class="review-steps">
+                <li><b>Read the exact item and revision.</b><span>Confirm its parent, owner/product, rationale, conditions and source lineage. A group node is only a container; review its child obligations.</span></li>
+                <li><b>Check that the statement is clear and testable.</b><span>Keep one obligation per sentence. Resolve vague terms, define units and bounds, and make the acceptance rule measurable.</span></li>
+                <li><b>Check how it will be verified.</b><span>Review the method, planned case, test conditions, evidence needed and unresolved items. A planned case is not a result.</span></li>
+                <li><b>Record a proposal here.</b><span>Edit the wording, add the reason or question, and optionally propose a label field/value. Save locally, then use <i>Export review</i> to bring the packet into our conversation.</span></li>
+                <li><b>Change official labels only with the matching basis.</b><span>Update wording/review fields after human review; update verification fields only when a result is recorded; set physical verification only from applicable hardware evidence.</span></li>
+                <li><b>Append a new canonical revision.</b><span>Do not overwrite history. Preserve the source status and provenance, update references that should point to the new revision, validate the One-Piece records, then rebuild this projection.</span></li>
+              </ol>
+              <div class="review-guide-note"><b>What this site can change:</b> browser-local wording and label proposals only. Saving or exporting a proposal does not change an official status, approve a requirement, or create verification evidence.</div>
+            </section>
+            <section class="relationship-section"><span class="section-kicker">TRACE RELATIONSHIPS</span><h2>What each graph edge means</h2><p>Read directed edges in sentence order: subject → verb → object. The verb label is shown in active form.</p><div class="relationship-list"><div><code>derives</code><span>source requirement or requirement set → derives → derived requirement or requirement set</span></div><div><code>allocates</code><span>requirement → allocates → function → allocates → component; some shared obligations allocate to several components</span></div><div><code>constrains</code><span>requirement → constrains → design parameter</span></div><div><code>satisfies</code><span>design → satisfies → intended requirement; correspondence only</span></div><div><code>verifies</code><span>test case or evidence → verifies → requirement; carries method, outcome and applicability</span></div></div><p class="semantic-warning">A trace edge never upgrades a draft to approved or an unrun plan to a pass.</p></section>
+            <section class="source-footer"><div><span class="section-kicker">READING NOTES</span><b>Requirement practice and model limits.</b><p>ISO/IEC/IEEE 29148:2018 is the first requirements reference in this model. NASA guidance follows; compatible ASD-STE100 wording rules apply where possible. Full standards audits are not recorded as complete.</p></div><div class="source-links"><a href="https://github.com/hirototamura/one-piece/blob/v0.3.0/docs/en/system_model.md" target="_blank" rel="noreferrer">System model guide ↗</a><a href="https://github.com/hirototamura/one-piece/blob/main/docs/engineering/standards.md" target="_blank" rel="noreferrer">Writing standards ↗</a></div></section>
+          </div>
+        </section>
+      </main>
+    </div>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js" defer></script>
+  </body>
+</html>

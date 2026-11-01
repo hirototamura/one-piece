@@ -3,4 +3,4 @@ from .model import EDGE_TYPES, RecordError, canonical_bytes, make_record, record
 from .store import ConflictError, IntegrityError, Store
 
 __all__ = ["EDGE_TYPES", "RecordError", "ConflictError", "IntegrityError", "Store", "canonical_bytes", "make_record", "record_schema", "ref", "validate_record"]
-__version__ = "0.3.0"
+__version__ = "0.4.0"

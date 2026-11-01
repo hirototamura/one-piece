@@ -1,0 +1,941 @@
+{
+  "id": "cube.architecture.proposal",
+  "revision": "allocation-draft-20261017-1",
+  "status": "draft",
+  "approval_state": "pending_human_review",
+  "base_model_ref": {
+    "id": "cube.system-model.active",
+    "revision": "standards-draft-20261011-2"
+  },
+  "description": "Proposed allocation split: onboard functions and components, with external verification functions and equipment in their own context.",
+  "functions": [
+    {
+      "id": "cube.function.estimate-attitude",
+      "name": "Estimate attitude and angular rates",
+      "kind": "function",
+      "scope": "operational",
+      "boundary": "onboard",
+      "parent_ref": {
+        "id": "cube.system"
+      },
+      "inputs": [
+        "IMU observations"
+      ],
+      "outputs": [
+        "Attitude estimate",
+        "Angular-rate estimate and yaw-rate RMS"
+      ],
+      "component_ids": [
+        "cube.component.imu",
+        "cube.component.controller"
+      ],
+      "description": "Estimate the state used by balance control and yaw-rate monitoring. Sensor selection and accuracy remain open.",
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "R-YAW"
+      ]
+    },
+    {
+      "id": "cube.function.control-balance",
+      "name": "Control vertex balance",
+      "kind": "function",
+      "scope": "operational",
+      "boundary": "onboard",
+      "parent_ref": {
+        "id": "cube.system"
+      },
+      "inputs": [
+        "Estimated attitude and angular rates",
+        "Wheel state and operating limits"
+      ],
+      "outputs": [
+        "Wheel torque commands"
+      ],
+      "component_ids": [
+        "cube.component.controller"
+      ],
+      "description": "Control tilt and contact-point motion after manual placement and release. The control algorithm and parameter values remain draft.",
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "R-HOLD",
+        "R-RMS",
+        "R-TILT",
+        "R-DRIFT",
+        "R-REPEAT"
+      ]
+    },
+    {
+      "id": "cube.function.generate-torque",
+      "name": "Generate reaction torque",
+      "kind": "function",
+      "scope": "operational",
+      "boundary": "onboard",
+      "parent_ref": {
+        "id": "cube.system"
+      },
+      "inputs": [
+        "Torque commands",
+        "Electrical power"
+      ],
+      "outputs": [
+        "Reaction torque",
+        "Wheel speed and drive state"
+      ],
+      "component_ids": [
+        "cube.component.reaction-wheels",
+        "cube.component.motor-drivers"
+      ],
+      "description": "Generate body reaction torque using the three reaction-wheel axes within the speed and torque envelopes.",
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "R-DRIVE-TORQUE",
+        "R-DRIVE-SPEED"
+      ]
+    },
+    {
+      "id": "cube.function.manage-power",
+      "name": "Manage power and drive protection",
+      "kind": "function",
+      "scope": "operational",
+      "boundary": "onboard",
+      "parent_ref": {
+        "id": "cube.system"
+      },
+      "inputs": [
+        "Supply voltage",
+        "Load current",
+        "Motor and driver temperature"
+      ],
+      "outputs": [
+        "Power within operating limits",
+        "Protection or limiting action"
+      ],
+      "component_ids": [
+        "cube.component.power-bus",
+        "cube.component.motor-drivers",
+        "cube.component.controller"
+      ],
+      "description": "Keep current, voltage and component temperature within approved limits; numerical limits and protection design are unresolved.",
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "R-DRIVE-CURRENT",
+        "R-DRIVE-VOLTAGE",
+        "R-DRIVE-TEMP"
+      ]
+    },
+    {
+      "id": "cube.function.maintain-contact",
+      "name": "Support the body at the vertex",
+      "kind": "function",
+      "scope": "operational",
+      "boundary": "onboard",
+      "parent_ref": {
+        "id": "cube.system"
+      },
+      "inputs": [
+        "Body mass and geometry",
+        "Floor contact and disturbances"
+      ],
+      "outputs": [
+        "Support force",
+        "Contact geometry and motion envelope"
+      ],
+      "component_ids": [
+        "cube.component.frame-housing",
+        "cube.component.vertex-contact"
+      ],
+      "description": "Provide the mechanical support and contact behavior needed by balance control. This passive function is shared with active control for drift and tilt performance.",
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "R-HOLD",
+        "R-TILT",
+        "R-DRIFT"
+      ]
+    },
+    {
+      "id": "cube.function.measure-motion",
+      "name": "Measure motion independently",
+      "kind": "function",
+      "scope": "verification",
+      "boundary": "external verification",
+      "parent_ref": {
+        "id": "cube.verification"
+      },
+      "inputs": [
+        "Recorded physical motion",
+        "Calibrated measurement setup"
+      ],
+      "outputs": [
+        "Independent attitude and position measurements",
+        "Measurement uncertainty"
+      ],
+      "component_ids": [
+        "cube.component.camera-metrology"
+      ],
+      "description": "Measure physical motion independently of the onboard estimate. The measurement setup is external to the Cube.",
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "R-VISION",
+        "R-MODEL"
+      ]
+    },
+    {
+      "id": "cube.function.capture-synchronize",
+      "name": "Capture and synchronize test data",
+      "kind": "function",
+      "scope": "verification",
+      "boundary": "external verification",
+      "parent_ref": {
+        "id": "cube.verification"
+      },
+      "inputs": [
+        "Video timestamps",
+        "MCU timestamps and run data"
+      ],
+      "outputs": [
+        "Time-aligned records",
+        "Synchronization uncertainty"
+      ],
+      "component_ids": [
+        "cube.component.test-logger",
+        "cube.component.camera-metrology"
+      ],
+      "description": "Relate video and MCU time bases and preserve the exact run records.",
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "R-SYNC",
+        "R-TRACE"
+      ]
+    },
+    {
+      "id": "cube.function.evaluate-trace",
+      "name": "Evaluate and trace test results",
+      "kind": "function",
+      "scope": "verification",
+      "boundary": "external verification",
+      "parent_ref": {
+        "id": "cube.verification"
+      },
+      "inputs": [
+        "Model predictions",
+        "Independent measurements",
+        "Versioned run configuration"
+      ],
+      "outputs": [
+        "Model comparison",
+        "Repeated-trial assessment",
+        "Version-linked evidence"
+      ],
+      "component_ids": [
+        "cube.component.analysis-workstation",
+        "cube.component.test-logger"
+      ],
+      "description": "Compare simulation with hardware, evaluate repeated trials, and retain exact references to requirements, designs, conditions and results.",
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "R-REPEAT",
+        "R-MODEL",
+        "R-TRACE"
+      ]
+    }
+  ],
+  "components": [
+    {
+      "id": "cube.component.frame-housing",
+      "name": "Frame and printed housing",
+      "kind": "component",
+      "scope": "onboard",
+      "boundary": "onboard",
+      "parent_ref": {
+        "id": "cube.system"
+      },
+      "description": "Structural assembly, installation envelope and fixed-part mass properties. Material, process and detailed geometry are pending review.",
+      "quantity": "1 assembly proposed",
+      "physical_verified": false,
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "C-JAPAN",
+        "C-PRINT",
+        "C-FIT-MATERIAL",
+        "C-FIT-PRINT",
+        "C-FIT-INSTALL",
+        "R-HOLD",
+        "R-TILT",
+        "R-DRIFT"
+      ]
+    },
+    {
+      "id": "cube.component.vertex-contact",
+      "name": "Vertex contact interface",
+      "kind": "component",
+      "scope": "onboard",
+      "boundary": "onboard",
+      "parent_ref": {
+        "id": "cube.system"
+      },
+      "description": "Contact region or insert defining vertex radius, friction and compliance. It may be integral to the housing; no separate purchased part is assumed.",
+      "quantity": "1 interface proposed",
+      "physical_verified": false,
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "C-JAPAN",
+        "R-HOLD",
+        "R-TILT",
+        "R-DRIFT"
+      ]
+    },
+    {
+      "id": "cube.component.reaction-wheels",
+      "name": "Three reaction-wheel assemblies",
+      "kind": "component",
+      "scope": "onboard",
+      "boundary": "onboard",
+      "parent_ref": {
+        "id": "cube.system"
+      },
+      "description": "Rotating inertias and wheel geometry for three axes. Detailed dimensions and balance are pending review.",
+      "quantity": "3 axes from mission",
+      "physical_verified": false,
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "C-JAPAN",
+        "C-FIT-INSTALL",
+        "R-DRIVE-TORQUE",
+        "R-DRIVE-SPEED"
+      ]
+    },
+    {
+      "id": "cube.component.motor-drivers",
+      "name": "Motors and drive electronics",
+      "kind": "component",
+      "scope": "onboard",
+      "boundary": "onboard",
+      "parent_ref": {
+        "id": "cube.system"
+      },
+      "description": "Motor and driver functions providing wheel torque, electrical limits and temperature monitoring. Device selection is unresolved.",
+      "quantity": "TBD per-axis design",
+      "physical_verified": false,
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "C-JAPAN",
+        "C-FIT-INSTALL",
+        "R-DRIVE-TORQUE",
+        "R-DRIVE-SPEED",
+        "R-DRIVE-CURRENT",
+        "R-DRIVE-VOLTAGE",
+        "R-DRIVE-TEMP"
+      ]
+    },
+    {
+      "id": "cube.component.imu",
+      "name": "Onboard inertial sensing",
+      "kind": "component",
+      "scope": "onboard",
+      "boundary": "onboard",
+      "parent_ref": {
+        "id": "cube.system"
+      },
+      "description": "Attitude and angular-rate sensing used by the onboard estimator. Sensor model and actual uncertainty are unresolved.",
+      "quantity": "TBD",
+      "physical_verified": false,
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "C-JAPAN",
+        "C-FIT-INSTALL",
+        "R-YAW"
+      ]
+    },
+    {
+      "id": "cube.component.controller",
+      "name": "Control MCU and firmware",
+      "kind": "component",
+      "scope": "onboard",
+      "boundary": "onboard",
+      "parent_ref": {
+        "id": "cube.system"
+      },
+      "description": "Attitude estimation, balance control, scheduling, limit handling and run identification. Firmware and board selection remain draft.",
+      "quantity": "TBD",
+      "physical_verified": false,
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "C-JAPAN",
+        "C-FIT-INSTALL",
+        "R-HOLD",
+        "R-RMS",
+        "R-TILT",
+        "R-DRIFT",
+        "R-REPEAT",
+        "R-DRIVE-CURRENT",
+        "R-DRIVE-VOLTAGE",
+        "R-DRIVE-TEMP",
+        "R-YAW"
+      ]
+    },
+    {
+      "id": "cube.component.power-bus",
+      "name": "Power supply and bus",
+      "kind": "component",
+      "scope": "onboard",
+      "boundary": "onboard",
+      "parent_ref": {
+        "id": "cube.system"
+      },
+      "description": "Supply, distribution and bus-current/voltage protection. Battery, regulator and wiring choices remain open.",
+      "quantity": "TBD",
+      "physical_verified": false,
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "C-JAPAN",
+        "C-FIT-INSTALL",
+        "R-DRIVE-CURRENT",
+        "R-DRIVE-VOLTAGE",
+        "R-DRIVE-TEMP"
+      ]
+    },
+    {
+      "id": "cube.component.camera-metrology",
+      "name": "Independent camera and metrology setup",
+      "kind": "component",
+      "scope": "external",
+      "boundary": "external verification",
+      "parent_ref": {
+        "id": "cube.verification"
+      },
+      "description": "External physical measurements and video timing; calibration and uncertainty must be established.",
+      "quantity": "TBD",
+      "physical_verified": false,
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "R-VISION",
+        "R-SYNC",
+        "R-MODEL",
+        "R-TRACE"
+      ]
+    },
+    {
+      "id": "cube.component.test-logger",
+      "name": "Test acquisition and timestamp logger",
+      "kind": "component",
+      "scope": "external",
+      "boundary": "external verification",
+      "parent_ref": {
+        "id": "cube.verification"
+      },
+      "description": "Capture MCU and video timing, run metadata and evidence files. This is test equipment, separate from onboard control.",
+      "quantity": "TBD",
+      "physical_verified": false,
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "R-REPEAT",
+        "R-SYNC",
+        "R-MODEL",
+        "R-TRACE"
+      ]
+    },
+    {
+      "id": "cube.component.analysis-workstation",
+      "name": "Model and analysis workspace",
+      "kind": "component",
+      "scope": "external",
+      "boundary": "external verification",
+      "parent_ref": {
+        "id": "cube.verification"
+      },
+      "description": "Execute comparisons, repeated-trial analysis and version traceability. No additional onboard computer is implied.",
+      "quantity": "TBD",
+      "physical_verified": false,
+      "revision": "allocation-draft-20261017-1",
+      "status": "draft",
+      "approval_state": "pending_human_review",
+      "proposal": true,
+      "requirement_ids": [
+        "R-REPEAT",
+        "R-MODEL",
+        "R-TRACE"
+      ]
+    }
+  ],
+  "requirement_allocations": [
+    {
+      "source": "M-VERTEX",
+      "targets": [
+        "cube.system"
+      ],
+      "rationale": "The mission is an integrated physical demonstration of the complete three-wheel Cube; it remains a system-level responsibility.",
+      "scope": "system"
+    },
+    {
+      "source": "C-BUDGET",
+      "targets": [
+        "cube.system"
+      ],
+      "rationale": "The prototype cost limit applies to the total onboard assembly. No per-component budget has been invented.",
+      "scope": "system"
+    },
+    {
+      "source": "C-JAPAN",
+      "targets": [
+        "cube.component.frame-housing",
+        "cube.component.vertex-contact",
+        "cube.component.reaction-wheels",
+        "cube.component.motor-drivers",
+        "cube.component.imu",
+        "cube.component.controller",
+        "cube.component.power-bus"
+      ],
+      "rationale": "Supply availability applies to purchased components and materials across the onboard assembly; fulfillment remains to be checked.",
+      "scope": "crosscutting"
+    },
+    {
+      "source": "C-PRINT",
+      "targets": [
+        "cube.component.frame-housing"
+      ],
+      "rationale": "The printed housing owns material and printer-envelope compatibility; specific approved values remain unresolved.",
+      "scope": "local"
+    },
+    {
+      "source": "C-FIT-MATERIAL",
+      "targets": [
+        "cube.component.frame-housing"
+      ],
+      "rationale": "The printed housing owns material and printer-envelope compatibility; specific approved values remain unresolved.",
+      "scope": "local"
+    },
+    {
+      "source": "C-FIT-PRINT",
+      "targets": [
+        "cube.component.frame-housing"
+      ],
+      "rationale": "The printed housing owns material and printer-envelope compatibility; specific approved values remain unresolved.",
+      "scope": "local"
+    },
+    {
+      "source": "C-FIT-INSTALL",
+      "targets": [
+        "cube.component.frame-housing",
+        "cube.component.reaction-wheels",
+        "cube.component.motor-drivers",
+        "cube.component.imu",
+        "cube.component.controller",
+        "cube.component.power-bus"
+      ],
+      "rationale": "Installation fit is an interface responsibility shared by the housing and each installed assembly. These links do not establish dimensional compliance.",
+      "scope": "shared"
+    },
+    {
+      "source": "R-HOLD",
+      "targets": [
+        "cube.function.control-balance",
+        "cube.function.maintain-contact"
+      ],
+      "rationale": "Balance control owns the active performance; vertex support and contact are shared contributors where applicable.",
+      "scope": "shared"
+    },
+    {
+      "source": "R-RMS",
+      "targets": [
+        "cube.function.control-balance"
+      ],
+      "rationale": "Balance control owns the active performance; vertex support and contact are shared contributors where applicable.",
+      "scope": "local"
+    },
+    {
+      "source": "R-TILT",
+      "targets": [
+        "cube.function.control-balance",
+        "cube.function.maintain-contact"
+      ],
+      "rationale": "Balance control owns the active performance; vertex support and contact are shared contributors where applicable.",
+      "scope": "shared"
+    },
+    {
+      "source": "R-DRIFT",
+      "targets": [
+        "cube.function.control-balance",
+        "cube.function.maintain-contact"
+      ],
+      "rationale": "Balance control owns the active performance; vertex support and contact are shared contributors where applicable.",
+      "scope": "shared"
+    },
+    {
+      "source": "R-REPEAT",
+      "targets": [
+        "cube.function.control-balance",
+        "cube.function.evaluate-trace"
+      ],
+      "rationale": "Control must reproduce the physical hold behavior; the test evaluator determines the repeated-trial result.",
+      "scope": "shared"
+    },
+    {
+      "source": "R-DRIVE-TORQUE",
+      "targets": [
+        "cube.function.generate-torque"
+      ],
+      "rationale": "Reaction-torque generation owns motor torque and wheel-speed operating envelopes.",
+      "scope": "local"
+    },
+    {
+      "source": "R-DRIVE-SPEED",
+      "targets": [
+        "cube.function.generate-torque"
+      ],
+      "rationale": "Reaction-torque generation owns motor torque and wheel-speed operating envelopes.",
+      "scope": "local"
+    },
+    {
+      "source": "R-DRIVE-CURRENT",
+      "targets": [
+        "cube.function.manage-power"
+      ],
+      "rationale": "Power and protection behavior owns electrical and thermal limits and routes them to the participating hardware.",
+      "scope": "local"
+    },
+    {
+      "source": "R-DRIVE-VOLTAGE",
+      "targets": [
+        "cube.function.manage-power"
+      ],
+      "rationale": "Power and protection behavior owns electrical and thermal limits and routes them to the participating hardware.",
+      "scope": "local"
+    },
+    {
+      "source": "R-DRIVE-TEMP",
+      "targets": [
+        "cube.function.manage-power"
+      ],
+      "rationale": "Power and protection behavior owns electrical and thermal limits and routes them to the participating hardware.",
+      "scope": "local"
+    },
+    {
+      "source": "R-YAW",
+      "targets": [
+        "cube.function.estimate-attitude"
+      ],
+      "rationale": "The state estimator supplies the yaw-rate RMS that must be monitored during the hold interval.",
+      "scope": "local"
+    },
+    {
+      "source": "R-VISION",
+      "targets": [
+        "cube.function.measure-motion"
+      ],
+      "rationale": "Independent physical metrology owns measurement uncertainty; onboard sensor estimates are a separate measurement path.",
+      "scope": "local"
+    },
+    {
+      "source": "R-SYNC",
+      "targets": [
+        "cube.function.capture-synchronize"
+      ],
+      "rationale": "External acquisition owns the video-to-MCU time relation and its uncertainty.",
+      "scope": "local"
+    },
+    {
+      "source": "R-MODEL",
+      "targets": [
+        "cube.function.measure-motion",
+        "cube.function.evaluate-trace"
+      ],
+      "rationale": "Independent measurement supplies physical data and the evaluator compares it with model results under matching conditions.",
+      "scope": "shared"
+    },
+    {
+      "source": "R-TRACE",
+      "targets": [
+        "cube.function.capture-synchronize",
+        "cube.function.evaluate-trace"
+      ],
+      "rationale": "Acquisition records run provenance and evaluation binds it to exact model and requirement revisions.",
+      "scope": "shared"
+    }
+  ],
+  "parameter_allocations": [
+    {
+      "source": "D-BUDGET",
+      "targets": [
+        "cube.system"
+      ]
+    },
+    {
+      "source": "D-CORNER-R",
+      "targets": [
+        "cube.component.vertex-contact"
+      ]
+    },
+    {
+      "source": "D-SIDE",
+      "targets": [
+        "cube.component.frame-housing"
+      ]
+    },
+    {
+      "source": "D-SPEED-LIMIT",
+      "targets": [
+        "cube.component.reaction-wheels"
+      ]
+    },
+    {
+      "source": "D-WHEEL-MASS",
+      "targets": [
+        "cube.component.reaction-wheels"
+      ]
+    },
+    {
+      "source": "D-WHEEL-RADIUS",
+      "targets": [
+        "cube.component.reaction-wheels"
+      ]
+    },
+    {
+      "source": "F-CONTROL-PERIOD",
+      "targets": [
+        "cube.component.controller"
+      ]
+    },
+    {
+      "source": "F-SIM-DT",
+      "targets": [
+        "cube.component.analysis-workstation"
+      ]
+    },
+    {
+      "source": "I-BUS-I",
+      "targets": [
+        "cube.component.power-bus",
+        "cube.component.motor-drivers"
+      ]
+    },
+    {
+      "source": "I-BUS-V",
+      "targets": [
+        "cube.component.power-bus",
+        "cube.component.motor-drivers"
+      ]
+    },
+    {
+      "source": "I-CAMERA-U",
+      "targets": [
+        "cube.component.camera-metrology"
+      ]
+    },
+    {
+      "source": "I-COM-X",
+      "targets": [
+        "cube.component.frame-housing"
+      ]
+    },
+    {
+      "source": "I-COM-Y",
+      "targets": [
+        "cube.component.frame-housing"
+      ]
+    },
+    {
+      "source": "I-COM-Z",
+      "targets": [
+        "cube.component.frame-housing"
+      ]
+    },
+    {
+      "source": "I-CONTACT-COMPLIANCE",
+      "targets": [
+        "cube.component.vertex-contact"
+      ]
+    },
+    {
+      "source": "I-DELAY",
+      "targets": [
+        "cube.component.imu",
+        "cube.component.controller",
+        "cube.component.motor-drivers"
+      ]
+    },
+    {
+      "source": "I-DRIVE-TEMP",
+      "targets": [
+        "cube.component.motor-drivers"
+      ]
+    },
+    {
+      "source": "I-FRAME-MASS",
+      "targets": [
+        "cube.component.frame-housing"
+      ]
+    },
+    {
+      "source": "I-GYRO-NOISE",
+      "targets": [
+        "cube.component.imu"
+      ]
+    },
+    {
+      "source": "I-INERTIA-X",
+      "targets": [
+        "cube.component.frame-housing"
+      ]
+    },
+    {
+      "source": "I-INERTIA-Y",
+      "targets": [
+        "cube.component.frame-housing"
+      ]
+    },
+    {
+      "source": "I-INERTIA-Z",
+      "targets": [
+        "cube.component.frame-housing"
+      ]
+    },
+    {
+      "source": "I-MU",
+      "targets": [
+        "cube.component.vertex-contact"
+      ]
+    },
+    {
+      "source": "I-NOLOAD-SPEED",
+      "targets": [
+        "cube.component.motor-drivers"
+      ]
+    },
+    {
+      "source": "I-PEAK-TORQUE",
+      "targets": [
+        "cube.component.motor-drivers"
+      ]
+    },
+    {
+      "source": "I-PRINT-MATERIAL",
+      "targets": [
+        "cube.component.frame-housing"
+      ]
+    },
+    {
+      "source": "I-PRINT-X",
+      "targets": [
+        "cube.component.frame-housing"
+      ]
+    },
+    {
+      "source": "I-PRINT-Y",
+      "targets": [
+        "cube.component.frame-housing"
+      ]
+    },
+    {
+      "source": "I-PRINT-Z",
+      "targets": [
+        "cube.component.frame-housing"
+      ]
+    },
+    {
+      "source": "I-ROLLING",
+      "targets": [
+        "cube.component.vertex-contact"
+      ]
+    },
+    {
+      "source": "I-SYNC-U",
+      "targets": [
+        "cube.component.test-logger",
+        "cube.component.camera-metrology"
+      ]
+    },
+    {
+      "source": "I-TILT-NOISE",
+      "targets": [
+        "cube.component.imu"
+      ]
+    },
+    {
+      "source": "I-TORQUE-KT",
+      "targets": [
+        "cube.component.motor-drivers"
+      ]
+    },
+    {
+      "source": "I-TORQUE-THRESHOLD",
+      "targets": [
+        "cube.component.motor-drivers"
+      ]
+    },
+    {
+      "source": "I-TORSION",
+      "targets": [
+        "cube.component.vertex-contact"
+      ]
+    },
+    {
+      "source": "I-WHEEL-J",
+      "targets": [
+        "cube.component.reaction-wheels"
+      ]
+    },
+    {
+      "source": "I-WHEEL-JT",
+      "targets": [
+        "cube.component.reaction-wheels"
+      ]
+    }
+  ],
+  "open_questions": [
+    "Confirm boundaries and granularity of each function and component.",
+    "Confirm which installation interfaces share responsibility for C-FIT-INSTALL.",
+    "Decide whether vertex contact is integral to the housing or a separate insert.",
+    "Choose hardware, numerical operating limits, and evidence before approving any physical claim."
+  ]
+}
