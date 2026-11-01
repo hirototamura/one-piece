@@ -12,6 +12,11 @@ def _json(value):
     return json.dumps(value, ensure_ascii=False, separators=(",", ":"), allow_nan=False).replace("<", "\\u003c").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029")
 
 
+def _record_key(record):
+    return json.dumps([record["project_id"], record["id"], record["revision"]],
+                      ensure_ascii=False, separators=(",", ":"))
+
+
 def _trace_projection(records, history):
     """Keep exact revision targets separate from the current display projection."""
     identity = lambda r: (r["project_id"], r["id"], r["revision"])
@@ -19,7 +24,7 @@ def _trace_projection(records, history):
     all_records = {identity(r): r for r in history}
     historical = {}
     missing = []
-    graph_kinds = {"requirement", "product", "design", "design_candidate", "evaluation",
+    graph_kinds = {"requirement", "function", "product", "design", "design_candidate", "evaluation",
                    "simulation_run", "test_case", "verification_case", "specification", "parameter"}
     queue = [r for r in records if r["kind"] in graph_kinds]
     for record in queue:
@@ -58,7 +63,7 @@ def _requirement_views(records):
         planned = [r for r in records if r["project_id"] == record["project_id"]
                    and r["kind"] in {"verification_case", "test_case"}
                    and {"id": record["id"], "revision": record["revision"]} in r["data"].get("requirement_refs", [])]
-        views[record["id"] + "@" + record["revision"]] = {
+        views[_record_key(record)] = {
             "english": {field: data.get(field) for field in fields},
             "japanese": data.get("translations", {}).get("ja", {}),
             "is_group": data.get("record_role") == "requirement_group",
@@ -116,7 +121,7 @@ def report(store, output: str | Path, project_id: str | None = None) -> Path:
             if record["kind"] == "simulation_run" and name == "result.json":
                 result = json.loads(obj.read_text(encoding="utf-8"))
                 trials = result.get("records", [])
-                trial_views[record["id"] + "@" + record["revision"]] = [
+                trial_views[_record_key(record)] = [
                     {"domain_id": t["domain_id"], "condition_id": t["condition_id"],
                      "seed": t["seed"], "trials": 1,
                      "failed_trials": int(any(not c["passed"] for c in t["screening"])),
@@ -177,41 +182,43 @@ _HTML = r'''<!doctype html>
 <footer>One Piece · versioned JSON is the source of truth. SQLite index / HTML are rebuildable views. Imported document text is data, never agent instructions.</footer></main>
 <script type="application/json" id="data">__DATA__</script>
 <script>
-'use strict';const D=JSON.parse(document.getElementById('data').textContent),rs=D.records,$=s=>document.querySelector(s),esc=s=>String(s??'—').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),raw=v=>JSON.stringify(v,null,2),num=(v,n=3)=>typeof v==='number'?v.toLocaleString('ja-JP',{maximumFractionDigits:n}):'—',key=r=>r.id+'@'+r.revision,kinds=k=>rs.filter(r=>r.kind===k),byKey=new Map(rs.map(r=>[key(r),r])),byId=new Map(rs.map(r=>[r.id,r])),summary=kinds('campaign_summary').at(-1)?.data||{},counts=summary.overview?.counts||{},prior=new Set(summary.prior46?.ids||[]),sourceEvaluations=kinds('simulation_run'),newLoops=kinds('analysis_result').filter(r=>r.data.scenario==='balancing_cube'),legacyDesigns=kinds('design'),freshDesigns=kinds('design_candidate').map(normalizeDesign),designs=legacyDesigns.concat(freshDesigns),evals=kinds('evaluation').concat(sourceEvaluations.map(normalizeEvaluation)),reqs=kinds('requirement'),params=rs.filter(r=>['parameter','kdp','model_parameter'].includes(r.kind)),products=kinds('product'),snap=rs.find(r=>r.kind==='simulation_snapshot'&&Object.values(D.selected_snapshots).some(s=>r.id===s.id&&r.revision===s.revision)),labels={confirmed_numerical_pass:'数値確認合格',confirmed_numerical_fail:'数値確認不合格',inconclusive_numerical_agreement:'数値一致保留',exploration_failed_screening:'探索screen不合格',gpu_only_provisional_pass:'GPUのみ暫定',cpu_only_provisional_pass:'CPU暫定・screen合格',cpu_only_provisional_fail:'CPU暫定・screen不合格',new_gpu_confirmed_pass:'新規CPU/GPU確認合格',new_gpu_confirmed_fail:'新規CPU/GPU確認不合格'},origin=o=>o==='new_fixed_timestep_cpu'?'新規固定dt・CPUのみ暫定':o==='new_fixed_timestep_cpu_gpu'?'新規固定dt・CPU/GPU照合':o==='supplemental_native_cpu'?'追加CPU dt安定性（履歴）':o==='original_campaign'?'元GPU・CPU確認':o||'—';
-$('#integrity').textContent=D.integrity.ok?'記録・出典の整合性検査: PASS':'整合性検査: 要確認';$('#integrity').className+=' '+(D.integrity.ok?'good':'bad');$('#stats').innerHTML=[[legacyDesigns.length,'既存探索候補の記録'],[freshDesigns.length,'新しい反復の候補'],[counts.original_confirmed_pass,'元GPU・CPU確認合格'],[counts.supplemental_confirmed_pass,'追加CPU安定性合格（履歴）'],['null','実機忠実度・物理成功']].map(([v,l])=>`<div><strong>${esc(v)}</strong><span>${esc(l)}</span></div>`).join('');$('#prior').innerHTML=Object.entries(summary.prior46?.status_counts||{}).sort((a,b)=>['confirmed_numerical_pass','confirmed_numerical_fail','inconclusive_numerical_agreement'].indexOf(a[0])-['confirmed_numerical_pass','confirmed_numerical_fail','inconclusive_numerical_agreement'].indexOf(b[0])).map(([s,v])=>`<div><strong>${v}</strong><small>${esc(labels[s]||s)}</small></div>`).join('');const bestId=summary.best?.original_confirmed?.[0],best=byId.get(bestId);$('#best').innerHTML=best?`<strong class="mono">${esc(bestId)}</strong><p>${esc(best.data.family)} · 同じ固定制御器を適用</p><p>探索11/12・確認12/12。採用baselineは未確定。</p><button id="open-best">設計差分を確認</button>`:'<p>確認済み設計の参照を記録していません。</p>';$('#snapshot-raw').textContent=raw(snap?{id:snap.id,revision:snap.revision,data:snap.data}:{});$('#context-raw').textContent=raw(D.contexts);$('#checks').textContent=raw({integrity:D.integrity,limitations:summary.limitations,null_unmeasured:summary.null_unmeasured,historical_policy_note:summary.historical_policy_note});
-function normalizeDesign(r){let es=sourceEvaluations.filter(e=>e.data.candidate_ref?.id===r.id&&e.data.candidate_ref?.revision===r.revision),v=es.filter(e=>e.data.stage==='validation').at(-1),e=v||es.at(-1),d=r.data,p=d.proposal||{},gpu=e?.data.numeric_gpu_verified===true,pass=e?.data.all_screening_passed===true;return {...r,__source:r,data:{...d,family:p.family,parameters:p.parameters,physics:d.mechanical_config?.physics,actuation:d.mechanical_config?.actuation,hypothesis:p.hypothesis,parent_id:p.parent_id,status:gpu?(pass?'new_gpu_confirmed_pass':'new_gpu_confirmed_fail'):(pass?'cpu_only_provisional_pass':'cpu_only_provisional_fail'),validation_origin:gpu?'new_fixed_timestep_cpu_gpu':'new_fixed_timestep_cpu',history_only:false}}}
+'use strict';const D=JSON.parse(document.getElementById('data').textContent),rs=D.records,$=s=>document.querySelector(s),esc=s=>String(s??'—').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),raw=v=>JSON.stringify(v,null,2),num=(v,n=3)=>typeof v==='number'?v.toLocaleString('ja-JP',{maximumFractionDigits:n}):'—',key=(r,project=r.project_id)=>JSON.stringify([project,r.id,r.revision]),kinds=k=>rs.filter(r=>r.kind===k),byKey=new Map(rs.map(r=>[key(r),r])),idKey=(project,id)=>JSON.stringify([project,id]),byId=new Map(rs.map(r=>[idKey(r.project_id,r.id),r])),summaryRecord=kinds('campaign_summary').at(-1),summary=summaryRecord?.data||{},summaryProject=summaryRecord?.project_id||rs[0]?.project_id,counts=summary.overview?.counts||{},prior=new Set(summary.prior46?.ids||[]),sourceEvaluations=kinds('simulation_run'),newLoops=kinds('analysis_result').filter(r=>r.data.scenario==='balancing_cube'),legacyDesigns=kinds('design'),freshDesigns=kinds('design_candidate').map(normalizeDesign),designs=legacyDesigns.concat(freshDesigns),evals=kinds('evaluation').concat(sourceEvaluations.map(normalizeEvaluation)),reqs=kinds('requirement'),params=rs.filter(r=>['parameter','kdp','model_parameter'].includes(r.kind)),products=kinds('product'),snap=rs.find(r=>r.kind==='simulation_snapshot'&&r.id===D.selected_snapshots[r.project_id]?.id&&r.revision===D.selected_snapshots[r.project_id]?.revision),labels={confirmed_numerical_pass:'数値確認合格',confirmed_numerical_fail:'数値確認不合格',inconclusive_numerical_agreement:'数値一致保留',exploration_failed_screening:'探索screen不合格',gpu_only_provisional_pass:'GPUのみ暫定',cpu_only_provisional_pass:'CPU暫定・screen合格',cpu_only_provisional_fail:'CPU暫定・screen不合格',new_gpu_confirmed_pass:'新規CPU/GPU確認合格',new_gpu_confirmed_fail:'新規CPU/GPU確認不合格'},origin=o=>o==='new_fixed_timestep_cpu'?'新規固定dt・CPUのみ暫定':o==='new_fixed_timestep_cpu_gpu'?'新規固定dt・CPU/GPU照合':o==='supplemental_native_cpu'?'追加CPU dt安定性（履歴）':o==='original_campaign'?'元GPU・CPU確認':o||'—';
+$('#integrity').textContent=D.integrity.ok?'記録・出典の整合性検査: PASS':'整合性検査: 要確認';$('#integrity').className+=' '+(D.integrity.ok?'good':'bad');$('#stats').innerHTML=[[legacyDesigns.length,'既存探索候補の記録'],[freshDesigns.length,'新しい反復の候補'],[counts.original_confirmed_pass,'元GPU・CPU確認合格'],[counts.supplemental_confirmed_pass,'追加CPU安定性合格（履歴）'],['null','実機忠実度・物理成功']].map(([v,l])=>`<div><strong>${esc(v)}</strong><span>${esc(l)}</span></div>`).join('');$('#prior').innerHTML=Object.entries(summary.prior46?.status_counts||{}).sort((a,b)=>['confirmed_numerical_pass','confirmed_numerical_fail','inconclusive_numerical_agreement'].indexOf(a[0])-['confirmed_numerical_pass','confirmed_numerical_fail','inconclusive_numerical_agreement'].indexOf(b[0])).map(([s,v])=>`<div><strong>${v}</strong><small>${esc(labels[s]||s)}</small></div>`).join('');const bestId=summary.best?.original_confirmed?.[0],best=byId.get(idKey(summaryProject,bestId));$('#best').innerHTML=best?`<strong class="mono">${esc(bestId)}</strong><p>${esc(best.data.family)} · 同じ固定制御器を適用</p><p>探索11/12・確認12/12。採用baselineは未確定。</p><button id="open-best">設計差分を確認</button>`:'<p>確認済み設計の参照を記録していません。</p>';$('#snapshot-raw').textContent=raw(snap?{id:snap.id,revision:snap.revision,data:snap.data}:{});$('#context-raw').textContent=raw(D.contexts);$('#checks').textContent=raw({integrity:D.integrity,limitations:summary.limitations,null_unmeasured:summary.null_unmeasured,historical_policy_note:summary.historical_policy_note});
+function normalizeDesign(r){let es=sourceEvaluations.filter(e=>e.project_id===r.project_id&&e.data.candidate_ref?.id===r.id&&e.data.candidate_ref?.revision===r.revision),v=es.filter(e=>e.data.stage==='validation').at(-1),e=v||es.at(-1),d=r.data,p=d.proposal||{},gpu=e?.data.numeric_gpu_verified===true,pass=e?.data.all_screening_passed===true;return {...r,__source:r,data:{...d,family:p.family,parameters:p.parameters,physics:d.mechanical_config?.physics,actuation:d.mechanical_config?.actuation,hypothesis:p.hypothesis,parent_id:p.parent_id,status:gpu?(pass?'new_gpu_confirmed_pass':'new_gpu_confirmed_fail'):(pass?'cpu_only_provisional_pass':'cpu_only_provisional_fail'),validation_origin:gpu?'new_fixed_timestep_cpu_gpu':'new_fixed_timestep_cpu',history_only:false}}}
 function normalizeEvaluation(r){let d=r.data,n=d.trial_count||0;return {...r,__source:r,data:{...d,candidate_id:d.candidate_ref?.id||d.candidate_id,design_ref:d.candidate_ref,verification_origin:d.numeric_gpu_verified?'new_fixed_timestep_cpu_gpu':'new_fixed_timestep_cpu',summary:{score:d.score,trials:n,passed_trials:Math.round(n*(d.screening_pass_fraction||0)),all_pass:d.all_screening_passed,numeric_verified:d.numeric_gpu_verified,numeric_cpu_verified:d.numeric_cpu_verified,gpu_state:d.gpu_state,agreement_state:d.agreement_state,failures:d.failure_metrics||{}},coverage:{actual:n,expected:n,complete:d.numeric_cpu_verified===true},conditions:D.trial_views[key(r)]||[]}}}
 for(const r of [...freshDesigns,...evals])byKey.set(key(r),r);
-const evalFor=r=>evals.filter(e=>e.data.candidate_id===r.id&&(!e.data.design_ref||e.data.design_ref.revision===r.revision)),stageEval=(r,s)=>evalFor(r).filter(e=>e.data.stage===s).at(-1),options=designs.map(r=>`<option value="${esc(key(r))}">${esc(r.id)} · ${esc(r.revision)}</option>`).join('');['#graph-design','#compare-base','#compare-target'].forEach(s=>$(s).innerHTML=options);function setSelect(s,id){let r=byId.get(id);if(r)$(s).value=key(r)}setSelect('#graph-design',bestId);setSelect('#compare-base','baseline');setSelect('#compare-target',bestId);
+const evalFor=r=>evals.filter(e=>e.project_id===r.project_id&&e.data.candidate_id===r.id&&(!e.data.design_ref||e.data.design_ref.revision===r.revision)),stageEval=(r,s)=>evalFor(r).filter(e=>e.data.stage===s).at(-1),options=designs.map(r=>`<option value="${esc(key(r))}">${esc(r.id)} · ${esc(r.revision)}</option>`).join('');['#graph-design','#compare-base','#compare-target'].forEach(s=>$(s).innerHTML=options);function setSelect(s,id){let r=byId.get(idKey(summaryProject,id));if(r)$(s).value=key(r)}setSelect('#graph-design',bestId);setSelect('#compare-base','baseline');setSelect('#compare-target',bestId);
 const edgeInfo={derive:['#536f91','子要求 → 親要求 / 同kindの祖先'],satisfy:['#31826d','設計・製品 → 要求（意図）'],verify:['#a05b3d','検証根拠 → 要求・test case'],allocate:['#8a6da5','要求・KDP → 担当製品'],constrain:['#a99035','要求・仕様 → 設定・設計']},enabled=new Set(Object.keys(edgeInfo));$('#legend').innerHTML=Object.entries(edgeInfo).map(([type,[c,l]])=>`<label><input type="checkbox" data-edge="${type}" checked><i style="background:${c}"></i>${type} · ${esc(l)}</label>`).join('');$('#legend').onchange=e=>{e.target.checked?enabled.add(e.target.dataset.edge):enabled.delete(e.target.dataset.edge);drawGraph()};
 function graphLayout(columns){
-  const height=Math.max(550,80+34*Math.max(1,...columns.map(column=>column.length))),xs=[125,360,565,775,1045],positions=new Map();
+  const height=Math.max(550,80+34*Math.max(1,...columns.map(column=>column.length))),xs=[125,360,595,830,1065,1300],positions=new Map();
   columns.forEach((column,i)=>column.forEach((record,j)=>positions.set(key(record),[xs[i],40+(j+.5)*(height-80)/Math.max(1,column.length)])));
-  return {height,positions};
+  return {height,positions,width:1440};
 }
-const traceByKey=new Map([...(D.trace_records||[]),...rs].map(r=>[key(r),r])),historicalKeys=new Set((D.trace_records||[]).map(key));
+const traceByKey=new Map([...(D.trace_records||[]),...rs].map(r=>[key(r),r])),historicalKeys=new Set((D.trace_records||[]).map(r=>key(r)));
 function drawGraph(){
   const selected=byKey.get($('#graph-design').value),evidence=selected?evalFor(selected):[];
-  let nodes=[...reqs,...products,...(selected?[selected]:[]),...evidence,...kinds('test_case'),...kinds('verification_case'),...kinds('specification')];
+  let nodes=[...reqs,...kinds('function'),...products,...(selected?[selected]:[]),...evidence,...kinds('test_case'),...kinds('verification_case'),...kinds('specification')];
   if($('#graph-kdps').checked)nodes.push(...kinds('parameter').slice(0,17));
   const focus=$('#graph-focus').value;
   if(focus!=='all')nodes=nodes.filter(r=>r.product_node===focus||r.id==='M-VERTEX'||r.id==='cube.req.system'||r.id==='cube.system'||r===selected||evidence.includes(r));
-  const included=new Set(nodes.map(key));
+  const included=new Set(nodes.map(r=>key(r)));
   // An edge can reach its saved revision only. Never substitute the current ID.
   for(let i=0;i<nodes.length;i++)for(const edge of nodes[i].links){
-    const targetKey=key(edge.target),target=traceByKey.get(targetKey);
+    const targetKey=key(edge.target,nodes[i].project_id),target=traceByKey.get(targetKey);
     if(enabled.has(edge.type)&&historicalKeys.has(targetKey)&&!included.has(targetKey)&&target){nodes.push(target);included.add(targetKey)}
   }
-  const cols=[nodes.filter(r=>r.kind==='requirement'),nodes.filter(r=>r.kind==='parameter'),nodes.filter(r=>r.kind==='product'),nodes.filter(r=>['design','design_candidate'].includes(r.kind)),nodes.filter(r=>['evaluation','simulation_run','test_case','verification_case','specification'].includes(r.kind))],layout=graphLayout(cols),pos=layout.positions;
-  $('#graph').setAttribute('viewBox','0 0 1200 '+layout.height);
+  const cols=[nodes.filter(r=>r.kind==='requirement'),nodes.filter(r=>r.kind==='function'),nodes.filter(r=>r.kind==='parameter'),nodes.filter(r=>r.kind==='product'),nodes.filter(r=>['design','design_candidate'].includes(r.kind)),nodes.filter(r=>['evaluation','simulation_run','test_case','verification_case','specification'].includes(r.kind))],layout=graphLayout(cols),pos=layout.positions;
+  $('#graph').setAttribute('viewBox','0 0 '+layout.width+' '+layout.height);
+  $('#graph').style.minWidth=layout.width+'px';
+  $('#graph').setAttribute('width',layout.width);
   $('#graph').setAttribute('height',layout.height);
   let h='<defs>'+Object.entries(edgeInfo).map(([t,[c]])=>`<marker id="arrow-${t}" markerWidth="7" markerHeight="7" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6" fill="none" stroke="${c}"/></marker>`).join('')+'</defs>',omitted=[];
   for(const r of nodes)for(const edge of r.links){
     if(!enabled.has(edge.type))continue;
-    const a=pos.get(key(r)),b=pos.get(key(edge.target));
-    if(!a||!b){omitted.push(key(r)+' —'+edge.type+'→ '+key(edge.target));continue}
+    const a=pos.get(key(r)),b=pos.get(key(edge.target,r.project_id));
+    if(!a||!b){omitted.push(key(r)+' —'+edge.type+'→ '+key(edge.target,r.project_id));continue}
     const c=edgeInfo[edge.type][0];
-    h+=`<path d="M${a[0]},${a[1]} C${(a[0]+b[0])/2},${a[1]} ${(a[0]+b[0])/2},${b[1]} ${b[0]},${b[1]}" fill="none" stroke="${c}" stroke-width="1" opacity=".35" marker-end="url(#arrow-${edge.type})"><title>${esc(key(r)+' —'+edge.type+'→ '+key(edge.target))}</title></path>`;
+    h+=`<path d="M${a[0]},${a[1]} C${(a[0]+b[0])/2},${a[1]} ${(a[0]+b[0])/2},${b[1]} ${b[0]},${b[1]}" fill="none" stroke="${c}" stroke-width="1" opacity=".35" marker-end="url(#arrow-${edge.type})"><title>${esc(key(r)+' —'+edge.type+'→ '+key(edge.target,r.project_id))}</title></path>`;
   }
   for(const r of nodes){
     const [x,y]=pos.get(key(r)),historical=historicalKeys.has(key(r)),ja=r.data.translations?.ja;
@@ -233,7 +240,7 @@ function requirementLanguages(r){
 }
 $('#reqrows').innerHTML=reqs.map(r=>{const v=reqView(r),ja=v.japanese||{};return `<tr data-key="${esc(key(r))}"><td class="mono">${esc(r.id)}<br><small>@${esc(r.revision)} · ${esc(r.data.level)}${v.is_group?' · 要求グループ':''}</small></td><td><span lang="en">${esc(r.data.name)}<br>${esc(r.data.statement||'')}</span><br><small lang="ja">${esc(ja.name||'日本語訳は未記録')}<br>${esc(ja.statement||'')}</small></td><td>${esc(r.data.value)} ${esc(r.data.unit)}</td><td>要求文: ${esc(v.statement_status)}<br>元出典の状態: ${esc(v.source_status)}<br>検証: ${esc(v.verification_status)}<br>実機検証: ${r.data.physical_verified===true?'実証済み':'未実施・未判定'}${r.data.hardware_verification_required?'<br>実機で示す項目（合格フラグではない）':''}${v.is_group?'<br>階層用グループ（規範的な要求ではない）':''}</td></tr>`}).join('');
 function reqDetail(r){
-  const v=reqView(r),en=v.english||r.data,ja=v.japanese||{},linkedRefs=new Set((v.evidence_refs||[]).map(key)),linked=rs.filter(e=>linkedRefs.has(key(e))),byOrigin={};
+  const v=reqView(r),en=v.english||r.data,ja=v.japanese||{},linkedRefs=new Set((v.evidence_refs||[]).map(ref=>key(ref,r.project_id))),linked=rs.filter(e=>linkedRefs.has(key(e))),byOrigin={};
   linked.forEach(e=>{const o=e.data.verification_origin||e.kind;byOrigin[o]=(byOrigin[o]||0)+1});
   $('#reqdetail').innerHTML=requirementLanguages(r)+`<p>${esc(r.data.value)} ${esc(r.data.unit)} · 要求文の状態: ${esc(v.statement_status)}（検証結果ではない）<br>元出典の状態: ${esc(v.source_status)}（旧版の由来。改訂版の承認ではない）</p><p>計画した検証方法: ${esc(methodLabel(v.verification_method))}<br>現在版の検証状態: ${esc(v.verification_status)}<br>実機検証: ${r.data.physical_verified===true?'実証済み':'未実施・未判定'}${r.data.hardware_verification_required?' · 実機で示す項目（合格フラグではない）':''}</p><p class="note">${v.is_group?'この記録は要求を整理するグループです。実行可能な合否条件を持つ要求とは区別します。':r.data.status==='draft'?'改訂要求は草案です。人間の承認と、現在版に対する検証は未完了です。':'要求文の状態と検証結果は別に管理します。数値試験リンクは物理合格を意味しません。'}</p>`+
   [['rationale','根拠 / Rationale'],['conditions','試験条件 / Conditions'],['acceptance_criteria','合格条件 / Acceptance criteria'],['unresolved_items','未解決事項 / Open items']].map(([field,label])=>`<details ${['acceptance_criteria','unresolved_items'].includes(field)?'open':''}><summary>${label}</summary><div lang="en"><small>EN · source</small>${structured(en[field])}</div><div lang="ja"><small>日本語訳</small>${structured(ja[field])}</div></details>`).join('')+
