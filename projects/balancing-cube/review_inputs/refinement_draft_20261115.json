@@ -1,0 +1,674 @@
+{
+  "id": "cube.model-refinement.proposal",
+  "revision": "refinement-draft-20261115-1",
+  "status": "draft",
+  "created_date_jst": "2026-11-15",
+  "scope": "Eight-corner mission wording, existing requirement duplication, existing KDP reference granularity, and current compiler optimization units.",
+  "source_model": {
+    "id": "cube.system-model.active",
+    "revision": "reviewed-20261019-1",
+    "sha256": "c1a4c415c28def80c9548b38e59ef581f515d7416e9bbf2636d7403ad75823f9"
+  },
+  "source_snapshot": {
+    "id": "cube.simulation.snapshot",
+    "revision": "reviewed-20261019-1",
+    "sha256": "2215109a99822e1a3ba9e77d19e414fd7078bfc5818379a45cf27ca8e928d30d"
+  },
+  "source_baseline": {
+    "id": "cube.baseline.requirements-allocation",
+    "revision": "reviewed-20261019-1",
+    "sha256": "2678e694be673de4ab2ce35eecfddc02942287f2ab57916d750801e99cddd54f"
+  },
+  "compiler_source": {
+    "repository": "engineering_agents",
+    "commit": "3ec66b128431f0c11d7c19e4f09eabde12ec6624",
+    "path": "src/scenario/balancing_cube/design.py",
+    "sha256": "6578d4c763d52d54144ecb7d2d0906c68fed3c1676345459d17d42c9d9a1e973"
+  },
+  "human_direction": {
+    "mission_scope": "required",
+    "statement_ja": "このミッションを８頂点を要求したのは後からだからでした。これはこのEngineeringAgentsをやる上で重要な見える動きに直結するため追加必須です。",
+    "meaning": "Eight-corner mission intent is required. The complete refinement draft has not been reviewed or baselined."
+  },
+  "mission_change": {
+    "requirement_ref": {
+      "id": "M-VERTEX",
+      "revision": "reviewed-20261019-1"
+    },
+    "source_wording_ref": {
+      "id": "M-VERTEX",
+      "revision": "bottom-corner-000-20261017-3"
+    },
+    "statement_before": "The Cube shall hold its vertex position with 3 reaction wheels in the physical test environment.",
+    "statement_after": "The Cube shall balance on each of its 8 corners with its 3 reaction wheels.",
+    "statement_after_ja": "Cubeは、3個のリアクションホイールを用いて8頂点のそれぞれで倒立保持しなければならない。",
+    "acceptance_criteria_before": {
+      "domain": "hardware",
+      "metric": "vertex_hold_demonstrated",
+      "operator": "==",
+      "unit": "1",
+      "value": true
+    },
+    "acceptance_criteria_after": {
+      "domain": "hardware",
+      "metric": "distinct_corners_demonstrated",
+      "operator": "==",
+      "unit": "count",
+      "value": 8
+    },
+    "affected_verification_case_ref": {
+      "id": "cube.verify.M-VERTEX",
+      "revision": "reviewed-20261019-1"
+    },
+    "verification_case_acceptance_after": {
+      "domain": "hardware",
+      "metric": "distinct_corners_demonstrated",
+      "operator": "==",
+      "unit": "count",
+      "value": 8
+    },
+    "verification_execution_status": "not_run",
+    "evidence_refs": []
+  },
+  "first_trial_scope": {
+    "snapshot_ref": {
+      "id": "cube.simulation.snapshot",
+      "revision": "bottom-corner-000-20261017-3"
+    },
+    "support_corner": "000",
+    "implemented_support_corner_count": 1,
+    "mission_corner_count": 8,
+    "trial_requirement_refs": [
+      {
+        "id": "R-FIRST-CORNER",
+        "revision": "bottom-corner-000-20261017-3"
+      },
+      {
+        "id": "R-WHEEL-MOUNT-000",
+        "revision": "bottom-corner-000-20261017-3"
+      }
+    ],
+    "mount_parameter_ref": {
+      "id": "D-WHEEL-MOUNT-SIDE",
+      "revision": "bottom-corner-000-20261017-3"
+    },
+    "classification": "Development-trial configuration; not additional mission pass/fail credit.",
+    "other_corners_implemented_by_this_proposal": false
+  },
+  "parameter_reference_changes": [
+    {
+      "parameter_ref": {
+        "id": "D-SIDE",
+        "revision": "reviewed-20261019-1"
+      },
+      "parameter_sha256": "b923fe9514b821272c08197d8dc54a0480dbc0b63c5c72b2abd9c91b8b81ed92",
+      "requirement_refs_before": [
+        {
+          "id": "C-FIT",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "R-HOLD",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "requirement_refs_after": [
+        {
+          "id": "C-FIT-INSTALL",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "C-FIT-PRINT",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "R-HOLD",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "basis": "Invert the existing requirement-to-parameter constrain links; add no new relationship."
+    },
+    {
+      "parameter_ref": {
+        "id": "D-SPEED-LIMIT",
+        "revision": "reviewed-20261019-1"
+      },
+      "parameter_sha256": "1c49705171cbfcda098e312c5beb53cbc00061ec79e58247ec7d0f6bf7b914a9",
+      "requirement_refs_before": [
+        {
+          "id": "R-DRIVE",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "requirement_refs_after": [
+        {
+          "id": "R-DRIVE-SPEED",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "basis": "Invert the existing requirement-to-parameter constrain links; add no new relationship."
+    },
+    {
+      "parameter_ref": {
+        "id": "D-WHEEL-RADIUS",
+        "revision": "reviewed-20261019-1"
+      },
+      "parameter_sha256": "6069380430369fe62b8de0b80b1389d7c4cfa725580f3e055c4607f38770ae03",
+      "requirement_refs_before": [
+        {
+          "id": "C-FIT",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "R-DRIVE",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "requirement_refs_after": [
+        {
+          "id": "C-FIT-INSTALL",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "R-DRIVE-SPEED",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "basis": "Invert the existing requirement-to-parameter constrain links; add no new relationship."
+    },
+    {
+      "parameter_ref": {
+        "id": "I-BUS-I",
+        "revision": "reviewed-20261019-1"
+      },
+      "parameter_sha256": "997fe41d8a14596712decc3f10847ff0e3f79288451f351526bebefe3b044281",
+      "requirement_refs_before": [
+        {
+          "id": "R-DRIVE",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "requirement_refs_after": [
+        {
+          "id": "R-DRIVE-CURRENT",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "basis": "Invert the existing requirement-to-parameter constrain links; add no new relationship."
+    },
+    {
+      "parameter_ref": {
+        "id": "I-BUS-V",
+        "revision": "reviewed-20261019-1"
+      },
+      "parameter_sha256": "3b3344f88f622bdbadc8efe2d0be8e54b8e6d9084fbfcd61ce3eb3126b255853",
+      "requirement_refs_before": [
+        {
+          "id": "R-DRIVE",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "requirement_refs_after": [
+        {
+          "id": "R-DRIVE-VOLTAGE",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "basis": "Invert the existing requirement-to-parameter constrain links; add no new relationship."
+    },
+    {
+      "parameter_ref": {
+        "id": "I-DRIVE-TEMP",
+        "revision": "reviewed-20261019-1"
+      },
+      "parameter_sha256": "8da411b176409cbfef88f4d74b98df1150893f30bc3e552e3e9ec61bd56ee03a",
+      "requirement_refs_before": [
+        {
+          "id": "R-DRIVE",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "requirement_refs_after": [
+        {
+          "id": "R-DRIVE-TEMP",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "basis": "Invert the existing requirement-to-parameter constrain links; add no new relationship."
+    },
+    {
+      "parameter_ref": {
+        "id": "I-NOLOAD-SPEED",
+        "revision": "reviewed-20261019-1"
+      },
+      "parameter_sha256": "df78f43207740706e474e0de7b24ec89a6fd19907dc8f612f4b7644d75c5147f",
+      "requirement_refs_before": [
+        {
+          "id": "R-DRIVE",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "requirement_refs_after": [
+        {
+          "id": "R-DRIVE-TORQUE",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "basis": "Invert the existing requirement-to-parameter constrain links; add no new relationship."
+    },
+    {
+      "parameter_ref": {
+        "id": "I-PEAK-TORQUE",
+        "revision": "reviewed-20261019-1"
+      },
+      "parameter_sha256": "9ad11598ec0eb11c0371fdd748174f8af1e2864cb60d23c941fe26c8364fcc26",
+      "requirement_refs_before": [
+        {
+          "id": "R-DRIVE",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "R-HOLD",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "requirement_refs_after": [
+        {
+          "id": "R-DRIVE-TORQUE",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "R-HOLD",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "basis": "Invert the existing requirement-to-parameter constrain links; add no new relationship."
+    },
+    {
+      "parameter_ref": {
+        "id": "I-PRINT-MATERIAL",
+        "revision": "reviewed-20261019-1"
+      },
+      "parameter_sha256": "e73c0bdfb863d0c49de4590c84002907d90da63a372fbcbec503a20b2cfd9e7e",
+      "requirement_refs_before": [
+        {
+          "id": "C-FIT",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "C-PRINT",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "requirement_refs_after": [
+        {
+          "id": "C-FIT-MATERIAL",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "C-PRINT",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "basis": "Invert the existing requirement-to-parameter constrain links; add no new relationship."
+    },
+    {
+      "parameter_ref": {
+        "id": "I-PRINT-X",
+        "revision": "reviewed-20261019-1"
+      },
+      "parameter_sha256": "d88053990cc9c2b26ad60789dea2522a06111e469ff38e6c559e31e21eea8165",
+      "requirement_refs_before": [
+        {
+          "id": "C-FIT",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "requirement_refs_after": [
+        {
+          "id": "C-FIT-PRINT",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "basis": "Invert the existing requirement-to-parameter constrain links; add no new relationship."
+    },
+    {
+      "parameter_ref": {
+        "id": "I-PRINT-Y",
+        "revision": "reviewed-20261019-1"
+      },
+      "parameter_sha256": "9270b8c31c5652028728950b29094af94979bdf04cf811fead7b7bac4483698a",
+      "requirement_refs_before": [
+        {
+          "id": "C-FIT",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "requirement_refs_after": [
+        {
+          "id": "C-FIT-PRINT",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "basis": "Invert the existing requirement-to-parameter constrain links; add no new relationship."
+    },
+    {
+      "parameter_ref": {
+        "id": "I-PRINT-Z",
+        "revision": "reviewed-20261019-1"
+      },
+      "parameter_sha256": "df16abbb4429b55cd005aa641845cfee9f8f094d26387a5f2eb406d6ddd74695",
+      "requirement_refs_before": [
+        {
+          "id": "C-FIT",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "requirement_refs_after": [
+        {
+          "id": "C-FIT-PRINT",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "basis": "Invert the existing requirement-to-parameter constrain links; add no new relationship."
+    },
+    {
+      "parameter_ref": {
+        "id": "I-TORQUE-KT",
+        "revision": "reviewed-20261019-1"
+      },
+      "parameter_sha256": "7989b6e2dfcb8e2ea478a65d4af3f69f6a8152df0f11d03106809aead15a07af",
+      "requirement_refs_before": [
+        {
+          "id": "R-DRIVE",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "requirement_refs_after": [
+        {
+          "id": "R-DRIVE-TORQUE",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "basis": "Invert the existing requirement-to-parameter constrain links; add no new relationship."
+    },
+    {
+      "parameter_ref": {
+        "id": "I-TORQUE-THRESHOLD",
+        "revision": "reviewed-20261019-1"
+      },
+      "parameter_sha256": "2bea384f867318d152ca850cbe791e6d84b8329c43ba15e4ad51b510d938786f",
+      "requirement_refs_before": [
+        {
+          "id": "R-DRIVE",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "requirement_refs_after": [
+        {
+          "id": "R-DRIVE-TORQUE",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "basis": "Invert the existing requirement-to-parameter constrain links; add no new relationship."
+    }
+  ],
+  "requirement_duplicate_review": {
+    "requirement_ref": {
+      "id": "C-PRINT",
+      "revision": "reviewed-20261019-1"
+    },
+    "acceptance_alias_ref": {
+      "id": "C-FIT-PRINT",
+      "revision": "reviewed-20261019-1"
+    },
+    "related_material_requirement_ref": {
+      "id": "C-FIT-MATERIAL",
+      "revision": "reviewed-20261019-1"
+    },
+    "finding": "C-PRINT acceptance currently delegates to C-FIT-PRINT. The broader manufacture wording may carry intent beyond the delegated size check.",
+    "proposed_disposition": "Candidate for consolidation. Do not count the same acceptance test twice; do not retire the broader wording before resolving its retained meaning.",
+    "requirement_retirement_applied": false
+  },
+  "optimization_unit_definition": "One independent permitted proposal input plus all mechanically derived model changes. A derived model quantity is not an additional independent search variable.",
+  "mechanical_optimization_units": [
+    {
+      "proposal_path": "parameters.side_m",
+      "direct_equivalent_kdp_refs": [
+        {
+          "id": "D-SIDE",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "affected_kdp_refs": [
+        {
+          "id": "D-SIDE",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "D-WHEEL-RADIUS",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "I-FRAME-MASS",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "I-INERTIA-X",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "I-INERTIA-Y",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "I-INERTIA-Z",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "I-WHEEL-J",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "I-WHEEL-JT",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "derived_model_paths": [
+        "physics.cube_side_m",
+        "physics.wheel_radius_m",
+        "physics.frame_mass_kg",
+        "physics.frame_inertia_kg_m2",
+        "physics.wheel_axial_inertia_kg_m2",
+        "physics.wheel_transverse_inertia_kg_m2"
+      ],
+      "compiler_bounds": [
+        0.14,
+        0.22
+      ]
+    },
+    {
+      "proposal_path": "parameters.print_mass_ref_kg",
+      "direct_equivalent_kdp_refs": [],
+      "affected_kdp_refs": [
+        {
+          "id": "I-FRAME-MASS",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "I-INERTIA-X",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "I-INERTIA-Y",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "I-INERTIA-Z",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "derived_model_paths": [
+        "physics.frame_mass_kg",
+        "physics.frame_inertia_kg_m2"
+      ],
+      "compiler_bounds": [
+        0.08,
+        0.25
+      ]
+    },
+    {
+      "proposal_path": "parameters.wheel_mass_kg",
+      "direct_equivalent_kdp_refs": [],
+      "affected_kdp_refs": [
+        {
+          "id": "D-WHEEL-MASS",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "I-WHEEL-J",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "I-WHEEL-JT",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "derived_model_paths": [
+        "physics.wheel_mass_kg",
+        "physics.wheel_axial_inertia_kg_m2",
+        "physics.wheel_transverse_inertia_kg_m2"
+      ],
+      "compiler_bounds": [
+        0.035,
+        0.09
+      ]
+    },
+    {
+      "proposal_path": "parameters.wheel_radius_ratio",
+      "direct_equivalent_kdp_refs": [],
+      "affected_kdp_refs": [
+        {
+          "id": "D-WHEEL-RADIUS",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "I-WHEEL-J",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "I-WHEEL-JT",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "derived_model_paths": [
+        "physics.wheel_radius_m",
+        "physics.wheel_axial_inertia_kg_m2",
+        "physics.wheel_transverse_inertia_kg_m2"
+      ],
+      "compiler_bounds": [
+        0.23,
+        0.4
+      ]
+    },
+    {
+      "proposal_path": "parameters.inner_radius_ratio",
+      "direct_equivalent_kdp_refs": [],
+      "affected_kdp_refs": [
+        {
+          "id": "I-WHEEL-J",
+          "revision": "reviewed-20261019-1"
+        },
+        {
+          "id": "I-WHEEL-JT",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "derived_model_paths": [
+        "physics.wheel_axial_inertia_kg_m2",
+        "physics.wheel_transverse_inertia_kg_m2"
+      ],
+      "compiler_bounds": [
+        0.65,
+        0.92
+      ]
+    },
+    {
+      "proposal_path": "parameters.wheel_thickness_m",
+      "direct_equivalent_kdp_refs": [],
+      "affected_kdp_refs": [
+        {
+          "id": "I-WHEEL-JT",
+          "revision": "reviewed-20261019-1"
+        }
+      ],
+      "derived_model_paths": [
+        "physics.wheel_thickness_m",
+        "physics.wheel_transverse_inertia_kg_m2"
+      ],
+      "compiler_bounds": [
+        0.004,
+        0.01
+      ]
+    }
+  ],
+  "unit_caveats": [
+    "All six mechanical fields are required in a proposal; one-coordinate experiments retain the other five values.",
+    "Proposal wheel_mass_kg excludes the motor rotor mass. Compiled D-WHEEL-MASS includes it.",
+    "Effective wheel radius equals side_m multiplied by wheel_radius_ratio; do not search both as independent coordinates.",
+    "With wheel mass and radius fixed, thickness changes transverse inertia but not axial inertia in the current compiler.",
+    "Motor family is an existing discrete component-package choice; its assumed mass and drive properties are not independently adjustable identification parameters.",
+    "Four optional controller inputs exist: tilt_q_scale, rate_q_scale, momentum_q_scale, yaw_rate_gain_nm_s. They have no dedicated KDP IDs in the selected 37-record registry; this draft adds none.",
+    "The six compiler inputs are an implementation inventory, not a decision to optimize all six."
+  ],
+  "design_role_review": [
+    {
+      "parameter_ref": {
+        "id": "D-BUDGET",
+        "revision": "reviewed-20261019-1"
+      },
+      "disposition": "Human-defined acceptance limit; exclude from performance optimization."
+    },
+    {
+      "parameter_ref": {
+        "id": "D-SPEED-LIMIT",
+        "revision": "reviewed-20261019-1"
+      },
+      "disposition": "Assembly limit to substantiate and obey; do not increase the limit to improve a score."
+    },
+    {
+      "parameter_ref": {
+        "id": "D-CORNER-R",
+        "revision": "reviewed-20261019-1"
+      },
+      "disposition": "Design-role parameter outside the current mechanical compiler proposal allowlist; do not expand scope automatically."
+    }
+  ],
+  "remaining_trace_review": [
+    {
+      "requirement_ref": {
+        "id": "R-TILT",
+        "revision": "reviewed-20261019-1"
+      },
+      "finding": "Allocated to balance control, with no direct parameter constrain links in the selected model. Review existing model dependencies without inventing a causal ranking or adding measurements."
+    },
+    {
+      "requirement_ref": {
+        "id": "R-RMS",
+        "revision": "reviewed-20261019-1"
+      },
+      "finding": "Allocated to balance control, with no direct parameter constrain links in the selected model. Review existing model dependencies without inventing a causal ranking or adding measurements."
+    }
+  ],
+  "change_limits": {
+    "new_requirement_ids": [],
+    "new_parameter_ids": [],
+    "new_measurements": [],
+    "new_robustness_objectives": [],
+    "new_recovery_objectives": [],
+    "score_change_applied": false,
+    "canonical_import_applied": false,
+    "active_model_changed": false,
+    "historical_evidence_relabelled": false
+  }
+}

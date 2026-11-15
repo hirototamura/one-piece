@@ -344,6 +344,10 @@ h1 em { color: #b47b3d; font-weight: 500; }
 .graph-inspector-description { margin: 7px 0 11px; color: #4e6276; font: 11px/1.65 var(--display); }
 .graph-inspector-description p { margin: 0 0 7px; overflow-wrap: anywhere; }
 .graph-inspector-description.is-empty { color: #8c98a3; font-size: 9px; }
+.graph-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.graph-object-control { display: grid; gap: 6px; margin: 12px 0; color: #687d8c; font: 10px var(--mono); }
+.graph-object-control select { max-width: 100%; padding: 9px; border: 1px solid #dce2e4; border-radius: 3px; background: #fff; color: #34465a; font: inherit; }
+.kdp-graph-link { padding: 7px 0; color: #587a72; border: 0; background: transparent; text-align: left; cursor: pointer; font: 10px/1.5 var(--mono); text-decoration: underline; text-underline-offset: 3px; }
 .design-coverage { margin-bottom: 14px; padding: 15px; border: 1px solid #cddae3; border-radius: 5px; background: #f5f8fb; }
 .design-coverage h3 { margin: 5px 0; color: #344c64; font: 600 15px var(--display); }
 .design-coverage p { color: #667b8f; font-size: 10px; line-height: 1.6; }

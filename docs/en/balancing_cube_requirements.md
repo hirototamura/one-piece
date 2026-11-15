@@ -1,24 +1,20 @@
-# Balancing Cube reviewed requirements
+# Balancing Cube requirements
 
-`reviewed-20261019-1` · human review: 2026-10-19 · reviewer: hirototamura
+`refined-20261115-1` · human direction: 2026-11-15 · baseline: `cube.baseline.model-refinement@refined-20261115-1`
 
-The human accepted the requirement wording and the function/component allocation split. Verification results, unresolved items and historical evidence retain their separate states.
+The eight-corner mission and atomic KDP references extend the reviewed allocation model. Verification remains separate.
 
-Canonical baseline: `cube.baseline.requirements-allocation@reviewed-20261019-1`.
-
-There are 22 obligations and 7 organizational groups. Open numerical limits and verification procedures remain open; review is not a hardware pass.
-
-Regenerate: `python projects/balancing-cube/review_requirements.py --write-docs`.
+Regenerate: `python projects/balancing-cube/refine_model.py --write-docs`.
 
 ## C-BUDGET: First prototype cost
 
-`C-BUDGET@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`C-BUDGET@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 The cost of the first Cube prototype shall be no more than the approved budget.
 
 The prototype needs an explicit cost limit.
 
-Acceptance / 合否基準: {"limit_ref": {"id": "D-BUDGET", "revision": "reviewed-20261019-1"}, "metric": "prototype_cost", "operator": "<=", "unit": "JPY"}
+Acceptance / 合否基準: {"limit_ref": {"id": "D-BUDGET", "revision": "refined-20261115-1"}, "metric": "prototype_cost", "operator": "<=", "unit": "JPY"}
 
 Allocation: cube.system
 
@@ -27,13 +23,13 @@ Open items / 未解決事項:
 
 ## C-FIT: Manufacturing and installation requirement set
 
-`C-FIT@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`C-FIT@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 This node groups requirements. It is not a separate test obligation.
 
 ## C-FIT-INSTALL: Installed component dimensions
 
-`C-FIT-INSTALL@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`C-FIT-INSTALL@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 Each installed component shall have dimensions no more than the specified dimensions of its space in the Cube housing.
 
@@ -48,7 +44,7 @@ Open items / 未解決事項:
 
 ## C-FIT-MATERIAL: Print material selection
 
-`C-FIT-MATERIAL@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`C-FIT-MATERIAL@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 The Cube housing shall use a print material from the approved material list for the specified 3D printer.
 
@@ -63,7 +59,7 @@ Open items / 未解決事項:
 
 ## C-FIT-PRINT: Printed part dimensions
 
-`C-FIT-PRINT@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`C-FIT-PRINT@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 Each printed housing part shall have dimensions no more than the specified build limits of the 3D printer.
 
@@ -78,7 +74,7 @@ Open items / 未解決事項:
 
 ## C-JAPAN: Component supply to Japan
 
-`C-JAPAN@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`C-JAPAN@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 The Cube shall use components that suppliers can supply to Japan.
 
@@ -93,13 +89,13 @@ Open items / 未解決事項:
 
 ## C-PRINT: Housing manufacture
 
-`C-PRINT@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`C-PRINT@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 The Cube housing shall be a part that the specified 3D printer can make.
 
 The user intends to use a friend's 3D printer.
 
-Acceptance / 合否基準: {"metric": "housing_manufacturable", "operator": "==", "requirement_ref": {"id": "C-FIT-PRINT", "revision": "reviewed-20261019-1"}, "unit": "1", "value": true}
+Acceptance / 合否基準: {"metric": "housing_manufacturable", "operator": "==", "requirement_ref": {"id": "C-FIT-PRINT", "revision": "refined-20261115-1"}, "unit": "1", "value": true}
 
 Allocation: cube.component.frame-housing
 
@@ -108,13 +104,13 @@ Open items / 未解決事項:
 
 ## M-VERTEX: Vertex hold mission
 
-`M-VERTEX@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`M-VERTEX@refined-20261115-1` · reviewed · human_reviewed · not_run
 
-The Cube shall hold its vertex position with 3 reaction wheels in the physical test environment.
+The Cube shall balance on each of its 8 corners with its 3 reaction wheels.
 
 This mission requires a physical demonstration of the Cube concept.
 
-Acceptance / 合否基準: {"domain": "hardware", "metric": "vertex_hold_demonstrated", "operator": "==", "unit": "1", "value": true}
+Acceptance / 合否基準: {"domain": "hardware", "metric": "distinct_corners_demonstrated", "operator": "==", "unit": "count", "value": 8}
 
 Allocation: cube.system
 
@@ -123,7 +119,7 @@ Open items / 未解決事項:
 
 ## R-DRIFT: Contact point movement
 
-`R-DRIFT@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-DRIFT@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 During the hold interval, the Cube contact point shall move no more than 2 mm from its initial position.
 
@@ -138,13 +134,13 @@ Open items / 未解決事項:
 
 ## R-DRIVE: Drive limit requirement set
 
-`R-DRIVE@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-DRIVE@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 This node groups requirements. It is not a separate test obligation.
 
 ## R-DRIVE-CURRENT: Bus current limits
 
-`R-DRIVE-CURRENT@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-DRIVE-CURRENT@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 The drive system shall keep the bus current between the approved minimum and maximum limits of the bus circuit.
 
@@ -160,7 +156,7 @@ Open items / 未解決事項:
 
 ## R-DRIVE-SPEED: Wheel speed limits
 
-`R-DRIVE-SPEED@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-DRIVE-SPEED@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 Each reaction wheel shall have a speed magnitude no more than the approved limit for its assembly.
 
@@ -175,7 +171,7 @@ Open items / 未解決事項:
 
 ## R-DRIVE-TEMP: Component temperature limits
 
-`R-DRIVE-TEMP@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-DRIVE-TEMP@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 Each motor and driver shall have a temperature between its approved minimum and maximum limits.
 
@@ -190,7 +186,7 @@ Open items / 未解決事項:
 
 ## R-DRIVE-TORQUE: Motor torque limits
 
-`R-DRIVE-TORQUE@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-DRIVE-TORQUE@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 At each measured speed, each motor shall have torque between its approved minimum and maximum limits.
 
@@ -205,7 +201,7 @@ Open items / 未解決事項:
 
 ## R-DRIVE-VOLTAGE: Bus voltage limits
 
-`R-DRIVE-VOLTAGE@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-DRIVE-VOLTAGE@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 The drive system shall keep the bus voltage between the approved minimum and maximum limits of each connected component.
 
@@ -220,7 +216,7 @@ Open items / 未解決事項:
 
 ## R-HOLD: Hold after manual release
 
-`R-HOLD@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-HOLD@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 After manual placement and release, the Cube shall hold its vertex position for at least 30 s without external support.
 
@@ -235,7 +231,7 @@ Open items / 未解決事項:
 
 ## R-MODEL: Independent model comparison
 
-`R-MODEL@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-MODEL@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 The verification platform shall compare model results with independent physical measurements under the same test conditions.
 
@@ -250,7 +246,7 @@ Open items / 未解決事項:
 
 ## R-REPEAT: Repeated hold tests
 
-`R-REPEAT@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-REPEAT@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 Under fixed test conditions, the Cube shall pass the hold test in at least 9 of 10 trials.
 
@@ -266,7 +262,7 @@ Open items / 未解決事項:
 
 ## R-RMS: Tilt angle RMS
 
-`R-RMS@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-RMS@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 During the hold interval, the Cube shall have a tilt angle RMS no more than 2 deg.
 
@@ -281,7 +277,7 @@ Open items / 未解決事項:
 
 ## R-SYNC: Video and MCU time relation
 
-`R-SYNC@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-SYNC@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 The verification platform shall calculate the time relation between video and MCU timestamps with a time uncertainty no more than 0.005 s.
 
@@ -296,7 +292,7 @@ Open items / 未解決事項:
 
 ## R-TILT: Maximum tilt angle
 
-`R-TILT@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-TILT@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 During the hold interval, the Cube shall keep its tilt angle no more than 5 deg.
 
@@ -311,7 +307,7 @@ Open items / 未解決事項:
 
 ## R-TRACE: Exact run references
 
-`R-TRACE@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-TRACE@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 The verification platform shall identify the exact revisions of requirements, KDPs, designs, conditions, and results for each run.
 
@@ -323,7 +319,7 @@ Allocation: cube.function.capture-synchronize, cube.function.evaluate-trace
 
 ## R-VISION: Independent attitude measurement
 
-`R-VISION@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-VISION@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 The independent attitude measurement system shall have an angular standard uncertainty of no more than 0.5 deg.
 
@@ -338,7 +334,7 @@ Open items / 未解決事項:
 
 ## R-YAW: Yaw rate monitoring
 
-`R-YAW@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-YAW@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 During the hold interval, the control system shall monitor the yaw rate RMS.
 
@@ -353,30 +349,30 @@ Open items / 未解決事項:
 
 ## cube.req.gnc: Control requirement set
 
-`cube.req.gnc@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`cube.req.gnc@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 This node groups requirements. It is not a separate test obligation.
 
 ## cube.req.mechanical: Mechanical requirement set
 
-`cube.req.mechanical@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`cube.req.mechanical@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 This node groups requirements. It is not a separate test obligation.
 
 ## cube.req.operation: Operational requirement set
 
-`cube.req.operation@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`cube.req.operation@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 This node groups requirements. It is not a separate test obligation.
 
 ## cube.req.system: System requirement set
 
-`cube.req.system@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`cube.req.system@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 This node groups requirements. It is not a separate test obligation.
 
 ## cube.req.verification: Verification platform requirement set
 
-`cube.req.verification@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`cube.req.verification@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 This node groups requirements. It is not a separate test obligation.

@@ -353,7 +353,10 @@ function graphEdges() {
   data.requirements.forEach((item) => {
     if (item.verification_case_ref?.id) add(item.verification_case_ref.id, item.id, "verify", item.verification_case_ref.revision, item.revision);
   });
-  (data.kdps || []).forEach((parameter) => (parameter.requirements || []).forEach((requirementId) => add(requirementId, parameter.id, "constrain", "", parameter.revision)));
+  (data.kdps || []).forEach((parameter) => (parameter.requirement_refs || []).forEach((reference) => {
+    const target = requirement(reference.id);
+    if (target && target.revision === reference.revision) add(target.id, parameter.id, "constrain", target.revision, parameter.revision);
+  }));
   (data.verification_cases || []).forEach((testCase) => {
     const record = testCase.data || {};
     (record.requirement_refs || []).forEach((ref) => add(testCase.id, ref.id, "verify", testCase.revision, ref.revision));
@@ -447,6 +450,7 @@ function renderGraphInspector(id) {
     push("role", record.role); push("origin", record.origin); push("value", record.value);
     push("unit", record.unit); push("bounds", record.bounds); push("uncertainty", record.uncertainty ?? record.standard_uncertainty);
     push("model_path", record.model_path); push("method", record.method); push("source", record.source);
+    push("requirement_refs", record.requirement_refs);
   } else if (record.proposal || ["function", "component"].includes(node.kind)) {
     push("status", record.status); push("approval_state", record.approval_state); push("boundary", record.boundary); push("scope", record.scope);
     push("inputs", record.inputs); push("outputs", record.outputs);
@@ -506,7 +510,21 @@ function openGraphNode(id, filter = "all") {
   renderSystemGraph();
 }
 
+function renderGraphObjectPicker() {
+  const data = DATA.balancing_cube;
+  const sets = [
+    [language === "ja" ? "要求" : "Requirements", data.requirements],
+    [language === "ja" ? "設計KDP" : "Design KDPs", data.kdps.filter((p) => p.role === "design")],
+    [language === "ja" ? "同定対象KDP" : "Identification KDPs", data.kdps.filter((p) => p.role === "identify")],
+    [language === "ja" ? "固定パラメータ" : "Fixed parameters", data.kdps.filter((p) => !["design", "identify"].includes(p.role))],
+  ];
+  const picker = $("#graph-object-picker");
+  picker.innerHTML = `<option value="">${language === "ja" ? "対象を選ぶ…" : "Choose an object…"}</option>` + sets.filter(([, rows]) => rows.length).map(([label, rows]) => `<optgroup label="${esc(label)}">${rows.map((r) => `<option value="${esc(r.id)}">${esc(r.id)} · ${esc(language === "ja" ? (r.name_ja || r.name) : r.name)}</option>`).join("")}</optgroup>`).join("");
+  picker.value = graphFocusId;
+}
+
 function renderSystemGraph() {
+  renderGraphObjectPicker();
   const model = DATA.balancing_cube.model;
   const snapshot = model.simulation_snapshot_ref || {};
   const focus = graphNode(graphFocusId) || graphNode("M-VERTEX");
@@ -572,7 +590,7 @@ function renderRequirementDetail(r) {
     ${conditions?.length ? `<section class="detail-section"><span class="detail-label">${t.conditions}</span><ul class="detail-list">${conditions.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></section>` : ""}
     <section class="detail-section"><span class="detail-label">${t.method}</span><div class="method-line"><span class="method-icon">${r.verification_method === "test" ? "⊙" : "⌕"}</span><b>${esc(r.verification_method || "not specified")}</b><small>${r.verification_case_ref ? `${esc(r.verification_case_ref.id)}@${esc(r.verification_case_ref.revision)}` : "no case linked"}</small></div></section>
     <section class="detail-section"><span class="detail-label">${t.unresolved} <i>${openItems.length.toString().padStart(2, "0")}</i></span>${openItems.length ? `<div class="open-item-list">${openItems.map((item) => `<article><span>${esc(item.id)}</span><p>${esc(item.description)}</p><small>OWNER · ${esc(item.owner || "TBD")}</small></article>`).join("")}</div>` : `<span class="empty-note">No open items are recorded for this requirement.</span>`}</section>
-    <section class="detail-section"><span class="detail-label">${t.designParams} <i>${r.kdps.length.toString().padStart(2, "0")}</i></span>${r.kdps.length ? `<div class="kdp-list">${r.kdps.map((k) => `<details class="kdp-item"><summary><b>${esc(k.id)}</b><span>${esc(k.name || "Parameter")}</span><i>＋</i></summary><div><span>${esc(k.symbol || k.quantity || "")}</span><b>${esc(formatValue(k.value))} ${esc(k.unit || "")}</b><small>${esc(k.revision)}${k.uncertainty ? ` · uncertainty ${esc(formatValue(k.uncertainty))}` : ""}${k.role ? ` · ${esc(k.role)}` : ""}${k.origin ? ` · origin: ${esc(k.origin)}` : ""}</small></div></details>`).join("")}</div>` : `<span class="empty-note">No KDP link is recorded.</span>`}</section>
+    <section class="detail-section"><span class="detail-label">${t.designParams} <i>${r.kdps.length.toString().padStart(2, "0")}</i></span>${r.kdps.length ? `<button type="button" class="kdp-graph-link" data-requirement-kdps="${esc(r.id)}">${language === "ja" ? "要求とKDPの関係をグラフで見る" : "View requirement–KDP connections"} ↗</button><div class="kdp-list">${r.kdps.map((k) => `<details class="kdp-item"><summary><b>${esc(k.id)}</b><span>${esc(k.name || "Parameter")}</span><i>＋</i></summary><div><span>${esc(k.symbol || k.quantity || "")}</span><b>${esc(formatValue(k.value))} ${esc(k.unit || "")}</b><small>${esc(k.revision)}${k.uncertainty ? ` · uncertainty ${esc(formatValue(k.uncertainty))}` : ""}${k.role ? ` · ${esc(k.role)}` : ""}${k.origin ? ` · origin: ${esc(k.origin)}` : ""}</small><button type="button" class="kdp-graph-link" data-parameter-graph="${esc(k.id)}">${language === "ja" ? "このKDPにつながる要求を見る" : "Explore this KDP’s requirements"} ↗</button></div></details>`).join("")}</div>` : `<span class="empty-note">No KDP link is recorded.</span>`}</section>
     <details class="detail-section trace-details"><summary><span class="detail-label">${t.links}</span><i>＋</i></summary>${renderLinks(r)}</details>
     <details class="detail-section trace-details"><summary><span class="detail-label">${t.case}</span><i>＋</i></summary>${r.verification_case_ref ? `<div class="case-summary"><b>${esc(r.verification_case?.name || r.verification_case_ref.id)}</b><pre>${esc(JSON.stringify(r.verification_case, null, 2))}</pre></div>` : `<span class="empty-note">No planned case linked.</span>`}</details>
     <details class="detail-section trace-details"><summary><span class="detail-label">${t.source}</span><i>＋</i></summary><div class="source-record"><b>${esc(r.source_record?.id || "Source not recorded")}@${esc(r.source_record?.revision || "")}</b><p>Statement status: ${esc(r.status)} · source statement status: ${esc(r.source_status || "not recorded")}</p><small>MODEL ${esc(DATA.balancing_cube.model.id)}@${esc(DATA.balancing_cube.model.revision)}</small></div></details>
@@ -586,6 +604,8 @@ function renderRequirementDetail(r) {
     $("#review-panel").scrollIntoView({ behavior: "smooth", block: "center" });
   });
   $$('[data-architecture-node]', card).forEach((button) => button.addEventListener("click", () => showArchitectureObject(button.dataset.architectureNode)));
+  $$('[data-requirement-kdps]', card).forEach((button) => button.addEventListener("click", () => showArchitectureObject(button.dataset.requirementKdps, "constrain")));
+  $$('[data-parameter-graph]', card).forEach((button) => button.addEventListener("click", () => showArchitectureObject(button.dataset.parameterGraph, "constrain")));
 }
 
 function selectRequirement(id) {
@@ -748,6 +768,10 @@ function wireControls() {
   document.addEventListener("keydown", (event) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); $("#global-search").focus(); } });
   $("#language-toggle").addEventListener("click", () => setLanguage(language === "en" ? "ja" : "en"));
   $("#graph-home").addEventListener("click", () => openGraphNode("M-VERTEX"));
+  $("#graph-parameters").addEventListener("click", () => openGraphNode(selectedId || "M-VERTEX", "constrain"));
+  $("#graph-object-picker").addEventListener("change", (event) => {
+    if (event.target.value) openGraphNode(event.target.value, "constrain");
+  });
   $("#save-draft").addEventListener("click", saveDraft);
   $("#review-export-top").addEventListener("click", exportReview);
   $$("[data-jump]").forEach((button) => button.addEventListener("click", () => {

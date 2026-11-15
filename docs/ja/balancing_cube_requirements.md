@@ -1,24 +1,20 @@
-# Balancing Cubeのレビュー済み要求
+# Balancing Cubeの要求
 
-`reviewed-20261019-1` · human review: 2026-10-19 · reviewer: hirototamura
+`refined-20261115-1` · human direction: 2026-11-15 · baseline: `cube.baseline.model-refinement@refined-20261115-1`
 
-要求文と機能・構成品への割当は人によるレビュー済み。検証結果、未解決事項、過去の証拠の適用範囲は別に管理する。
+8頂点のミッションとKDPの個別要求参照を、レビュー済みの割当モデルに反映した。検証状態は別に保持する。
 
-Canonical baseline: `cube.baseline.requirements-allocation@reviewed-20261019-1`.
-
-22個の義務と7個の整理用グループを含む。未確定の数値限界と検証手順は未確定のままであり、レビューは実機試験の合格を意味しない。
-
-Regenerate: `python projects/balancing-cube/review_requirements.py --write-docs`.
+Regenerate: `python projects/balancing-cube/refine_model.py --write-docs`.
 
 ## C-BUDGET: 初回試作の費用
 
-`C-BUDGET@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`C-BUDGET@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 Cubeの初回試作の費用は、承認された予算以下でなければならない。
 
 試作には明示的な費用上限が必要である。
 
-Acceptance / 合否基準: {"limit_ref": {"id": "D-BUDGET", "revision": "reviewed-20261019-1"}, "metric": "prototype_cost", "operator": "<=", "unit": "JPY"}
+Acceptance / 合否基準: {"limit_ref": {"id": "D-BUDGET", "revision": "refined-20261115-1"}, "metric": "prototype_cost", "operator": "<=", "unit": "JPY"}
 
 Allocation: cube.system
 
@@ -27,13 +23,13 @@ Open items / 未解決事項:
 
 ## C-FIT: 製作と搭載の要求集合
 
-`C-FIT@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`C-FIT@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 このノードは要求をまとめる。独立した試験義務ではない。
 
 ## C-FIT-INSTALL: 搭載部品の寸法
 
-`C-FIT-INSTALL@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`C-FIT-INSTALL@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 各搭載部品の寸法は、Cube筐体内の搭載空間に指定された寸法以下でなければならない。
 
@@ -48,7 +44,7 @@ Open items / 未解決事項:
 
 ## C-FIT-MATERIAL: 造形材料の選定
 
-`C-FIT-MATERIAL@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`C-FIT-MATERIAL@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 Cubeの筐体は、指定された3Dプリンタの承認済み材料一覧にある造形材料を使用しなければならない。
 
@@ -63,7 +59,7 @@ Open items / 未解決事項:
 
 ## C-FIT-PRINT: 造形部品の寸法
 
-`C-FIT-PRINT@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`C-FIT-PRINT@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 筐体の各造形部品の寸法は、3Dプリンタの指定された造形限界以下でなければならない。
 
@@ -78,7 +74,7 @@ Open items / 未解決事項:
 
 ## C-JAPAN: 日本への部品供給
 
-`C-JAPAN@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`C-JAPAN@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 Cubeは、供給元が日本へ供給できる部品を使用しなければならない。
 
@@ -93,13 +89,13 @@ Open items / 未解決事項:
 
 ## C-PRINT: 筐体の製作
 
-`C-PRINT@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`C-PRINT@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 Cubeの筐体は、指定された3Dプリンタで製作できる部品でなければならない。
 
 ユーザーは友人の3Dプリンタを使用する意図を持つ。
 
-Acceptance / 合否基準: {"metric": "housing_manufacturable", "operator": "==", "requirement_ref": {"id": "C-FIT-PRINT", "revision": "reviewed-20261019-1"}, "unit": "1", "value": true}
+Acceptance / 合否基準: {"metric": "housing_manufacturable", "operator": "==", "requirement_ref": {"id": "C-FIT-PRINT", "revision": "refined-20261115-1"}, "unit": "1", "value": true}
 
 Allocation: cube.component.frame-housing
 
@@ -108,13 +104,13 @@ Open items / 未解決事項:
 
 ## M-VERTEX: 頂点保持のミッション
 
-`M-VERTEX@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`M-VERTEX@refined-20261115-1` · reviewed · human_reviewed · not_run
 
-Cubeは、実機試験環境で3個のリアクションホイールを用いて頂点姿勢を保持しなければならない。
+Cubeは、3個のリアクションホイールを用いて8頂点のそれぞれで倒立保持しなければならない。
 
 このミッションではCubeの構想を実機で示す必要がある。
 
-Acceptance / 合否基準: {"domain": "hardware", "metric": "vertex_hold_demonstrated", "operator": "==", "unit": "1", "value": true}
+Acceptance / 合否基準: {"domain": "hardware", "metric": "distinct_corners_demonstrated", "operator": "==", "unit": "count", "value": 8}
 
 Allocation: cube.system
 
@@ -123,7 +119,7 @@ Open items / 未解決事項:
 
 ## R-DRIFT: 接地点の移動
 
-`R-DRIFT@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-DRIFT@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 保持区間中、Cubeの接地点は初期位置から2 mmを超えて移動してはならない。
 
@@ -138,13 +134,13 @@ Open items / 未解決事項:
 
 ## R-DRIVE: 駆動限界の要求集合
 
-`R-DRIVE@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-DRIVE@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 このノードは要求をまとめる。独立した試験義務ではない。
 
 ## R-DRIVE-CURRENT: バス電流の限界
 
-`R-DRIVE-CURRENT@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-DRIVE-CURRENT@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 駆動系は、バス電流をバス回路の承認済みの最小値と最大値の間に保たなければならない。
 
@@ -160,7 +156,7 @@ Open items / 未解決事項:
 
 ## R-DRIVE-SPEED: ホイールの回転速度限界
 
-`R-DRIVE-SPEED@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-DRIVE-SPEED@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 各リアクションホイールの回転速度の大きさは、その組立体の承認済みの限界以下でなければならない。
 
@@ -175,7 +171,7 @@ Open items / 未解決事項:
 
 ## R-DRIVE-TEMP: 部品の温度限界
 
-`R-DRIVE-TEMP@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-DRIVE-TEMP@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 各モーターとドライバの温度は、それぞれの承認済みの最小値と最大値の間でなければならない。
 
@@ -190,7 +186,7 @@ Open items / 未解決事項:
 
 ## R-DRIVE-TORQUE: モーターのトルク限界
 
-`R-DRIVE-TORQUE@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-DRIVE-TORQUE@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 各モーターのトルクは、測定した各回転速度における承認済みの最小値と最大値の間でなければならない。
 
@@ -205,7 +201,7 @@ Open items / 未解決事項:
 
 ## R-DRIVE-VOLTAGE: バス電圧の限界
 
-`R-DRIVE-VOLTAGE@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-DRIVE-VOLTAGE@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 駆動系は、バス電圧を各接続部品の承認済みの最小値と最大値の間に保たなければならない。
 
@@ -220,7 +216,7 @@ Open items / 未解決事項:
 
 ## R-HOLD: 手動解放後の保持
 
-`R-HOLD@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-HOLD@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 手動で設置して解放した後、Cubeは外部からの支持なしで頂点姿勢を30 s以上保持しなければならない。
 
@@ -235,7 +231,7 @@ Open items / 未解決事項:
 
 ## R-MODEL: モデルの独立比較
 
-`R-MODEL@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-MODEL@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 検証基盤は、対応する試験条件で、モデルの結果と独立した実測値を比較しなければならない。
 
@@ -250,7 +246,7 @@ Open items / 未解決事項:
 
 ## R-REPEAT: 保持試験の反復
 
-`R-REPEAT@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-REPEAT@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 固定した試験条件で、Cubeは10回の試行のうち9回以上、保持試験に合格しなければならない。
 
@@ -266,7 +262,7 @@ Open items / 未解決事項:
 
 ## R-RMS: 傾斜角のRMS
 
-`R-RMS@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-RMS@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 保持区間中、Cubeの傾斜角のRMSは2 deg以下でなければならない。
 
@@ -281,7 +277,7 @@ Open items / 未解決事項:
 
 ## R-SYNC: 動画とMCUの時刻の対応
 
-`R-SYNC@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-SYNC@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 検証基盤は、動画とMCUのタイムスタンプ間の時刻関係を、0.005 s以下の時刻不確かさで算出しなければならない。
 
@@ -296,7 +292,7 @@ Open items / 未解決事項:
 
 ## R-TILT: 最大傾斜角
 
-`R-TILT@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-TILT@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 保持区間中、Cubeは傾斜角を5 deg以下に保たなければならない。
 
@@ -311,7 +307,7 @@ Open items / 未解決事項:
 
 ## R-TRACE: 実行の厳密な版参照
 
-`R-TRACE@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-TRACE@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 検証基盤は、各実行について、要求、KDP、設計、条件、結果の厳密な版を特定しなければならない。
 
@@ -323,7 +319,7 @@ Allocation: cube.function.capture-synchronize, cube.function.evaluate-trace
 
 ## R-VISION: 独立した姿勢計測
 
-`R-VISION@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-VISION@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 独立した姿勢計測系の角度の標準不確かさは、0.5 deg以下でなければならない。
 
@@ -338,7 +334,7 @@ Open items / 未解決事項:
 
 ## R-YAW: ヨー角速度の監視
 
-`R-YAW@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`R-YAW@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 保持区間中、制御系はヨー角速度のRMSを監視しなければならない。
 
@@ -353,30 +349,30 @@ Open items / 未解決事項:
 
 ## cube.req.gnc: 制御要求集合
 
-`cube.req.gnc@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`cube.req.gnc@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 このノードは要求をまとめる。独立した試験義務ではない。
 
 ## cube.req.mechanical: 機械要求集合
 
-`cube.req.mechanical@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`cube.req.mechanical@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 このノードは要求をまとめる。独立した試験義務ではない。
 
 ## cube.req.operation: 運用要求集合
 
-`cube.req.operation@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`cube.req.operation@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 このノードは要求をまとめる。独立した試験義務ではない。
 
 ## cube.req.system: システム要求集合
 
-`cube.req.system@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`cube.req.system@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 このノードは要求をまとめる。独立した試験義務ではない。
 
 ## cube.req.verification: 検証基盤の要求集合
 
-`cube.req.verification@reviewed-20261019-1` · reviewed · human_reviewed · not_run
+`cube.req.verification@refined-20261115-1` · reviewed · human_reviewed · not_run
 
 このノードは要求をまとめる。独立した試験義務ではない。

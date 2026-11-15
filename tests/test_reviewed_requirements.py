@@ -130,7 +130,8 @@ def test_reviewed_context_pins_allocated_functions_and_components(tmp_path,monke
     rows[(function['id'],function['revision'])]=function
     store=Store(tmp_path/'context')
     monkeypatch.setattr(store,'records',lambda project_id=None,kinds=None:list(rows.values()))
-    context=store.context('balancing-cube',product_node='cube.component.controller',max_designs=0,max_evidence=0)
+    context=store.context('balancing-cube',product_node='cube.component.controller',max_designs=0,max_evidence=0,
+                          snapshot_ref={'id':'cube.simulation.snapshot','revision':review['REVISION']})
     assert context['snapshot_ref']=={'id':'cube.simulation.snapshot','revision':review['REVISION']}
     selected={r['id']:r for r in context['records']}
     assert selected[function['id']]['revision']==review['REVISION']

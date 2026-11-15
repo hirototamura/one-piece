@@ -39,8 +39,12 @@ Verificationは指定した要求と条件への適合、Validationは意図し�
 - [OMG SysML v2](https://www.omg.org/spec/SysML/2.0/)：構成・属性・要求・検証の参考。
 - [ENPIRE](https://arxiv.org/html/2606.19980v2)：環境構築と、その環境を固定した改善ループを分離する。
 
-要求の優先順位はISO/IEC/IEEE 29148:2018、適用するNASA標準・要求記述ガイド、ASD-STE100の順である。NASAの要求記述に従い、英語要求には`shall`を使う。現在のbalancing-cube表示は、明示的なactive system-model参照により `cube.simulation.snapshot@reviewed-20261019-1` を選ぶ。snapshotの文脈は、要求・KDP・機能・製品・検証ケースの厳密な版を固定する。比較基準designとcampaign_summaryは文脈件数制限の外に置く。Engineering Agentsは、別のsnapshotを選択するまで、実行時の明示的な既定値 `fixed-dt-mvp-2` を保持する。
+要求の優先順位はISO/IEC/IEEE 29148:2018、適用するNASA標準・要求記述ガイド、ASD-STE100の順である。NASAの要求記述に従い、英語要求には`shall`を使う。現在のbalancing-cube表示は、明示的なactive system-model参照により `cube.simulation.snapshot@refined-20261115-1` を選ぶ。snapshotの文脈は、要求・KDP・機能・製品・検証ケースの厳密な版を固定する。比較基準designとcampaign_summaryは文脈件数制限の外に置く。Engineering Agentsは、別のsnapshotを選択するまで、実行時の明示的な既定値 `fixed-dt-mvp-2` を保持する。
 
 [レビュー済みの英語要求](../en/balancing_cube_requirements.md)を原文として、対応する[日本語訳](balancing_cube_requirements.md)を作る。現在のモデルは、22個の試験義務、7個の整理用コンテナ、22個の計画済み検証ケースを持つ。コンテナは記録の互換性のためkindを`requirement`に保つが、`record_role: requirement_group`と空のstatementにより試験義務から区別する。製作と駆動の複合要求には、分割した子要求を持たせる。レビュー済みの割当分割は8機能・10構成要素からなる。機上には5機能・7構成要素、外部の検証文脈には3機能・3ツールがある。要求は担当機能または構成要素へ、機能は実装する構成要素へ割り当てる。ミッションと総予算のみ全体への割当を保持する。共通制約は複数構成要素へ割り当てられる。
 
 2026-10-19の人によるレビューで、この要求と割当baselineを`status: reviewed`、`approval_state: human_reviewed`とした。レビュー判断にユーザーの指示と対象範囲を記録し、baselineは各構成記録のハッシュを保持する。ハードウェア設計の採用は含まない。新しい提案は草案から始める。`source_status`は以前の要求文の状態を保持する。要求文の状態と実機検証は別である。`hardware_verification_required`は予定する実機作業を表し、合格フラグではない。数値evaluationと設計意図は元の版への接続先を保持する。過去の版は、元のフィールド、グラフの厳密な接続先、出典のdigestを維持する。改訂した22検証ケースはすべて`not_run`であり、未解決項目も保持する。[リリースノート](reviewed_cube_release.md)を参照する。
+
+## 2026-11-15の8頂点・KDP参照の洗練化
+
+現行モデルは8頂点のミッションを明記し、KDPの参照先を個別要求へ具体化した。整理用グループは分類用に保持する。`cube.change-contract.control-algorithm@refined-20261115-1` は参照制御アルゴリズムの変更可能範囲を定める。コードの提案・実行は次段階であり、現行の実行設定は別途 `bottom-corner-000-20261017-3` を固定する。既存の割当と数値証拠の適用範囲を保持する。[洗練化の内容](cube_model_refinement.md)を参照する。

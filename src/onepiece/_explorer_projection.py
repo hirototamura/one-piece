@@ -57,6 +57,7 @@ def project_model(records, model):
             "bounds": kd.get("bounds"), "standard_uncertainty": kd.get("standard_uncertainty"),
             "priority": kd.get("priority"), "note": kd.get("note"),
             "requirements": kd.get("requirements", []),
+            "requirement_refs": kd.get("requirement_refs", []),
             "product_node": kdp.get("product_node"), "links": kdp.get("links", []),
         })
     kdp_by_key = {(x["id"], x["revision"]): x for x in kdps}
@@ -179,6 +180,7 @@ def project_model(records, model):
         "balancing_cube": {
             "model": {**model_data, "id": model["id"], "revision": model["revision"],
                       "created_at": model["created_at"]},
+            "change_contract": snapshot["data"].get("change_contract"),
             "groups": normalized_groups, "requirements": normalized_obligations,
             "kdps": kdps, "verification_cases": verification_cases,
             "products": products, "functions": functions,

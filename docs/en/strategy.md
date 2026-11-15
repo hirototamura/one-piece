@@ -24,6 +24,7 @@ The [Cube requirements](balancing_cube_requirements.md) separate test obligation
 - [Dataset storage](dataset_storage.md): Git-tracked retrieval catalogs and immutable Release evidence shared across environments.
 - [System model](system_model.md): versioned records, trace relations and evidence scope.
 - [Cube configuration catalogue](cube_configuration_catalogue.md): reviewed, executable, historical and BOM-reference roles with exact revisions.
+- [Cube model refinement](cube_model_refinement.md): required eight-corner mission wording, existing optimization units, duplicate acceptance and KDP reference granularity.
 - [SysML API](sysml_api.md): supported standard services and exchange mapping.
 - [Verification and diff](verification_and_diff.md): current scope and proposed acceptance criteria.
 - [Competitor research](competitor_tradeoff.md): observations without historical adoption decisions.

@@ -21,6 +21,7 @@
 - [要求エクスプローラー](requirements_explorer.md)：正本の版選択、グラフ確認、ブラウザー内の改訂案。
 - [データの保存と取得](dataset_storage.md)：Git の取得カタログと、環境をまたいで共有する固定した Release 証拠。
 - [システムモデル](system_model.md)：版付き記録、トレース関係、証拠の適用範囲。
+- [Cubeの要求・KDP洗練化](cube_model_refinement.md)：必須の8頂点ミッション、既存の最適化単位、合否基準の重複、KDP参照の粒度。
 - [SysML API](sysml_api.md)：対応する標準サービスと交換形式。
 - [自動検証とdiff](verification_and_diff.md)：現在の範囲と受入条件の草案。
 - [競合調査](competitor_tradeoff.md)：過去の採用判断を除いた観察。
