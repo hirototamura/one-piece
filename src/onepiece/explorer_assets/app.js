@@ -57,7 +57,8 @@ function formatValue(value) {
   return String(value);
 }
 
-function requirement(id) { return DATA.balancing_cube.requirements.find((r) => r.id === id); }
+function obligations() { return [...DATA.balancing_cube.requirements, ...(DATA.balancing_cube.constraints || [])]; }
+function requirement(id) { return obligations().find((r) => r.id === id); }
 
 function statusPill(label, tone = "", title = "") { return `<span class="pill ${tone}"${title ? ` title="${esc(title)}"` : ""}>${esc(label)}</span>`; }
 
@@ -66,7 +67,7 @@ function groupName(groupId) {
 }
 
 function requirementsForGroup(groupId) {
-  return DATA.balancing_cube.requirements.filter((r) => r.group_id === groupId);
+  return obligations().filter((r) => r.group_id === groupId);
 }
 
 function setView(view) {
@@ -81,16 +82,16 @@ function setView(view) {
 
 function renderCubeStats() {
   const data = DATA.balancing_cube;
-  const unresolved = data.requirements.reduce((sum, r) => sum + r.unresolved_items.length, 0);
+  const unresolved = obligations().reduce((sum, r) => sum + r.unresolved_items.length, 0);
   const reviewCount = data.requirements.filter((r) => r.approval_state === "human_reviewed").length;
   const rows = [
-    { label: "TEST OBLIGATIONS", value: data.counts.obligations, suffix: "requirements", style: "stat-amber" },
+    { label: "SYSTEM REQUIREMENTS", value: data.counts.obligations, suffix: `${(data.constraints || []).length} separate constraints`, style: "stat-amber" },
     { label: "ORGANIZATIONAL GROUPS", value: data.counts.groups, suffix: "containers", style: "stat-blue" },
     { label: "OPEN ITEMS", value: unresolved, suffix: "to resolve", style: "stat-coral" },
     { label: "HUMAN REVIEW", value: `${reviewCount}/${data.counts.obligations}`, suffix: "reviewed", style: "stat-green" },
   ];
   $("#cube-stats").innerHTML = rows.map((s, i) => `<article class="stat-card ${s.style}"><span class="stat-label">${s.label}</span><div><b>${esc(s.value)}</b><small>${esc(s.suffix)}</small></div><span class="stat-index">0${i + 1}</span></article>`).join("");
-  $("#model-revision").textContent = `${data.model.revision}  ·  ${data.model.approval_state.replaceAll("_", " ")}`;
+  $("#model-revision").textContent = `${data.model.revision}  ·  ${humanize(data.model.approval_state || "not recorded")}`;
 }
 
 function initGroupControls() {
@@ -115,7 +116,7 @@ function filteredRequirements() {
   const group = $("#group-filter").value;
   const filter = $("#status-filter").value;
   const query = searchText.trim().toLocaleLowerCase();
-  return DATA.balancing_cube.requirements.filter((r) => {
+  return obligations().filter((r) => {
     const groupMatch = group === "all" || r.group_id === group;
     const statusMatch = filter === "all" || (filter === "open" ? r.unresolved_items.length > 0 : filter === "hardware" ? r.hardware_verification_required : filter === "not-run" ? r.verification_status === "not_run" : true);
     const queryHaystack = [r.id, r.name, r.name_ja, r.statement, r.statement_ja, r.rationale, ...r.unresolved_items.map((i) => i.description), ...r.kdps.map((k) => k.id)].join(" ").toLocaleLowerCase();
@@ -125,7 +126,7 @@ function filteredRequirements() {
 
 function renderRequirements() {
   const visible = filteredRequirements();
-  $("#list-count").textContent = `${String(visible.length).padStart(2, "0")} OF ${DATA.balancing_cube.counts.obligations} OBLIGATIONS`;
+  $("#list-count").textContent = `${String(visible.length).padStart(2, "0")} OF ${obligations().length} REQUIREMENTS / CONSTRAINTS`;
   $("#no-results").hidden = visible.length > 0;
   const grouped = new Map();
   const ordered = [{ id: "M-VERTEX", name: "Mission" }, ...DATA.balancing_cube.groups.map((g) => ({ id: g.id, name: g.name }))];
@@ -140,7 +141,7 @@ function renderRequirements() {
       const selected = r.id === selectedId;
       const statement = language === "ja" ? (r.statement_ja || r.statement) : r.statement;
       const title = language === "ja" ? (r.name_ja || r.name) : r.name;
-      return `<button type="button" class="req-row ${selected ? "is-selected" : ""}" data-requirement="${esc(r.id)}"><span class="req-row-id">${esc(r.id)}</span><b>${esc(title)}</b><p>${esc(statement)}</p><span class="req-row-meta">${r.unresolved_items.length ? `<i class="tbr-dot"></i>${r.unresolved_items.length} OPEN` : `<i class="check-dot"></i>NO OPEN ITEMS`}<span>${esc(r.verification_method || "—").toUpperCase()}</span></span></button>`;
+      return `<button type="button" class="req-row ${selected ? "is-selected" : ""}" data-requirement="${esc(r.id)}"><span class="req-row-id">${esc(r.id)}${r.record_role === "constraint" ? ` · ${esc(r.constraint_scope).toUpperCase()} CONSTRAINT` : ""}</span><b>${esc(title)}</b><p>${esc(statement)}</p><span class="req-row-meta">${r.unresolved_items.length ? `<i class="tbr-dot"></i>${r.unresolved_items.length} OPEN` : `<i class="check-dot"></i>NO OPEN ITEMS`}<span>${esc(r.verification_method || "—").toUpperCase()}</span></span></button>`;
     }).join("")}</section>`;
   }).join("");
   $$(".req-row").forEach((button) => button.addEventListener("click", () => selectRequirement(button.dataset.requirement)));
@@ -230,27 +231,12 @@ function renderReviewedArchitecture() {
     const r = requirement(allocation.source);
     return `<tr><td>${button(r.id, r.id)}<span>${esc(r.name)}</span></td><td>${esc(r.previous_allocations.map((ref) => ref.id).join(", "))}</td><td>${allocation.targets.map((id) => button(id)).join("")}<small>${esc(allocation.scope)}</small></td><td>${esc(allocation.rationale)}</td></tr>`;
   }).join("");
-  $("#architecture-panel").innerHTML = `<div class="architecture-header"><div><span class="section-kicker">ALLOCATION · HUMAN REVIEWED · ${esc(architecture.reviewed_on || architecture.revision)}</span><h3>Responsibility below the overall Cube</h3></div><a class="text-link" href="./provenance.json" target="_blank" rel="noreferrer">Build provenance ↗</a></div><p>The recorded model includes the accepted requirement → function → component allocations. The graph reads each connection in sentence order. Select an object to inspect it; double-click to focus one level of connections.</p><div class="architecture-actions">${button("cube.system", `Cube functions · ${architecture.functions.filter(n => n.parent_ref?.id === "cube.system").length}`, "performs")}${button("cube.system", `Cube components · ${architecture.components.filter(n => n.parent_ref?.id === "cube.system").length}`, "comprises")}${button("cube.verification", `External verification functions · ${architecture.functions.filter(n => n.parent_ref?.id === "cube.verification").length}`, "performs")}<button type="button" id="export-architecture">Export reviewed allocation ↗</button></div><p class="architecture-scope">${architecture.functions.length} functions · ${architecture.components.length} components · ${architecture.requirement_allocations.length} requirement assignments · ${architecture.parameter_allocations.length} parameter assignments. Mission and total budget retain system responsibility. External verification tools are separate from onboard hardware. Review does not establish physical verification.</p><details class="architecture-review"><summary>Review all ${architecture.requirement_allocations.length} assignments and their rationale</summary><div class="architecture-table-wrap"><table><thead><tr><th>Requirement</th><th>Previous draft allocation</th><th>Reviewed allocation</th><th>Reason</th></tr></thead><tbody>${rows}</tbody></table></div></details><details class="architecture-review"><summary>Browse ${architecture.functions.length} functions and ${architecture.components.length} components</summary><div class="architecture-catalog">${nodes.map((n) => `<article><small>${esc(n.kind.toUpperCase())} · REVIEWED · ${esc(n.boundary)}</small>${button(n.id)}<p>${esc(n.description)}</p></article>`).join("")}</div></details>`;
+  $("#architecture-panel").innerHTML = `<div class="architecture-header"><div><span class="section-kicker">ALLOCATION · HUMAN REVIEWED · ${esc(architecture.reviewed_on || architecture.revision)}</span><h3>Responsibility below the overall Cube</h3></div><a class="text-link" href="./provenance.json" target="_blank" rel="noreferrer">Build provenance ↗</a></div><p>The recorded model includes the accepted requirement → function → component allocations. The graph reads each connection in sentence order. Select an object to inspect it; double-click to focus one level of connections.</p><div class="architecture-actions">${button("cube.system", `Cube functions · ${architecture.functions.filter(n => n.parent_ref?.id === "cube.system").length}`, "performs")}${button("cube.system", `Cube components · ${architecture.components.filter(n => n.parent_ref?.id === "cube.system").length}`, "comprises")}${button("cube.verification", `External verification functions · ${architecture.functions.filter(n => n.parent_ref?.id === "cube.verification").length}`, "performs")}<button type="button" id="export-architecture">Export reviewed allocation ↗</button></div><p class="architecture-scope">${architecture.functions.length} functions · ${architecture.components.length} components · ${architecture.requirement_allocations.length} requirement assignments · ${architecture.parameter_allocations.length} parameter assignments. Mission retains system responsibility; project and manufacturing constraints are classified separately. External verification tools are separate from onboard hardware. Review does not establish physical verification.</p><details class="architecture-review"><summary>Review all ${architecture.requirement_allocations.length} assignments and their rationale</summary><div class="architecture-table-wrap"><table><thead><tr><th>Requirement</th><th>Previous draft allocation</th><th>Reviewed allocation</th><th>Reason</th></tr></thead><tbody>${rows}</tbody></table></div></details><details class="architecture-review"><summary>Browse ${architecture.functions.length} functions and ${architecture.components.length} components</summary><div class="architecture-catalog">${nodes.map((n) => `<article><small>${esc(n.kind.toUpperCase())} · REVIEWED · ${esc(n.boundary)}</small>${button(n.id)}<p>${esc(n.description)}</p></article>`).join("")}</div></details>`;
   $$('[data-architecture-node]', $("#architecture-panel")).forEach((b) => b.addEventListener("click", () => showArchitectureObject(b.dataset.architectureNode, b.dataset.architectureFilter)));
   $("#export-architecture").addEventListener("click", () => {
     const url = URL.createObjectURL(new Blob([JSON.stringify(architecture, null, 2)], { type: "application/json" }));
     const link = document.createElement("a"); link.href = url; link.download = `${architecture.revision}.json`; link.click(); URL.revokeObjectURL(url);
   });
-}
-
-function renderDesignCoverage() {
-  const coverage = DATA.balancing_cube.design_claims;
-  const designs = coverage.designs;
-  const targetCount = coverage.requirements_with_claims.length;
-  const screening = [...new Set(designs.flatMap((design) => (design.numerical_results || []).map((r) => `${r.data.stage || "recorded"}: ${screeningCaseCount(r.data)} numerical cases passed; ${r.data.all_screening_passed === true ? "all screening passed" : "screening incomplete"}; physical verification ${String(r.data.physical_verified)}`)))];
-  const sharedInput = designs.length > 1 && coverage.unique_design_inputs === 1 ? "The candidate records share the same design input. " : "";
-  $("#design-coverage").innerHTML = `<span class="section-kicker">RECORDED DESIGN SATISFACTION</span><h3>${designs.length} candidate records · ${coverage.unique_design_inputs} distinct design input${coverage.unique_design_inputs === 1 ? "" : "s"}</h3><p>Source-recorded satisfaction intent covers ${targetCount} of ${DATA.balancing_cube.requirements.length} current requirements: ${esc(coverage.requirements_with_claims.join(", ") || "none")}. ${esc(sharedInput)}Recorded results: ${esc(screening.join(". ") || "no linked screening results")}.</p><div class="architecture-actions">${designs.length ? `<button type="button" data-design-focus="${esc(designs[0].id)}">Show satisfies arrows ↗</button>` : ""}${designs.map((design) => `<button type="button" data-design-focus="${esc(design.id)}">${esc(design.name)}</button>`).join("")}</div><p class="design-coverage-note">A recorded <code>satisfies</code> arrow declares design intent. It does not establish a verified pass. No satisfaction links to the other ${DATA.balancing_cube.requirements.length - targetCount} current requirements are recorded in this projection.</p>`;
-  const historical = coverage.historical_designs || [];
-  if (historical.length) $("#design-coverage").insertAdjacentHTML("beforeend", `<details class="architecture-review"><summary>${historical.length} historical candidate records retain their original satisfaction targets</summary><p>These declarations and numerical runs apply to earlier requirement revisions. A new applicability decision is needed before linking them to this reviewed baseline.</p>${historical.map((design) => `<article><b>${esc(design.name)}</b><p>${esc(design.description)}</p><code>${esc(design.id)}@${esc(design.revision)}</code><p>${design.links.map((l) => `satisfies → ${esc(l.target.id)}@${esc(l.target.revision)}`).join("<br>")}</p>${renderDesignScreening(design)}</article>`).join("")}</details>`);
-  $$('[data-design-focus]', $("#design-coverage")).forEach((button) => button.addEventListener("click", () => {
-    openGraphNode(button.dataset.designFocus, "satisfy");
-    $("#model-graph").scrollIntoView({ behavior: "smooth", block: "start" });
-  }));
 }
 
 function screeningCaseCount(data) {
@@ -287,7 +273,7 @@ function graphNode(id) {
   const group = data.groups.find((item) => item.id === id);
   if (group) return { id, revision: group.revision, name: language === "ja" ? (group.name_ja || group.name) : group.name, kind: "requirement_group", record: group };
   const item = requirement(id);
-  if (item) return { id, revision: item.revision, name: language === "ja" ? (item.name_ja || item.name) : item.name, kind: item.level === "mission" ? "mission" : "requirement", record: item };
+  if (item) return { id, revision: item.revision, name: language === "ja" ? (item.name_ja || item.name) : item.name, kind: item.record_role === "constraint" ? "constraint" : item.level === "mission" ? "mission" : "requirement", record: item };
   const parameter = (data.kdps || []).find((record) => record.id === id);
   if (parameter) return { id, revision: parameter.revision, name: parameter.name || id, kind: parameter.role === "design" ? "design_parameter" : parameter.role === "identify" ? "identification_parameter" : "parameter", record: parameter };
   const product = (data.products || []).find((record) => record.id === id);
@@ -338,7 +324,7 @@ function graphEdges() {
     seen.add(key);
     edges.push({ source, target, type, sourceRevision, targetRevision, proposal: proposed, rationale, intent: type === "satisfy" });
   };
-  const records = [...data.groups, ...data.requirements, ...(data.kdps || []), ...(data.products || []), ...(data.functions || []), ...(data.verification_cases || []), ...(data.designs || [])];
+  const records = [...data.groups, ...obligations(), ...(data.kdps || []), ...(data.products || []), ...(data.functions || []), ...(data.verification_cases || []), ...(data.designs || [])];
   records.forEach((record) => (record.links || []).forEach((link) => {
     if (proposal && link.type === "allocate" && replaced.has(record.id)) return;
     if (link.type === "satisfy" && requirement(link.target?.id)?.revision !== link.target?.revision) return;
@@ -350,10 +336,13 @@ function graphEdges() {
       add(record.id, link.target?.id, link.type, record.revision, link.target?.revision, false, link.scope || link.note || "");
     }
   }));
-  data.requirements.forEach((item) => {
+  obligations().forEach((item) => {
     if (item.verification_case_ref?.id) add(item.verification_case_ref.id, item.id, "verify", item.verification_case_ref.revision, item.revision);
   });
-  (data.kdps || []).forEach((parameter) => (parameter.requirements || []).forEach((requirementId) => add(requirementId, parameter.id, "constrain", "", parameter.revision)));
+  (data.kdps || []).forEach((parameter) => (parameter.requirement_refs || []).forEach((reference) => {
+    const target = requirement(reference.id);
+    if (target && target.revision === reference.revision) add(target.id, parameter.id, "constrain", target.revision, parameter.revision);
+  }));
   (data.verification_cases || []).forEach((testCase) => {
     const record = testCase.data || {};
     (record.requirement_refs || []).forEach((ref) => add(testCase.id, ref.id, "verify", testCase.revision, ref.revision));
@@ -395,7 +384,7 @@ function graphEdgeSentence(edge) {
 function graphEdgesFor(id) { return graphEdges().filter((edge) => edge.source === id || edge.target === id); }
 
 function graphKindLabel(kind) {
-  return ({ mission: "MISSION", requirement: "REQUIREMENT", requirement_group: "REQUIREMENT GROUP", design_parameter: "DESIGN PARAMETER", identification_parameter: "IDENTIFICATION PARAMETER", parameter: "PARAMETER", product: "PRODUCT / PART", function: "FUNCTION", component: "COMPONENT", design_candidate: "DESIGN CANDIDATE", verification_case: "VERIFICATION CASE", system_model: "SYSTEM MODEL", simulation_snapshot: "SIMULATION SNAPSHOT" })[kind] || "MODEL OBJECT";
+  return ({ mission: "MISSION", requirement: "REQUIREMENT", constraint: "CONSTRAINT", requirement_group: "REQUIREMENT GROUP", design_parameter: "DESIGN PARAMETER", identification_parameter: "IDENTIFICATION PARAMETER", parameter: "PARAMETER", product: "PRODUCT / PART", function: "FUNCTION", component: "COMPONENT", design_candidate: "DESIGN CANDIDATE", verification_case: "VERIFICATION CASE", system_model: "SYSTEM MODEL", simulation_snapshot: "SIMULATION SNAPSHOT" })[kind] || "MODEL OBJECT";
 }
 
 function graphNodeSummary(node) {
@@ -403,6 +392,7 @@ function graphNodeSummary(node) {
   if (node.kind === "design_candidate") return "Recorded satisfaction intent · not physically verified";
   if (record.proposal) return `DRAFT · ${record.boundary} · ${record.approval_state.replaceAll("_", " ")}`;
   if (node.kind === "requirement_group") return `${record.level || "group"} · ${(record.members || []).length} members`;
+  if (node.kind === "constraint") return `${record.constraint_scope} constraint · separate from system requirements`;
   if (node.kind === "mission" || node.kind === "requirement") return `${record.level || "requirement"} · ${record.status || "status not recorded"} · ${record.verification_method || "method not recorded"}`;
   if (["design_parameter", "identification_parameter", "parameter"].includes(node.kind)) return `${record.role || "parameter"} · ${formatValue(record.value)}${record.unit ? ` ${record.unit}` : ""} · ${record.origin || "origin not recorded"}`;
   if (["product", "component", "function"].includes(node.kind)) return `${record.status || "status not recorded"} · ${record.physical_verified === true ? "physically verified" : "not physically verified"}`;
@@ -436,10 +426,11 @@ function renderGraphInspector(id) {
   const record = node.record || {};
   const attributes = [];
   const push = (label, value) => { if (value !== undefined && value !== null && value !== "") attributes.push([label, formatValue(value)]); };
-  if (node.kind === "mission" || node.kind === "requirement") {
+  if (node.kind === "mission" || node.kind === "requirement" || node.kind === "constraint") {
     push("level", record.level); push("status", record.status); push("approval_state", record.approval_state);
     push("verification_method", record.verification_method); push("verification_status", record.verification_status);
     push("physical_verified", record.physical_verified); push("hardware_verification_required", record.hardware_verification_required);
+    push("constraint_scope", record.constraint_scope);
   } else if (node.kind === "requirement_group") {
     push("level", record.level); push("record_role", record.record_role); push("members", (record.members || []).length);
     push("status", record.status); push("approval_state", record.approval_state);
@@ -447,6 +438,7 @@ function renderGraphInspector(id) {
     push("role", record.role); push("origin", record.origin); push("value", record.value);
     push("unit", record.unit); push("bounds", record.bounds); push("uncertainty", record.uncertainty ?? record.standard_uncertainty);
     push("model_path", record.model_path); push("method", record.method); push("source", record.source);
+    push("requirement_refs", record.requirement_refs);
   } else if (record.proposal || ["function", "component"].includes(node.kind)) {
     push("status", record.status); push("approval_state", record.approval_state); push("boundary", record.boundary); push("scope", record.scope);
     push("inputs", record.inputs); push("outputs", record.outputs);
@@ -506,7 +498,32 @@ function openGraphNode(id, filter = "all") {
   renderSystemGraph();
 }
 
+function renderGraphObjectPicker() {
+  const data = DATA.balancing_cube;
+  const sets = [
+    [language === "ja" ? "要求" : "Requirements", data.requirements],
+    [language === "ja" ? "プロジェクト・製造制約" : "Project / manufacturing constraints", data.constraints || []],
+    [language === "ja" ? "設計KDP" : "Design KDPs", data.kdps.filter((p) => p.role === "design")],
+    [language === "ja" ? "同定対象KDP" : "Identification KDPs", data.kdps.filter((p) => p.role === "identify")],
+    [language === "ja" ? "固定パラメータ" : "Fixed parameters", data.kdps.filter((p) => !["design", "identify"].includes(p.role))],
+  ];
+  const picker = $("#graph-object-picker");
+  picker.innerHTML = `<option value="">${language === "ja" ? "対象を選ぶ…" : "Choose an object…"}</option>` + sets.filter(([, rows]) => rows.length).map(([label, rows]) => `<optgroup label="${esc(label)}">${rows.map((r) => `<option value="${esc(r.id)}">${esc(r.id)} · ${esc(language === "ja" ? (r.name_ja || r.name) : r.name)}</option>`).join("")}</optgroup>`).join("");
+  picker.value = graphFocusId;
+}
+
+function renderOperatingContext() {
+  const cube = DATA.balancing_cube;
+  const seconds = cube.operating_parameters?.hold_interval_s;
+  const frame = cube.reference_frames;
+  const panel = $("#operating-context");
+  if (!seconds && !frame?.yaw_axis) { panel.innerHTML = ""; return; }
+  panel.innerHTML = `<section class="graph-contract"><b>${language === "ja" ? `実演の保持区間：${seconds}秒` : `Demonstration hold interval: ${seconds} s`}</b><p>${language === "ja" ? "実演の合否判定区間です。それ以降の保持を実証するものではありません。" : "This is the demonstration acceptance interval; continued holding beyond it is not established."}</p>${frame?.yaw_axis ? `<details><summary>${language === "ja" ? "roll・pitch・yawの基準軸" : "Roll, pitch and yaw reference axes"}</summary><p>${esc(language === "ja" ? frame.translations?.ja?.description : `Yaw: ${frame.yaw_axis} Roll: ${frame.roll_axis} Pitch: ${frame.pitch_axis}`)}</p><small>${esc(frame.horizontal_axis_status)}</small></details>` : ""}</section>`;
+}
+
 function renderSystemGraph() {
+  renderOperatingContext();
+  renderGraphObjectPicker();
   const model = DATA.balancing_cube.model;
   const snapshot = model.simulation_snapshot_ref || {};
   const focus = graphNode(graphFocusId) || graphNode("M-VERTEX");
@@ -530,7 +547,6 @@ function renderSystemGraph() {
   const graphContents = visibleEdges.length
     ? `<div class="graph-focus-vertex" style="grid-column:1;grid-row:1 / span ${visibleEdges.length}">${graphNodeCard(focus, true)}</div>${edgeRows}`
     : `<div class="graph-focus-vertex" style="grid-column:1;grid-row:1">${graphNodeCard(focus, true)}</div><div class="graph-empty-edges" style="grid-column:2;grid-row:1">No direct edges match this relationship filter.</div>`;
-  $("#graph-version").innerHTML = `<span><small>${architectureMode === "proposed" ? "RECORDED BASE MODEL" : "RECORDED MODEL"}</small><button type="button" class="graph-model-ref" data-graph-center="${esc(model.id)}"><code>${esc(model.id)}@${esc(model.revision)}</code><i>Inspect model object ↗</i></button></span><i>references →</i><span><small>PINNED SNAPSHOT</small><button type="button" class="graph-model-ref" data-graph-center="${esc(snapshot.id || "")}"><code>${esc(snapshot.id || "not recorded")}@${esc(snapshot.revision || "")}</code><i>Inspect snapshot object ↗</i></button></span>`;
   $("#model-graph").innerHTML = `<div class="graph-path" aria-label="Model path">${path.map((node, index) => `${index ? `<span aria-hidden="true">›</span>` : ""}<button type="button" data-graph-crumb="${esc(node.id)}" ${node.id === focus.id ? 'aria-current="page"' : ""}>${esc(node.name)}</button>`).join("")}</div>
     <div class="graph-layer-label"><span>ONE-HOP OBJECT GRAPH · ${esc(graphKindLabel(focus.kind))}</span><small>${allEdges.length} incident ${allEdges.length === 1 ? "edge" : "edges"}</small></div>
     <div class="graph-edge-filters" aria-label="Filter graph by relationship type">${filters}</div>
@@ -563,16 +579,16 @@ function renderRequirementDetail(r) {
   const allocationMarkup = allocation ? `<section class="detail-section architecture-allocation-note"><span class="detail-label">${DATA.balancing_cube.reviewed_architecture ? "REVIEWED ALLOCATION" : "PROPOSED ALLOCATION · DRAFT"}</span><p>${esc(allocation.rationale)}</p><div class="architecture-actions">${allocation.targets.map((id) => `<button type="button" data-architecture-node="${esc(id)}">${esc(proposedNodes.find((n) => n.id === id)?.name || id)} ↗</button>`).join("")}</div><small>${DATA.balancing_cube.reviewed_architecture ? "Recorded trace links below use this reviewed allocation." : "Recorded trace links below retain the source model's allocation."}</small></section>` : "";
   card.innerHTML = `
     <div class="detail-topline"><span class="req-row-id">${esc(r.id)} <i>@ ${esc(r.revision)}</i></span><button type="button" class="detail-menu" id="copy-id" aria-label="Copy requirement ID">⧉</button></div>
-    <div class="detail-title-row"><div><span class="level-kicker">${esc(r.level || "requirement").toUpperCase()} · ${esc(r.group)}</span><h3>${esc(title)}</h3></div><span class="detail-symbol">§</span></div>
+    <div class="detail-title-row"><div><span class="level-kicker">${esc(r.record_role === "constraint" ? `${r.constraint_scope} constraint` : r.level || "requirement").toUpperCase()} · ${esc(r.group)}</span><h3>${esc(title)}</h3></div><span class="detail-symbol">§</span></div>
     <div class="detail-pills">${statusPill(humanize(r.status || "status not recorded"), "pill-draft", `status: ${r.status || "not recorded"}`)}${statusPill(humanize(r.approval_state || "review state not recorded"), "pill-pending", `approval_state: ${r.approval_state || "not recorded"}`)}${statusPill(humanize(r.verification_status || "verification not recorded"), "pill-notrun", `verification_status: ${r.verification_status || "not recorded"}`)}${statusPill(r.physical_verified === true ? "Physically verified" : "Not physically verified", "pill-unverified", `physical_verified: ${r.physical_verified === null ? "null" : r.physical_verified}`)}${r.hardware_verification_required ? statusPill("Hardware check required", "pill-hardware", "hardware_verification_required: true") : ""}</div>
-    <section class="detail-section statement-section"><span class="detail-label">${t.statement}</span><blockquote>${esc(statement || "Organizational group — no standalone statement")}</blockquote></section>
+    <section class="detail-section statement-section"><span class="detail-label">${r.record_role === "constraint" ? (language === "ja" ? "制約" : "CONSTRAINT STATEMENT") : t.statement}</span><blockquote>${esc(statement || "Organizational group — no standalone statement")}</blockquote></section>
     ${allocationMarkup}
     <section class="detail-section"><span class="detail-label">${t.acceptance}</span><div class="acceptance-box"><span class="acceptance-check">⊙</span><div><b>${esc(formatAcceptance(r.acceptance))}</b><small>${esc(r.verification_status || "not_run").replaceAll("_", " ")} · ${r.hardware_verification_required ? esc(t.hardware) : "hardware evidence not flagged"}</small></div></div></section>
     ${rationale ? `<section class="detail-section"><span class="detail-label">${t.rationale}</span><p class="detail-copy">${esc(rationale)}</p></section>` : ""}
     ${conditions?.length ? `<section class="detail-section"><span class="detail-label">${t.conditions}</span><ul class="detail-list">${conditions.map((x) => `<li>${esc(x)}</li>`).join("")}</ul></section>` : ""}
     <section class="detail-section"><span class="detail-label">${t.method}</span><div class="method-line"><span class="method-icon">${r.verification_method === "test" ? "⊙" : "⌕"}</span><b>${esc(r.verification_method || "not specified")}</b><small>${r.verification_case_ref ? `${esc(r.verification_case_ref.id)}@${esc(r.verification_case_ref.revision)}` : "no case linked"}</small></div></section>
     <section class="detail-section"><span class="detail-label">${t.unresolved} <i>${openItems.length.toString().padStart(2, "0")}</i></span>${openItems.length ? `<div class="open-item-list">${openItems.map((item) => `<article><span>${esc(item.id)}</span><p>${esc(item.description)}</p><small>OWNER · ${esc(item.owner || "TBD")}</small></article>`).join("")}</div>` : `<span class="empty-note">No open items are recorded for this requirement.</span>`}</section>
-    <section class="detail-section"><span class="detail-label">${t.designParams} <i>${r.kdps.length.toString().padStart(2, "0")}</i></span>${r.kdps.length ? `<div class="kdp-list">${r.kdps.map((k) => `<details class="kdp-item"><summary><b>${esc(k.id)}</b><span>${esc(k.name || "Parameter")}</span><i>＋</i></summary><div><span>${esc(k.symbol || k.quantity || "")}</span><b>${esc(formatValue(k.value))} ${esc(k.unit || "")}</b><small>${esc(k.revision)}${k.uncertainty ? ` · uncertainty ${esc(formatValue(k.uncertainty))}` : ""}${k.role ? ` · ${esc(k.role)}` : ""}${k.origin ? ` · origin: ${esc(k.origin)}` : ""}</small></div></details>`).join("")}</div>` : `<span class="empty-note">No KDP link is recorded.</span>`}</section>
+    <section class="detail-section"><span class="detail-label">${t.designParams} <i>${r.kdps.length.toString().padStart(2, "0")}</i></span>${r.kdps.length ? `<button type="button" class="kdp-graph-link" data-requirement-kdps="${esc(r.id)}">${language === "ja" ? "要求とKDPの関係をグラフで見る" : "View requirement–KDP connections"} ↗</button><div class="kdp-list">${r.kdps.map((k) => `<details class="kdp-item"><summary><b>${esc(k.id)}</b><span>${esc(k.name || "Parameter")}</span><i>＋</i></summary><div><span>${esc(k.symbol || k.quantity || "")}</span><b>${esc(formatValue(k.value))} ${esc(k.unit || "")}</b><small>${esc(k.revision)}${k.uncertainty ? ` · uncertainty ${esc(formatValue(k.uncertainty))}` : ""}${k.role ? ` · ${esc(k.role)}` : ""}${k.origin ? ` · origin: ${esc(k.origin)}` : ""}</small><button type="button" class="kdp-graph-link" data-parameter-graph="${esc(k.id)}">${language === "ja" ? "このKDPにつながる要求を見る" : "Explore this KDP’s requirements"} ↗</button></div></details>`).join("")}</div>` : `<span class="empty-note">No KDP link is recorded.</span>`}</section>
     <details class="detail-section trace-details"><summary><span class="detail-label">${t.links}</span><i>＋</i></summary>${renderLinks(r)}</details>
     <details class="detail-section trace-details"><summary><span class="detail-label">${t.case}</span><i>＋</i></summary>${r.verification_case_ref ? `<div class="case-summary"><b>${esc(r.verification_case?.name || r.verification_case_ref.id)}</b><pre>${esc(JSON.stringify(r.verification_case, null, 2))}</pre></div>` : `<span class="empty-note">No planned case linked.</span>`}</details>
     <details class="detail-section trace-details"><summary><span class="detail-label">${t.source}</span><i>＋</i></summary><div class="source-record"><b>${esc(r.source_record?.id || "Source not recorded")}@${esc(r.source_record?.revision || "")}</b><p>Statement status: ${esc(r.status)} · source statement status: ${esc(r.source_status || "not recorded")}</p><small>MODEL ${esc(DATA.balancing_cube.model.id)}@${esc(DATA.balancing_cube.model.revision)}</small></div></details>
@@ -586,6 +602,8 @@ function renderRequirementDetail(r) {
     $("#review-panel").scrollIntoView({ behavior: "smooth", block: "center" });
   });
   $$('[data-architecture-node]', card).forEach((button) => button.addEventListener("click", () => showArchitectureObject(button.dataset.architectureNode)));
+  $$('[data-requirement-kdps]', card).forEach((button) => button.addEventListener("click", () => showArchitectureObject(button.dataset.requirementKdps, "constrain")));
+  $$('[data-parameter-graph]', card).forEach((button) => button.addEventListener("click", () => showArchitectureObject(button.dataset.parameterGraph, "constrain")));
 }
 
 function selectRequirement(id) {
@@ -748,6 +766,10 @@ function wireControls() {
   document.addEventListener("keydown", (event) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); $("#global-search").focus(); } });
   $("#language-toggle").addEventListener("click", () => setLanguage(language === "en" ? "ja" : "en"));
   $("#graph-home").addEventListener("click", () => openGraphNode("M-VERTEX"));
+  $("#graph-parameters").addEventListener("click", () => openGraphNode(selectedId || "M-VERTEX", "constrain"));
+  $("#graph-object-picker").addEventListener("change", (event) => {
+    if (event.target.value) openGraphNode(event.target.value, "constrain");
+  });
   $("#save-draft").addEventListener("click", saveDraft);
   $("#review-export-top").addEventListener("click", exportReview);
   $$("[data-jump]").forEach((button) => button.addEventListener("click", () => {
@@ -764,6 +786,8 @@ function wireControls() {
 
 function renderModelProvenance() {
   const model = DATA.balancing_cube.model;
+  const holdGuide = $("#guide-hold-interval");
+  if (holdGuide) holdGuide.textContent = `R-HOLD · at least ${requirement("R-HOLD")?.acceptance?.value ?? "specified"} s without external support`;
   $("#model-status-pill").textContent = `${humanize(model.approval_state || "not recorded")} · ${model.revision}`;
   $("#model-status-title").textContent = `Requirement and allocation state: ${humanize(model.approval_state || "not recorded")}`;
   $("#model-status-copy").textContent = `This view pins ${model.id}@${model.revision}. Review, test execution and physical verification are separate states. Browser proposals do not change the canonical model.`;
@@ -789,7 +813,6 @@ async function init() {
   DATA.balancing_cube.design_claims = designClaims;
   renderCubeStats();
   renderArchitecturePanel();
-  renderDesignCoverage();
   renderSystemGraph();
   initGroupControls();
   renderModelProvenance();

@@ -49,6 +49,12 @@ def parser() -> argparse.ArgumentParser:
     explorer_build.add_argument("--model-id", default="cube.system-model.active")
     explorer_build.add_argument("--model-revision", help="exact revision; omit to select the latest source model")
     explorer_build.add_argument("--engineering-agents-root", type=Path, help="optional ECLSS/scrubber comparison checkout")
+    explorer_serve = explorer_ops.add_parser("serve", help="run the local Systems Requirements Explorer web app")
+    explorer_serve.add_argument("--port", type=int, default=8791)
+    explorer_serve.add_argument("--project", default="balancing-cube")
+    explorer_serve.add_argument("--model-id", default="cube.system-model.active")
+    explorer_serve.add_argument("--model-revision", help="exact revision; omit for latest source model")
+    explorer_serve.add_argument("--engineering-agents-root", type=Path)
     datasets = sub.add_parser("datasets", help="catalog and retrieve immutable run evidence from private GitHub Releases")
     dataset_ops = datasets.add_subparsers(dest="dataset_command", required=True)
     pack = dataset_ops.add_parser("pack", help="prepare an indexed archive collection; never publishes or deletes inputs")
@@ -145,9 +151,14 @@ def main(argv: list[str] | None = None) -> int:
             from .report import report
             result = {"path": str(report(store, args.output, project_id=args.project))}
         elif args.command == "explorer":
-            from .explorer import build_explorer
-            result = build_explorer(store, args.output, project_id=args.project, model_id=args.model_id,
-                                    revision=args.model_revision, engineering_agents_root=args.engineering_agents_root)
+            options = dict(project_id=args.project, model_id=args.model_id,
+                           revision=args.model_revision, engineering_agents_root=args.engineering_agents_root)
+            if args.explorer_command == "serve":
+                from .explorer_server import serve_explorer
+                result = serve_explorer(store, port=args.port, **options)
+            else:
+                from .explorer import build_explorer
+                result = build_explorer(store, args.output, **options)
         elif args.command == "baseline":
             result = store.baseline(args.project, id=args.id, revision=args.revision, actor={"type": "human", "id": args.human_actor}, reason=args.reason)
         elif args.command == "sysml":

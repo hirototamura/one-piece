@@ -8,7 +8,8 @@ The graph has an [OMG Systems Modeling API 1.0 read and exchange boundary](docs/
 
 [Strategy](docs/en/strategy.md) / [戦略](docs/ja/strategy.md) records current strategies and specifications. CORE.md holds long-term philosophy and requires explicit human approval before edits. Other Markdown filenames under docs use lowercase snake_case.
 
-[Requirements explorer](docs/en/requirements_explorer.md) builds the interactive
+[Requirements explorer](docs/en/requirements_explorer.md) runs as a local web app with
+`onepiece --store projects/balancing-cube/store explorer serve` and builds the interactive
 Cube view from an exact canonical model revision. [Dataset retrieval](docs/en/dataset_storage.md)
 indexes historical validation evidence and retrieves selected, hash-checked
 datasets from private GitHub Releases or offline assets.

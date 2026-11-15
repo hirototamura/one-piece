@@ -18,9 +18,14 @@
 
 ## 関連する仕様
 
+- [要求の不足量による採点](requirement_scoring.md)：必須要求の合否、最大不足量、数値と実機の区別。
+
+- [Cubeの要求レビュー](cube_requirements_review.md)：10秒の運用値、頂点識別、制約の分離、構成管理。
+
 - [要求エクスプローラー](requirements_explorer.md)：正本の版選択、グラフ確認、ブラウザー内の改訂案。
 - [データの保存と取得](dataset_storage.md)：Git の取得カタログと、環境をまたいで共有する固定した Release 証拠。
 - [システムモデル](system_model.md)：版付き記録、トレース関係、証拠の適用範囲。
+- [Cubeの要求・KDP洗練化](cube_model_refinement.md)：必須の8頂点ミッション、既存の最適化単位、合否基準の重複、KDP参照の粒度。
 - [SysML API](sysml_api.md)：対応する標準サービスと交換形式。
 - [自動検証とdiff](verification_and_diff.md)：現在の範囲と受入条件の草案。
 - [競合調査](competitor_tradeoff.md)：過去の採用判断を除いた観察。
@@ -30,3 +35,7 @@
 [英語版strategy](../en/strategy.md)。
 
 [8頂点のミッションと初回試験](bottom_corner_trial.md)：固定した下側の取付面、制御器の出典、数値的証拠の範囲。
+
+## リリース候補：2026-11-15
+
+[v0.5.0リリース候補](cube_release_20261115.md) · `requirements-review-20261115-3` · 19 requirements / 3 constraints / 37 KDPs.

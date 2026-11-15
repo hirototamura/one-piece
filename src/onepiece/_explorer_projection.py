@@ -27,8 +27,9 @@ def project_model(records, model):
 
     current_requirements = [record_by_ref(records, reference)
                             for reference in context_refs["requirements"]]
+    constraints = [record_by_ref(records, reference) for reference in context_refs.get("constraints", [])]
     groups = [r for r in current_requirements if r["data"].get("record_role") == "requirement_group"]
-    obligations = [r for r in current_requirements if r["data"].get("record_role") != "requirement_group"]
+    obligations = [r for r in current_requirements if r["data"].get("record_role") != "requirement_group"] + constraints
 
     group_by_id = {r["id"]: r for r in groups}
     kdp_refs = {(r["id"], r["revision"]): r for r in context_refs.get("kdps", [])}
@@ -36,7 +37,10 @@ def project_model(records, model):
         for link in requirement.get("links", []):
             if link.get("type") == "constrain":
                 target = link.get("target", {})
-                kdp_refs[(target.get("id", ""), target.get("revision", ""))] = target
+                target_key = target.get("id", ""), target.get("revision", "")
+                target_record = records.get(target_key)
+                if target_record and target_record["kind"] in {"parameter", "kdp", "design_parameter", "model_parameter"}:
+                    kdp_refs[target_key] = target
 
     kdps = []
     for key in sorted(kdp_refs):
@@ -57,6 +61,7 @@ def project_model(records, model):
             "bounds": kd.get("bounds"), "standard_uncertainty": kd.get("standard_uncertainty"),
             "priority": kd.get("priority"), "note": kd.get("note"),
             "requirements": kd.get("requirements", []),
+            "requirement_refs": kd.get("requirement_refs", []),
             "product_node": kdp.get("product_node"), "links": kdp.get("links", []),
         })
     kdp_by_key = {(x["id"], x["revision"]): x for x in kdps}
@@ -77,12 +82,13 @@ def project_model(records, model):
         for link in record.get("links", []):
             if link.get("type") == "constrain":
                 target = link.get("target", {})
-                related_kdps.append(kdp_by_key.get((target.get("id"), target.get("revision")), {
-                    "id": target.get("id"), "revision": target.get("revision"), "missing": True
-                }))
+                parameter = kdp_by_key.get((target.get("id"), target.get("revision")))
+                if parameter:
+                    related_kdps.append(parameter)
         translations = data.get("translations", {}).get("ja", {})
         normalized_obligations.append({
             "id": record["id"], "revision": record["revision"],
+            "record_role": data.get("record_role", "requirement"), "constraint_scope": data.get("constraint_scope"),
             "name": data.get("name", record["id"]),
             "group_id": parent_id or "M-VERTEX", "group": group_name,
             "level": data.get("level"), "statement": data.get("statement"),
@@ -179,10 +185,15 @@ def project_model(records, model):
         "balancing_cube": {
             "model": {**model_data, "id": model["id"], "revision": model["revision"],
                       "created_at": model["created_at"]},
-            "groups": normalized_groups, "requirements": normalized_obligations,
+            "change_contract": snapshot["data"].get("change_contract"),
+            "groups": normalized_groups,
+            "requirements": [r for r in normalized_obligations if r["record_role"] != "constraint"],
+            "constraints": [r for r in normalized_obligations if r["record_role"] == "constraint"],
+            "operating_parameters": snapshot["data"].get("operating_parameters", {}),
+            "reference_frames": snapshot["data"].get("reference_frames", {}),
             "kdps": kdps, "verification_cases": verification_cases,
             "products": products, "functions": functions,
-            "counts": {"obligations": len(normalized_obligations), "groups": len(normalized_groups),
+            "counts": {"obligations": len(normalized_obligations) - len(constraints), "groups": len(normalized_groups),
                        "verification_cases": len(verification_cases), "linked_kdps": len(kdps)},
         },
         "eclss": None, "scrubber": None,
@@ -199,7 +210,7 @@ def project_model(records, model):
             "functions": functions,
             "components": [{**p, "kind": "component"} for p in products if p.get("record_role") == "component"],
             "requirement_allocations": [{"source": r["id"], "targets": [l["target"]["id"] for l in r["links"] if l["type"] == "allocate"],
-                                         "scope": r["allocation_scope"], "rationale": r["allocation_rationale"]} for r in normalized_obligations],
+                                         "scope": r["allocation_scope"], "rationale": r["allocation_rationale"]} for r in normalized_obligations if r["record_role"] != "constraint"],
             "parameter_allocations": [{"source": p["id"], "targets": [l["target"]["id"] for l in p["links"] if l["type"] == "allocate"]} for p in kdps],
         }
     return result

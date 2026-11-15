@@ -1,0 +1,429 @@
+{
+  "eclss": {
+    "agents": {
+      "actor": {
+        "discourse_window": 22,
+        "llm": {
+          "api_timeout": 20,
+          "base_url": "http://10.10.0.108:8000/v1",
+          "max_tokens": 768,
+          "model": "qwen3.5-9b",
+          "provider": "vllm",
+          "temperature": 0.45,
+          "think": false
+        },
+        "memory_limit": 30,
+        "policy": {
+          "ars_goal": {
+            "initial_co2_mass": 4.5,
+            "initial_contaminants": 5.0,
+            "initial_moisture_content": 25.0
+          },
+          "ogs_goal": {
+            "input_water_mass": 0.15,
+            "iodine_concentration": 2.0
+          },
+          "request_co2_amount": 0.025,
+          "request_co2_before_ogs": false,
+          "wrs_feed_trigger_l": 5.0,
+          "wrs_goal": {
+            "urine_volume": 0.5
+          }
+        },
+        "team": {
+          "count": 50,
+          "id_prefix": "eclss_actor",
+          "persona": "SSOS ECLSS actor. Read storage telemetry (/co2_storage, /o2_storage);\ncoordinate ARS air_revitalisation and OGS oxygen_generation via backend actions.\nSabatier CO2 feedstock is normally left to OGS (internal /ars/request_co2); issue an\nexplicit request_co2 before OGS only when policy request_co2_before_ogs is true.\nNo topology changes at runtime.\n"
+        }
+      },
+      "design": {
+        "audit": {
+          "archetypes": [
+            "rederive_numbers",
+            "avoid_local_optima",
+            "design_validity"
+          ],
+          "count": 3,
+          "enabled": true,
+          "id_prefix": "eclss_auditor",
+          "llm": {
+            "max_tokens": 2048
+          },
+          "persona": ""
+        },
+        "llm": {
+          "api_timeout": 20,
+          "base_url": "http://10.10.0.108:8001/v1",
+          "max_tokens": 16384,
+          "model": "qwen3.8-27b-uncensored",
+          "provider": "vllm",
+          "temperature": 0.45,
+          "think": true
+        },
+        "team": {
+          "archetypes": [],
+          "bias_direction": "",
+          "count": 1,
+          "id_prefix": "eclss_designer",
+          "persona": "Post-run ECLSS capacity design engineer. The run is over: size the next\nbuild. You are shown where the design stands and you answer one thing:\nthe sizing to try next, or that you are finished. Every candidate you\nname is checked, re-simulated, audited and compared for you before you\nare asked again. Do not judge pass/fail.\n"
+        },
+        "tool_use": {
+          "candidate_actor_mode": "inherit",
+          "decision_loop": {
+            "max_decisions": 2,
+            "max_llm_calls": 2,
+            "max_parse_retries": 1
+          },
+          "enabled": true,
+          "llm": {
+            "max_tokens": 6144
+          },
+          "max_candidate_runs": 1,
+          "plots_enabled": true
+        }
+      }
+    },
+    "scenario": {
+      "agents": {
+        "actor": {
+          "max_actions_per_step": 6,
+          "mode": "labeled_rule_base"
+        },
+        "design": {}
+      },
+      "backend": {
+        "kind": "plant_sim",
+        "ros2": {
+          "action_timeout_s": 120.0,
+          "startup_wait_s": 45.0,
+          "topic_timeout_s": 15.0
+        }
+      },
+      "description": "SSOS ECLSS closed loop. Agents operate ARS/OGS via EclssBackend (Crew Simulation replacement). Mock backend for local dev; Ros2EclssBridge for SSOS Docker. Mass storage values are kilograms (ROS bridge converts SSOS grams ↔ kg).\n",
+      "design_constraints": {
+        "budgets": {
+          "max_total_cost_musd": 500.0,
+          "max_total_mass_kg": 4000.0,
+          "max_total_volume_m3": 14.0
+        },
+        "enabled": true,
+        "objective": {
+          "primary": "require_full_survival",
+          "secondary": "maximize_evaluation_score"
+        },
+        "penalty_weights": {
+          "cost": 0.3,
+          "mass": 0.5,
+          "volume": 0.2
+        },
+        "simulation_policy": {
+          "require_feasible_final": false,
+          "require_in_bounds_final": true,
+          "run_invalid_candidates": false,
+          "run_out_of_bounds_candidates": true,
+          "run_over_budget_candidates": true
+        },
+        "sizing_model": {
+          "baseline": {
+            "ars_capacity_kg_day": 4.5,
+            "ogs_max_o2_kg_day": 9.25,
+            "wrs_max_feed_l_per_operation": 10.0
+          },
+          "hardware_cost_musd": {
+            "ars": {
+              "fixed": 15.0,
+              "variable_at_baseline": 25.0
+            },
+            "ogs": {
+              "fixed": 20.0,
+              "variable_at_baseline": 45.0
+            },
+            "wrs": {
+              "fixed": 18.0,
+              "variable_at_baseline": 37.0
+            }
+          },
+          "launch_cost_musd_per_kg": 0.055,
+          "mass_kg": {
+            "ars": {
+              "fixed": 180.0,
+              "variable_at_baseline": 270.0
+            },
+            "ogs": {
+              "fixed": 250.0,
+              "variable_at_baseline": 450.0
+            },
+            "wrs": {
+              "fixed": 300.0,
+              "variable_at_baseline": 350.0
+            }
+          },
+          "mode": "rack_affine_linear_v1",
+          "volume_m3": {
+            "ars": {
+              "fixed": 0.8,
+              "variable_at_baseline": 1.2
+            },
+            "ogs": {
+              "fixed": 1.0,
+              "variable_at_baseline": 1.3
+            },
+            "wrs": {
+              "fixed": 1.2,
+              "variable_at_baseline": 1.3
+            }
+          }
+        },
+        "subsystem_bounds": {
+          "ars": {
+            "max_capacity_kg_day": 80.0,
+            "min_capacity_kg_day": 4.5
+          },
+          "ogs": {
+            "max_o2_kg_day": 80.0,
+            "min_o2_kg_day": 9.25
+          },
+          "wrs": {
+            "max_feed_l_per_operation": 20.0,
+            "min_feed_l_per_operation": 1.0
+          }
+        }
+      },
+      "evaluation": {
+        "actor_decision": {
+          "command_bounds": {
+            "air_revitalisation": {
+              "initial_co2_mass": [
+                0.0,
+                8.0
+              ]
+            },
+            "oxygen_generation": {
+              "input_water_mass": [
+                0.0,
+                1.0
+              ]
+            },
+            "request_co2": {
+              "amount": [
+                0.0,
+                8.0
+              ]
+            },
+            "request_o2": {
+              "amount": [
+                0.0,
+                8.0
+              ]
+            },
+            "water_recovery": {
+              "urine_volume": [
+                0.0,
+                10.0
+              ]
+            }
+          },
+          "latency_weight": 0.5,
+          "max_latency_steps": 2
+        },
+        "enabled": true,
+        "footprint": {
+          "cost_full_score_musd": 500.0,
+          "cost_zero_score_musd": 900.0,
+          "mass_full_score_kg": 3400.0,
+          "mass_zero_score_kg": 6000.0
+        },
+        "physical_response": {
+          "conversion_weight": 1.0,
+          "sign_weight": 1.0,
+          "success_weight": 1.0
+        },
+        "physics_gate": {
+          "inventory_tolerance": 1e-09,
+          "ledger_tolerance": 2e-06
+        },
+        "resource_recovery": {
+          "resource_weights": {
+            "co2": 2.0,
+            "o2": 1.0,
+            "water": 1.0
+          },
+          "terminal_weight": 0.5
+        },
+        "tcl": {
+          "reference_seconds": 57600
+        },
+        "trajectory": {
+          "resource_weights": {
+            "co2": 1.0,
+            "o2": 1.0,
+            "water": 1.0
+          },
+          "zero_score_mean_severity": 1.0
+        }
+      },
+      "inject_failures": false,
+      "iteration": {
+        "approve_provisional": false,
+        "count": 50,
+        "enabled": true,
+        "exploration": {
+          "cooldown_iterations": 2,
+          "min_score_delta": 0.25,
+          "require_same_survival_tier": true,
+          "stagnation_window": 4
+        },
+        "paired_replay": true,
+        "run_id": "ssos_eclss_loop_design_iter"
+      },
+      "mock_dynamics": {
+        "ars_co2_reduction_kg": 0.35,
+        "ars_reference_co2_mass_kg": 1.8,
+        "co2_growth_kg_per_step": 0.06,
+        "sabatier_co2_kg_per_water_kg": 2.0
+      },
+      "name": "ssos_eclss_loop",
+      "output": {
+        "run_id": "ssos_eclss_loop_baseline",
+        "run_id_labeled_rule_base": "ssos_eclss_loop_labeled_rule_base",
+        "run_id_llm": "ssos_eclss_loop_llm"
+      },
+      "plant_sim": {
+        "ars": {
+          "capacity_kg_day": 4.5,
+          "capture_efficiency": 0.83,
+          "reference_goal_co2_kg": 1.8
+        },
+        "crew": {
+          "activity_factor": 1.0,
+          "co2_kg_day_person": 1.04,
+          "condensate_kg_day_person": 0.75,
+          "o2_kg_day_person": 0.84,
+          "potable_water_kg_day_person": 2.28,
+          "size": 50,
+          "unrecoverable_water_kg_day_person": 0.03,
+          "urine_kg_day_person": 1.5
+        },
+        "ogs": {
+          "max_o2_kg_day": 9.25
+        },
+        "operations": {
+          "busy_guard_enabled": true
+        },
+        "sabatier": {
+          "conversion_efficiency": 1.0
+        },
+        "survival": {
+          "co2": {
+            "critical_divisor": 2,
+            "critical_steps": 2,
+            "warning_divisor": 4,
+            "warning_steps": 2
+          },
+          "enabled": true,
+          "o2": {
+            "critical_loss": 2,
+            "critical_steps": 1,
+            "warning_loss": 1,
+            "warning_steps": 2
+          },
+          "water": {
+            "critical_loss": 1,
+            "critical_steps": 1,
+            "warning_loss": 1,
+            "warning_steps": 2
+          }
+        },
+        "time": {
+          "ars_operation_seconds": 4800,
+          "ogs_operation_seconds": 1200,
+          "step_seconds": 1200,
+          "wrs_operation_seconds": 1200
+        },
+        "wrs": {
+          "grey_recovery": 0.9,
+          "max_feed_l_per_operation": 10.0,
+          "urine_recovery": 0.98
+        }
+      },
+      "simulation": {
+        "initial_co2_storage_kg": 1.3,
+        "initial_o2_storage_kg": 8.0,
+        "initial_product_water_l": 80.0,
+        "steps": 50
+      },
+      "subsystem_failures": [
+        {
+          "end_step": 20,
+          "start_step": 10,
+          "subsystem": "ars"
+        },
+        {
+          "end_step": 30,
+          "start_step": 20,
+          "subsystem": "ogs"
+        },
+        {
+          "end_step": 40,
+          "start_step": 30,
+          "subsystem": "wrs"
+        }
+      ],
+      "thresholds": {
+        "co2_storage_critical_kg": 8.0,
+        "co2_storage_high_kg": 2.0,
+        "o2_storage_critical_kg": 1.0,
+        "o2_storage_low_kg": 6.0,
+        "product_water_critical_l": 25.0,
+        "product_water_low_l": 50.0
+      }
+    },
+    "scope_note": "Scenario configuration is the current operational and evaluation contract. It is not a reviewed One-Piece requirement baseline.",
+    "source": "engineering_agents/src/scenario/ssos_eclss_loop/scenario.yaml"
+  },
+  "scrubber": {
+    "formal_requirement_count": 0,
+    "scenario": {
+      "agents": {
+        "mode": "none"
+      },
+      "anomalies": [
+        {
+          "co2_production_multiplier": 1.4,
+          "name": "scrubber_degradation",
+          "power_margin_decay_per_step": 3.0,
+          "scrubber_efficiency_decay_per_step": 0.02,
+          "start_step": 20
+        }
+      ],
+      "description": "Baseline ECLSS demo. Scrubber efficiency degrades at step 20; CO2 rises into the warning/critical band. No agents (deterministic physics-only run).\n",
+      "design_parameters": {
+        "base_power_draw_w": 200.0,
+        "bypass_flow_bonus": 0.15,
+        "bypass_power_w": 40.0,
+        "co2_production_ppm_per_step": 32.0,
+        "fan_power_w": 80.0,
+        "load_reduction_factor": 0.6,
+        "permanent_bypass_power_w": 20.0,
+        "power_draw_to_margin_factor": 0.01875,
+        "scrub_rate_coefficient": 0.06,
+        "scrubber_base_efficiency": 0.95
+      },
+      "name": "scrubber_degradation",
+      "output": {
+        "run_id": "scrubber_degradation_baseline",
+        "run_id_labeled_rule_base": "scrubber_degradation_labeled_rule_base",
+        "run_id_llm": "scrubber_degradation_llm"
+      },
+      "simulation": {
+        "initial_co2_ppm": 800.0,
+        "initial_power_margin_w": 150.0,
+        "steps": 50
+      }
+    },
+    "source": "engineering_agents/src/scenario/scrubber_degradation/scenario.yaml"
+  },
+  "comparison_sources": [],
+  "source_site_commit": "084f87a1aa55e33a3e82b88936d7eec4aa3369e0",
+  "scope": "Retained scenario-contract examples from the Systems Requirements Explorer; not canonical Cube requirements."
+}
