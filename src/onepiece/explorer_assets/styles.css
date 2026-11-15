@@ -359,3 +359,7 @@ h1 em { color: #b47b3d; font-weight: 500; }
 .design-screening dd { margin: 0; }
 .design-screening code { display: block; color: #7b8895; font: 9.8px/1.5 var(--mono); overflow-wrap: anywhere; }
 :where([hidden]) { display: none !important; }
+
+/* Graph-card supporting text: 160% of the original typography. */
+.graph-node-kind { font-size: 11.2px; }
+.graph-node code, .graph-node small, .graph-node-hint, .graph-node-open { font-size: 12.8px; }
