@@ -1,7 +1,40 @@
 import json
+import shutil
+import subprocess
 
-from onepiece import Store, make_record
+import pytest
+
+from onepiece import Store, make_record, ref
 from onepiece.report import report
+
+
+def _run_report_javascript(html, expression):
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("Node.js is required to execute report JavaScript")
+    data = json.loads(html.split('<script type="application/json" id="data">')[1].split('</script>')[0])
+    script = html.split('<script>')[1].split('</script>')[0]
+    harness = r"""
+const {data,script,expression}=JSON.parse(require('node:fs').readFileSync(0,'utf8'));
+const elements=new Map(),all=new Set(['#graph-focus','#param-kind','#param-owner','#design-status','#design-era']);
+function element(selector){
+  if(!elements.has(selector))elements.set(selector,{
+    value:all.has(selector)?'all':'',checked:false,innerHTML:'',textContent:'',className:'',style:{},attributes:{},
+    setAttribute(name,value){this.attributes[name]=value},querySelectorAll(){return []},
+    getContext(){return {}},addEventListener(){}
+  });
+  return elements.get(selector);
+}
+element('#data').textContent=JSON.stringify(data);
+global.document={getElementById:id=>element('#'+id),querySelector:element};
+global.window={addEventListener(){}};
+global.requestAnimationFrame=()=>{};
+process.stdout.write(JSON.stringify(eval(script+'\n'+expression)));
+"""
+    result = subprocess.run([node, "-e", harness],
+                            input=json.dumps({"data": data, "script": script, "expression": expression}),
+                            text=True, capture_output=True, check=True)
+    return json.loads(result.stdout)
 
 
 def test_report_uses_store_and_escapes_imported_text(tmp_path):
@@ -106,7 +139,7 @@ def test_report_displays_translated_drafts_without_reusing_old_revision_evidence
     store.import_records([old_product, product, original, revised, evidence, current_evidence, planned, group])
     html = report(store, tmp_path / "report", "cube").read_text()
     data = json.loads(html.split('<script type="application/json" id="data">')[1].split('</script>')[0])
-    view = data["requirement_views"]["R-HOLD@english"]
+    view = data["requirement_views"]['["cube","R-HOLD","english"]']
     assert view["english"]["statement"] == english
     assert view["japanese"]["statement"] == japanese
     assert view["english"]["acceptance_criteria"]["duration"] == {"value": 30, "unit": "s"}
@@ -118,8 +151,8 @@ def test_report_displays_translated_drafts_without_reusing_old_revision_evidence
     assert view["historical_evidence_count"] == 1
     assert view["historical_target_refs"] == [{"id": "R-HOLD", "revision": "source"}]
     assert view["planned_case_refs"] == [{"id": "hold.test", "revision": "1"}]
-    assert data["requirement_views"]["cube.req.system@1"]["is_group"] is True
-    assert data["requirement_views"]["cube.req.system@1"]["english"]["statement"] is None
+    assert data["requirement_views"]['["cube","cube.req.system","1"]']["is_group"] is True
+    assert data["requirement_views"]['["cube","cube.req.system","1"]']["english"]["statement"] is None
     # Historical graph nodes use their own record revision and retain allocation.
     trace = {(r["id"], r["revision"]): r for r in data["trace_records"]}
     assert trace[("R-HOLD", "source")] == original
@@ -166,6 +199,7 @@ def test_multi_project_replay_resolves_design_and_provenance_within_its_project(
     data = json.loads(output.read_text().split('<script type="application/json" id="data">')[1].split('</script>')[0])
     cases = data['replay']['cases']
     assert len(cases) == 2 and len({case['id'] for case in cases}) == 2
+    assert set(data['trial_views']) == {'["alpha","same-run","1"]', '["beta","same-run","1"]'}
     for case in cases:
         side = .18 if case['project_id'] == 'alpha' else .32
         assert case['geometry']['cube_side_m'] == side
@@ -184,3 +218,94 @@ def test_report_current_projection_uses_timezone_instants(tmp_path):
     output = report(store, tmp_path / 'report')
     data = json.loads(output.read_text().split('<script type="application/json" id="data">')[1].split('</script>')[0])
     assert data['records'] == [newer]
+
+
+def test_report_keeps_overlapping_project_views_and_evaluations_separate(tmp_path):
+    store = Store(tmp_path / "store")
+    records = []
+    for project, status in [("alpha", "draft"), ("beta", "reviewed")]:
+        requirement = make_record(project_id=project, id="R-HOLD", kind="requirement",
+                                  data={"statement": project + " statement", "status": status})
+        design = make_record(project_id=project, id="shared-design", kind="design")
+        evidence = make_record(project_id=project, id="shared-evidence", kind="evaluation",
+                               data={"candidate_id": design["id"], "design_ref": ref(design),
+                                     "verification_origin": project, "summary": {}},
+                               links=[{"type": "verify", "target": ref(requirement)}])
+        fresh = make_record(project_id=project, id="fresh-design", kind="design_candidate")
+        run = make_record(project_id=project, id="shared-run", kind="simulation_run",
+                          data={"candidate_ref": ref(fresh), "numeric_gpu_verified": project == "alpha",
+                                "all_screening_passed": True})
+        product = make_record(project_id=project, id="shared-owner", kind="product", data={"name": "Owner"})
+        parameter = make_record(project_id=project, id="shared-param", kind="parameter",
+                                product_node=product['id'], data={"name": project + " parameter"})
+        records.extend([requirement, design, evidence, fresh, run, product, parameter])
+    records.append(make_record(project_id="alpha", id="summary", kind="campaign_summary",
+                               data={"best": {"original_confirmed": ["shared-design"]},
+                                     "prior46": {"ids": ["shared-design"]}}))
+    store.import_records(records)
+    html = report(store, tmp_path / "report").read_text()
+    views = _run_report_javascript(html, """
+['alpha','beta'].map(project=>{
+  const requirement=byKey.get(key({project_id:project,id:'R-HOLD',revision:'1'}));
+  reqDetail(requirement);
+  const design=byKey.get(key({project_id:project,id:'shared-design',revision:'1'}));
+  const fresh=byKey.get(key({project_id:project,id:'fresh-design',revision:'1'}));
+  designDetail(design);
+  $('#param-owner').value=idKey(project,'shared-owner');paramRows();
+  $('#design-prior').checked=true;designRows();
+  return {project,view:reqView(requirement),detail:$('#reqdetail').innerHTML,bestProject:best.project_id,
+          evaluations:evalFor(design).map(e=>e.project_id),freshStatus:fresh.data.status,
+          selectors: ['#graph-design','#compare-base','#compare-target'].map(s=>$(s).innerHTML),
+          designDetail:$('#design-detail').innerHTML, requirementRows:$('#reqrows').innerHTML,
+          ownerOptions:$('#param-owner').innerHTML, parameterRows:$('#paramrows').innerHTML,
+          priorDesigns:shown.map(r=>r.project_id),designRows:$('#designrows').innerHTML};
+})
+""")
+    for view, status in zip(views, ["draft", "reviewed"]):
+        project = view["project"]
+        assert view["view"]["english"]["statement"] == project + " statement"
+        assert view["view"]["statement_status"] == status
+        assert view["evaluations"] == [project]
+        assert view["bestProject"] == "alpha"
+        assert all(project + " / shared-design · 1" in options for options in view["selectors"])
+        assert project + " / shared-design @1" in view["designDetail"]
+        assert project + " / R-HOLD" in view["requirementRows"]
+        assert project + " / R-HOLD @1" in view["detail"]
+        assert project + " / Owner" in view["ownerOptions"]
+        assert project + " parameter" in view["parameterRows"]
+        assert ("beta" if project == "alpha" else "alpha") + " parameter" not in view["parameterRows"]
+        assert view["priorDesigns"] == ["alpha"]
+        assert "alpha / shared-design @1" in view["designRows"]
+        assert "beta / shared-design @1" not in view["designRows"]
+        assert project + ": 1" in view["detail"]
+        assert ("beta" if project == "alpha" else "alpha") + ": 1" not in view["detail"]
+        assert view["freshStatus"] == ("new_gpu_confirmed_pass" if project == "alpha"
+                                        else "cpu_only_provisional_pass")
+
+
+def test_report_renders_current_and_historical_function_allocation_chains(tmp_path):
+    store = Store(tmp_path / "store")
+    records = []
+    for revision, date in [("old", "2026-01-01"), ("current", "2026-01-02")]:
+        common = {"project_id": "cube", "revision": revision, "created_at": date + "T00:00:00Z"}
+        product = make_record(**common, id="component", kind="product")
+        function = make_record(**common, id="balance", kind="function",
+                               links=[{"type": "allocate", "target": ref(product)}])
+        requirement = make_record(**common, id="R-HOLD", kind="requirement",
+                                  links=[{"type": "allocate", "target": ref(function)}])
+        if revision == "current":
+            requirement["links"].append({"type": "derive", "target": {"id": "R-HOLD", "revision": "old"}})
+        records.extend([product, function, requirement])
+    store.import_records(records)
+    html = report(store, tmp_path / "report").read_text()
+    rendered = _run_report_javascript(html, """
+({graph:$('#graph').innerHTML,note:$('#graph-trace-note').innerHTML,
+  bounds:$('#graph').attributes.viewBox,trace:D.trace_records.map(r=>key(r))})
+""")
+    for revision in ("old", "current"):
+        key = json.dumps(["cube", "balance", revision], separators=(",", ":")).replace('"', '&quot;')
+        assert 'data-node="' + key + '"' in rendered["graph"]
+    assert rendered["graph"].count('marker-end="url(#arrow-allocate)"') == 4
+    assert "表示を省略した関係" not in rendered["note"]
+    assert '["cube","balance","old"]' in rendered["trace"]
+    assert rendered["bounds"].startswith("0 0 1440 ")
