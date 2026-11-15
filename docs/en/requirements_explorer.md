@@ -4,7 +4,8 @@
 
 ```sh
 python -m pip install -e .
-onepiece --store projects/balancing-cube/store explorer serve
+onepiece --store projects/balancing-cube/store explorer serve \
+  --model-revision requirements-review-20261115-3
 ```
 
 Open `http://127.0.0.1:8791/`. Use `--port` to choose another port and
@@ -31,7 +32,7 @@ Build the reviewed Cube view from the source checkout:
 ```sh
 python -m pip install -e .
 onepiece --store projects/balancing-cube/store explorer build \
-  projects/balancing-cube/explorer --model-revision reviewed-20261019-1
+  projects/balancing-cube/explorer --model-revision requirements-review-20261115-3
 python -m http.server 8791 --bind 127.0.0.1 \
   --directory projects/balancing-cube/explorer
 ```
@@ -40,7 +41,7 @@ Open `http://127.0.0.1:8791/`. Stop the local static server with Ctrl-C. This
 serves only the generated directory. It does not expose a writable store or start
 a model API. The installed wheel includes the assets; Node.js is not required.
 
-The reviewed projection contains 22 obligations, 7 groups, 37 linked parameters
+The reviewed projection contains 19 requirements, 3 separate constraints, 7 groups, 37 linked parameters
 and 22 planned verification cases. These counts come from the selected snapshot.
 The builder checks canonical JSON through `Store`, selects one project, and
 resolves exact ID/revision references. `--model-id` and `--model-revision` select

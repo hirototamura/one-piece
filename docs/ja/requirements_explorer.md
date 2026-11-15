@@ -4,7 +4,8 @@
 
 ```sh
 python -m pip install -e .
-onepiece --store projects/balancing-cube/store explorer serve
+onepiece --store projects/balancing-cube/store explorer serve \
+  --model-revision requirements-review-20261115-3
 ```
 
 `http://127.0.0.1:8791/` を開く。`--port` でポート、`--model-revision` で
@@ -27,7 +28,7 @@ Sitesアカウント、Node.js、隣接リポジトリは起動に不要。
 ```sh
 python -m pip install -e .
 onepiece --store projects/balancing-cube/store explorer build \
-  projects/balancing-cube/explorer --model-revision reviewed-20261019-1
+  projects/balancing-cube/explorer --model-revision requirements-review-20261115-3
 python -m http.server 8791 --bind 127.0.0.1 \
   --directory projects/balancing-cube/explorer
 ```

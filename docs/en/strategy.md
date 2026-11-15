@@ -37,3 +37,7 @@ The [Cube requirements](balancing_cube_requirements.md) separate test obligation
 Add concrete strategy, specification decisions and current implementation priorities here. Link supporting technical detail from this file. Keep canonical engineering requirements and evidence in versioned JSON. Do not move current implementation scope or milestones into CORE.md.
 
 [Japanese strategy](../ja/strategy.md).
+
+## Release candidate: 2026-11-15
+
+[v0.5.0 release candidate](cube_release_20261115.md) · `requirements-review-20261115-3` · 19 requirements / 3 constraints / 37 KDPs.

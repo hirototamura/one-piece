@@ -33,3 +33,7 @@
 [英語版strategy](../en/strategy.md)。
 
 [8頂点のミッションと初回試験](bottom_corner_trial.md)：固定した下側の取付面、制御器の出典、数値的証拠の範囲。
+
+## リリース候補：2026-11-15
+
+[v0.5.0リリース候補](cube_release_20261115.md) · `requirements-review-20261115-3` · 19 requirements / 3 constraints / 37 KDPs.
