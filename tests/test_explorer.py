@@ -1,12 +1,16 @@
 """Browser projections retain exact model references, approval states and claim scope."""
 import copy
 import json
+import shutil
+import subprocess
 from pathlib import Path
 
 import pytest
 
 from onepiece import Store, make_record, ref
 from onepiece.explorer import build_explorer
+from onepiece._explorer_claims import project_claims
+from onepiece.model import canonical_bytes
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -63,3 +67,45 @@ def test_explorer_does_not_write_into_canonical_store(tmp_path):
     store.import_records(minimal_records("wanted"))
     with pytest.raises(ValueError, match="outside the canonical store"):
         build_explorer(store, store.path / "explorer", project_id="wanted")
+
+
+def test_historical_claims_survive_multiple_reviews_without_becoming_current(tmp_path):
+    store = Store(ROOT / "projects/balancing-cube/store")
+    historical = []
+    for revision in ("reviewed-20261019-1", "refined-20261115-1", "requirements-review-20261115-3"):
+        output = tmp_path / revision
+        build_explorer(store, output, revision=revision)
+        claims = json.loads((output / "data/design-claims.json").read_text())
+        assert claims["designs"] == []
+        historical.append(claims["historical_designs"])
+    assert historical[0]
+    assert canonical_bytes(historical[0]) == canonical_bytes(historical[1]) == canonical_bytes(historical[2])
+    assert any(d["numerical_results"] for d in historical[2])
+    records = {(r["id"], r["revision"]): r for r in store.records("balancing-cube")}
+    projection = json.loads((tmp_path / "requirements-review-20261115-3/data/models.json").read_text())
+    unrelated = copy.deepcopy(next(iter(historical[2]))["source_record"])
+    unrelated.update(id="unrelated-candidate", revision="1")
+    unrelated["links"] = [{"type": "satisfy", "target": {"id": "R-TILT", "revision": "unrelated-branch"}}]
+    records[unrelated["id"], unrelated["revision"]] = unrelated
+    filtered = project_claims(records, projection)
+    assert "unrelated-candidate" not in {d["id"] for d in filtered["historical_designs"]}
+
+
+@pytest.mark.skipif(not shutil.which("node"), reason="Node is required for the browser-render regression")
+def test_historical_model_without_approval_state_renders_unknown_label(tmp_path):
+    output = tmp_path / "historical"
+    build_explorer(Store(ROOT / "projects/balancing-cube/store"), output, revision="trace-20261010-2")
+    script = r"""
+const fs = require('node:fs'), vm = require('node:vm'), assert = require('node:assert/strict');
+const nodes = new Map();
+const context = vm.createContext({fetch: () => new Promise(() => {}), console,
+  document: {querySelector: selector => {
+    if (!nodes.has(selector)) nodes.set(selector, {});
+    return nodes.get(selector);
+  }}});
+vm.runInContext(fs.readFileSync(process.argv[1], 'utf8'), context);
+vm.runInContext('DATA = ' + fs.readFileSync(process.argv[2], 'utf8') + '; renderCubeStats();', context);
+assert.match(nodes.get('#model-revision').textContent, /trace-20261010-2.*not recorded/i);
+assert(nodes.get('#cube-stats').innerHTML.includes('SYSTEM REQUIREMENTS'));
+"""
+    subprocess.run(["node", "-e", script, str(output / "app.js"), str(output / "data/models.json")], check=True)

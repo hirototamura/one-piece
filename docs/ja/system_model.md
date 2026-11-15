@@ -48,3 +48,5 @@ Verificationは指定した要求と条件への適合、Validationは意図し�
 ## 2026-11-15の8頂点・KDP参照の洗練化
 
 現行モデルは8頂点のミッションを明記し、KDPの参照先を個別要求へ具体化した。整理用グループは分類用に保持する。`cube.change-contract.control-algorithm@refined-20261115-1` は参照制御アルゴリズムの変更可能範囲を定める。コードの提案・実行は次段階であり、現行の実行設定は別途 `bottom-corner-000-20261017-3` を固定する。既存の割当と数値証拠の適用範囲を保持する。[洗練化の内容](cube_model_refinement.md)を参照する。
+
+現行の要求レビュー版は `cube.simulation.snapshot@requirements-review-20261115-3`。要求19件と制約3件を区別し、10秒の運用値、頂点の自動識別、構成管理機能を反映する。[ユーザーの要求レビュー](cube_requirements_review.md)を参照する。

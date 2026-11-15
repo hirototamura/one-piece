@@ -35,7 +35,7 @@ def build_explorer(store: Store, output: str | Path, *, project_id: str = "balan
     if not snapshot or snapshot["kind"] != "simulation_snapshot":
         raise RecordError("The model must reference an exact simulation snapshot")
     projection = project_model(records, model)
-    for collection in ("groups", "requirements", "kdps", "products", "functions", "verification_cases"):
+    for collection in ("groups", "requirements", "constraints", "kdps", "products", "functions", "verification_cases"):
         for item in projection["balancing_cube"][collection]:
             data = records[(item["id"], item["revision"])]["data"]
             for field in ("statement", "description"):

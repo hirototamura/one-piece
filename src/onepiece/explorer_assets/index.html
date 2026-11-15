@@ -101,6 +101,7 @@
               <div id="architecture-panel" class="architecture-panel"></div>
               <div id="design-coverage" class="design-coverage"></div>
               <div id="graph-version" class="graph-version"></div>
+              <div id="operating-context"></div>
               <label class="graph-object-control" for="graph-object-picker"><span>Explore a requirement or KDP</span><select id="graph-object-picker"></select></label>
               <div class="graph-layout">
                 <div id="model-graph" class="model-graph" aria-live="polite"></div>
@@ -192,7 +193,7 @@
             <p class="hero-copy basics-intro">The records do more than hold text. They keep exact revisions and make each claim traceable through the products, parameters, tests and evidence that give it meaning.</p>
             <div class="semantics-grid" id="model-notes">
               <article><span class="semantic-mark mark-mission">◎</span><span class="section-kicker">TOP LEVEL</span><h2>Mission</h2><p>States why the system exists. A lower-level revision can clarify how to achieve it, but it cannot silently replace the mission.</p><div class="semantic-example">M-VERTEX · balance on each of the Cube’s 8 corners</div></article>
-              <article><span class="semantic-mark mark-req">§</span><span class="section-kicker">OBLIGATION</span><h2>Requirement</h2><p>Names one obligation, its conditions, acceptance rule and intended verification method. Groups organize requirements; they are not test obligations.</p><div class="semantic-example">R-HOLD · at least 30 s without external support</div></article>
+              <article><span class="semantic-mark mark-req">§</span><span class="section-kicker">OBLIGATION</span><h2>Requirement</h2><p>Names one obligation, its conditions, acceptance rule and intended verification method. Groups organize requirements; they are not test obligations.</p><div class="semantic-example" id="guide-hold-interval"></div></article>
               <article><span class="semantic-mark mark-kdp">⌁</span><span class="section-kicker">DESIGN DRIVER</span><h2>KDP / parameter</h2><p>A consequential value with a unit and provenance. A <code>constrain</code> edge shows the parameter's relationship to a requirement; it does not show compliance.</p><div class="semantic-example">R-HOLD → wheel torque, delay and body geometry</div></article>
               <article><span class="semantic-mark mark-test">⊙</span><span class="section-kicker">CHECK PLAN</span><h2>Verification case</h2><p>Sets the method, conditions and acceptance measure for a check. A planned case stays <b>not run</b> until results are recorded.</p><div class="semantic-example">cube.verify.R-HOLD · planned hardware test</div></article>
               <article><span class="semantic-mark mark-evidence">↗</span><span class="section-kicker">OBSERVATION</span><h2>Evidence</h2><p>Records what happened under exact conditions and model revisions. Numerical evidence and hardware evidence answer different questions.</p><div class="semantic-example">Simulation agreement does not establish physical fidelity</div></article>

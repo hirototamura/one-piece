@@ -20,6 +20,8 @@ The [Cube requirements](balancing_cube_requirements.md) separate test obligation
 
 ## Supporting specifications
 
+- [Cube requirement review](cube_requirements_review.md): ten-second operating interval, corner detection, constraints and configuration management.
+
 - [Requirements explorer](requirements_explorer.md): canonical revision selection, graph inspection and browser-local review proposals.
 - [Dataset storage](dataset_storage.md): Git-tracked retrieval catalogs and immutable Release evidence shared across environments.
 - [System model](system_model.md): versioned records, trace relations and evidence scope.

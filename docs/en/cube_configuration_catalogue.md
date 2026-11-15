@@ -2,12 +2,12 @@
 
 The catalogue separates three meanings of the earlier term “current model.” It adds a fourth configuration for the fixed BOM assessment. It does not change the ordinary Engineering Agents scenario default or establish an adopted hardware baseline.
 
-- **CM-01 — requirements view:** `cube.simulation.snapshot@refined-20261115-1`. The human-reviewed 22 obligations and responsibility allocation. Its inherited numerical priors are not a new executable default.
+- **CM-01 — requirements view:** `cube.simulation.snapshot@requirements-review-20261115-3`. The user-reviewed 19 requirements, 3 separate constraints and responsibility allocation. Its inherited numerical priors are not a new executable default.
 - **CM-02 — scenario default:** `cube.simulation.snapshot@bottom-corner-000-20261017-3`. The lower-face descendant of D-000544-52890 with the saved MASS controller. Its compiled reference has a 166.235 mm side; it is distinct from its nominal controller-design plant.
 - **CM-03 — historical experiment:** `cube.simulation.snapshot@fixed-dt-mvp-2`. Upper-face inputs used by the completed multi-agent study. Each candidate's saved compiled configuration and controller identify the actual experiment.
 - **CM-04 — BOM reference:** `cube.simulation.snapshot@bom-reference-20261021-1`. A fixed 180 mm, 0.730 kg lower-face numerical proxy with component identities from the supplied BOM. It uses the retained controller without tuning.
 
-The authoritative index is `cube.configuration.catalogue@refined-20261115-1`. Its requirements-view entry includes the eight-corner and KDP refinement; executable and historical entries retain their original revisions. Entries `cube.configuration.cm-01` through `cm-04` pin exact snapshots, record hashes, requirement revisions, controller hashes and comparison designs. Select by role and exact revision, never by latest timestamp alone. The separate standalone ideal-pivot demonstration is catalogued as an additional preview, not equivalent to a floor-contact campaign.
+The authoritative index is `cube.configuration.catalogue@requirements-review-20261115-3`. Its requirements-view entry includes the eight-corner and KDP refinement; executable and historical entries retain their original revisions. Entries `cube.configuration.cm-01` through `cm-04` pin exact snapshots, record hashes, requirement revisions, controller hashes and comparison designs. Select by role and exact revision, never by latest timestamp alone. The separate standalone ideal-pivot demonstration is catalogued as an additional preview, not equivalent to a floor-contact campaign.
 
 ## Reference parts and authority
 

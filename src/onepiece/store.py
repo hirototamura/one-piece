@@ -81,6 +81,8 @@ def current_records(records, snapshot=None):
         pinned = []
         for category in ("requirements", "kdps", "functions", "products", "verification_cases"):
             pinned += refs.get(category, [])
+        for category in ("constraints", "operating_parameters", "definitions"):
+            pinned += refs.get(category, [])
         pinned += [r for r in [refs.get("campaign_summary"), snapshot["data"].get("comparison_design_ref")] if r]
         for reference in pinned:
             key = (snapshot["project_id"], reference["id"], reference["revision"])
@@ -88,6 +90,17 @@ def current_records(records, snapshot=None):
                 raise IntegrityError("Missing pinned context record")
             selected[key[:2]] = by_ref[key]
         selected[_key(snapshot)[:2]] = snapshot
+        # New IDs introduced by a later model must not leak into a pinned model.
+        scoped = {"requirements": {"requirement"}, "functions": {"function"},
+                  "products": {"product"}, "verification_cases": {"verification_case"},
+                  "constraints": {"constraint"}, "definitions": {"definition"}}
+        for category, kinds in scoped.items():
+            if category in refs or category in {"constraints", "definitions"}:
+                allowed = {r["id"] for r in refs.get(category, [])}
+                selected = {key: r for key, r in selected.items() if r["kind"] not in kinds or r["id"] in allowed}
+        if "kdps" in refs:
+            allowed = {r["id"] for category in ("kdps", "operating_parameters") for r in refs.get(category, [])}
+            selected = {key: r for key, r in selected.items() if r["kind"] != "parameter" or r["id"] in allowed}
     return sorted(selected.values(), key=lambda r: (_created_at(r), r["id"], r["revision"]))
 
 
