@@ -239,21 +239,6 @@ function renderReviewedArchitecture() {
   });
 }
 
-function renderDesignCoverage() {
-  const coverage = DATA.balancing_cube.design_claims;
-  const designs = coverage.designs;
-  const targetCount = coverage.requirements_with_claims.length;
-  const screening = [...new Set(designs.flatMap((design) => (design.numerical_results || []).map((r) => `${r.data.stage || "recorded"}: ${screeningCaseCount(r.data)} numerical cases passed; ${r.data.all_screening_passed === true ? "all screening passed" : "screening incomplete"}; physical verification ${String(r.data.physical_verified)}`)))];
-  const sharedInput = designs.length > 1 && coverage.unique_design_inputs === 1 ? "The candidate records share the same design input. " : "";
-  $("#design-coverage").innerHTML = `<span class="section-kicker">RECORDED DESIGN SATISFACTION</span><h3>${designs.length} candidate records · ${coverage.unique_design_inputs} distinct design input${coverage.unique_design_inputs === 1 ? "" : "s"}</h3><p>Source-recorded satisfaction intent covers ${targetCount} of ${DATA.balancing_cube.requirements.length} current requirements: ${esc(coverage.requirements_with_claims.join(", ") || "none")}. ${esc(sharedInput)}Recorded results: ${esc(screening.join(". ") || "no linked screening results")}.</p><div class="architecture-actions">${designs.length ? `<button type="button" data-design-focus="${esc(designs[0].id)}">Show satisfies arrows ↗</button>` : ""}${designs.map((design) => `<button type="button" data-design-focus="${esc(design.id)}">${esc(design.name)}</button>`).join("")}</div><p class="design-coverage-note">A recorded <code>satisfies</code> arrow declares design intent. It does not establish a verified pass. No satisfaction links to the other ${DATA.balancing_cube.requirements.length - targetCount} current requirements are recorded in this projection.</p>`;
-  const historical = coverage.historical_designs || [];
-  if (historical.length) $("#design-coverage").insertAdjacentHTML("beforeend", `<details class="architecture-review"><summary>${historical.length} historical candidate records retain their original satisfaction targets</summary><p>These declarations and numerical runs apply to earlier requirement revisions. A new applicability decision is needed before linking them to this reviewed baseline.</p>${historical.map((design) => `<article><b>${esc(design.name)}</b><p>${esc(design.description)}</p><code>${esc(design.id)}@${esc(design.revision)}</code><p>${design.links.map((l) => `satisfies → ${esc(l.target.id)}@${esc(l.target.revision)}`).join("<br>")}</p>${renderDesignScreening(design)}</article>`).join("")}</details>`);
-  $$('[data-design-focus]', $("#design-coverage")).forEach((button) => button.addEventListener("click", () => {
-    openGraphNode(button.dataset.designFocus, "satisfy");
-    $("#model-graph").scrollIntoView({ behavior: "smooth", block: "start" });
-  }));
-}
-
 function screeningCaseCount(data) {
   return Number.isFinite(data.screening_pass_fraction) && Number.isFinite(data.trial_count) ? `${Math.round(data.screening_pass_fraction * data.trial_count)}/${data.trial_count}` : "not recorded";
 }
@@ -562,7 +547,6 @@ function renderSystemGraph() {
   const graphContents = visibleEdges.length
     ? `<div class="graph-focus-vertex" style="grid-column:1;grid-row:1 / span ${visibleEdges.length}">${graphNodeCard(focus, true)}</div>${edgeRows}`
     : `<div class="graph-focus-vertex" style="grid-column:1;grid-row:1">${graphNodeCard(focus, true)}</div><div class="graph-empty-edges" style="grid-column:2;grid-row:1">No direct edges match this relationship filter.</div>`;
-  $("#graph-version").innerHTML = `<span><small>${architectureMode === "proposed" ? "RECORDED BASE MODEL" : "RECORDED MODEL"}</small><button type="button" class="graph-model-ref" data-graph-center="${esc(model.id)}"><code>${esc(model.id)}@${esc(model.revision)}</code><i>Inspect model object ↗</i></button></span><i>references →</i><span><small>PINNED SNAPSHOT</small><button type="button" class="graph-model-ref" data-graph-center="${esc(snapshot.id || "")}"><code>${esc(snapshot.id || "not recorded")}@${esc(snapshot.revision || "")}</code><i>Inspect snapshot object ↗</i></button></span>`;
   $("#model-graph").innerHTML = `<div class="graph-path" aria-label="Model path">${path.map((node, index) => `${index ? `<span aria-hidden="true">›</span>` : ""}<button type="button" data-graph-crumb="${esc(node.id)}" ${node.id === focus.id ? 'aria-current="page"' : ""}>${esc(node.name)}</button>`).join("")}</div>
     <div class="graph-layer-label"><span>ONE-HOP OBJECT GRAPH · ${esc(graphKindLabel(focus.kind))}</span><small>${allEdges.length} incident ${allEdges.length === 1 ? "edge" : "edges"}</small></div>
     <div class="graph-edge-filters" aria-label="Filter graph by relationship type">${filters}</div>
@@ -829,7 +813,6 @@ async function init() {
   DATA.balancing_cube.design_claims = designClaims;
   renderCubeStats();
   renderArchitecturePanel();
-  renderDesignCoverage();
   renderSystemGraph();
   initGroupControls();
   renderModelProvenance();
