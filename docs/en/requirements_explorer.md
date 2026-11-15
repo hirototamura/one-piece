@@ -1,5 +1,26 @@
 # Requirements explorer
 
+## Run the web app
+
+```sh
+python -m pip install -e .
+onepiece --store projects/balancing-cube/store explorer serve
+```
+
+Open `http://127.0.0.1:8791/`. Use `--port` to choose another port and
+`--model-revision` to pin a model. Ctrl-C stops the app and removes its temporary
+projection. Restart after editing source or canonical model records.
+
+The app includes the published Explorer layout, requirement/KDP navigation,
+English/Japanese text, local proposal/export workflow, current font sizes and
+panel choices. Cube data is generated from canonical records at startup. The
+ECLSS and scrubber examples are packaged scenario contracts, retained from the
+published site; an optional `--engineering-agents-root` overrides them with an
+explicit checkout. No Sites account, Node.js or sibling repository is needed.
+The server binds to loopback and serves only the generated view. Browser drafts
+remain in browser storage, scoped to the model and local origin.
+
+
 One-Piece owns the requirements explorer source and its data projection. The
 original local prototype was migrated from commit
 `d5bcc0c70be1f7b190fbe8368c90e5eec4ac75bf`. The maintained assets are packaged

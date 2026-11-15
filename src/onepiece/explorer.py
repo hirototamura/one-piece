@@ -14,11 +14,12 @@ from .store import Store, current_records
 
 def build_explorer(store: Store, output: str | Path, *, project_id: str = "balancing-cube",
                    model_id: str = "cube.system-model.active", revision: str | None = None,
-                   engineering_agents_root: str | Path | None = None) -> dict:
+                   engineering_agents_root: str | Path | None = None,
+                   bundled_comparisons: bool = False) -> dict:
     """Render exact snapshot references; review proposals remain browser-local.
 
-    The current UI supports the Cube model. ECLSS comparison pages are optional
-    and come only from an explicitly supplied Engineering Agents checkout.
+    The current UI supports the Cube model. Optional comparison pages use the
+    retained examples or an explicitly supplied Engineering Agents checkout.
     """
     output = Path(output).resolve()
     if output == store.path or output.is_relative_to(store.path):
@@ -58,6 +59,13 @@ def build_explorer(store: Store, output: str | Path, *, project_id: str = "balan
                              "commit": "d5bcc0c70be1f7b190fbe8368c90e5eec4ac75bf"},
         "comparison_sources": [],
     }
+    if bundled_comparisons and not engineering_agents_root:
+        examples = json.loads(files("onepiece").joinpath("explorer_assets/comparison_scenarios.json").read_text())
+        for key in ("eclss", "scrubber"):
+            projection[key] = examples[key]
+        provenance["comparison_sources"] = examples["comparison_sources"]
+        provenance["bundled_comparison_source"] = {"site_commit": examples["source_site_commit"],
+                                                   "sha256": digest(examples), "scope": examples["scope"]}
     if engineering_agents_root:
         try:
             import yaml
