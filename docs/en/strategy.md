@@ -20,6 +20,8 @@ The [Cube requirements](balancing_cube_requirements.md) separate test obligation
 
 ## Supporting specifications
 
+- [Requirement scoring](requirement_scoring.md): mandatory gates, capped shortfalls and separate numerical/physical scope.
+
 - [Cube requirement review](cube_requirements_review.md): ten-second operating interval, corner detection, constraints and configuration management.
 
 - [Requirements explorer](requirements_explorer.md): canonical revision selection, graph inspection and browser-local review proposals.

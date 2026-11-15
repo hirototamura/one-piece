@@ -18,6 +18,8 @@
 
 ## 関連する仕様
 
+- [要求の不足量による採点](requirement_scoring.md)：必須要求の合否、最大不足量、数値と実機の区別。
+
 - [Cubeの要求レビュー](cube_requirements_review.md)：10秒の運用値、頂点識別、制約の分離、構成管理。
 
 - [要求エクスプローラー](requirements_explorer.md)：正本の版選択、グラフ確認、ブラウザー内の改訂案。

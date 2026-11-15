@@ -84,6 +84,7 @@ def current_records(records, snapshot=None):
         for category in ("constraints", "operating_parameters", "definitions"):
             pinned += refs.get(category, [])
         pinned += [r for r in [refs.get("campaign_summary"), snapshot["data"].get("comparison_design_ref")] if r]
+        pinned += [r for r in [refs.get("scoring_contract")] if r]
         for reference in pinned:
             key = (snapshot["project_id"], reference["id"], reference["revision"])
             if key not in by_ref:
@@ -101,6 +102,9 @@ def current_records(records, snapshot=None):
         if "kdps" in refs:
             allowed = {r["id"] for category in ("kdps", "operating_parameters") for r in refs.get(category, [])}
             selected = {key: r for key, r in selected.items() if r["kind"] != "parameter" or r["id"] in allowed}
+        scoring_ref = refs.get("scoring_contract")
+        selected = {key: r for key, r in selected.items() if r["kind"] != "evaluation_contract"
+                    or (scoring_ref and ref(r) == scoring_ref)}
     return sorted(selected.values(), key=lambda r: (_created_at(r), r["id"], r["revision"]))
 
 
@@ -497,6 +501,7 @@ class Store:
         # Requirements, KDPs, and assumptions retain their exact units/uncertainty even when evidence is bounded.
         always = {"requirement", "kdp", "parameter", "model_parameter", "simulation_snapshot", "campaign_summary", "verification_coverage", "design_parameter", "assumption", "risk", "interface", "product", "specification", "system_model", "baseline"}
         always |= {"function", "verification_case", "review_decision"}
+        always |= {"constraint", "definition", "evaluation_contract"}
         snapshot = None
         if snapshot_ref is not None:
             snapshot = next((r for r in records if r["kind"] == "simulation_snapshot" and ref(r) == snapshot_ref), None)
