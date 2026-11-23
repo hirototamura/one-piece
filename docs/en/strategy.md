@@ -25,6 +25,7 @@ The [Cube requirements](balancing_cube_requirements.md) separate test obligation
 - [System model](system_model.md): versioned records, trace relations and evidence scope.
 - [Cube configuration catalogue](cube_configuration_catalogue.md): reviewed, executable, historical and BOM-reference roles with exact revisions.
 - [SysML API](sysml_api.md): supported standard services and exchange mapping.
+- [SysML migration experiment](sysml_migration_spike.md): a bounded native Cube example and lossless record recovery.
 - [Verification and diff](verification_and_diff.md): current scope and proposed acceptance criteria.
 - [Competitor research](competitor_tradeoff.md): observations without historical adoption decisions.
 - [Report collection and campaigns](report_collection.md): derived bilingual views, preview ownership and scoped numerical evidence.
