@@ -1,0 +1,32 @@
+{
+  "version": "0.5.0",
+  "date": "2026-11-15",
+  "timezone": "Asia/Tokyo",
+  "snapshot_ref": {
+    "id": "cube.simulation.snapshot",
+    "revision": "requirements-review-20261115-3"
+  },
+  "source_tests_passed": 135,
+  "wheel_tests_passed": 135,
+  "wheel_test_source_isolation": true,
+  "regeneration": {
+    "imported": 0,
+    "unchanged": 118
+  },
+  "baseline_members_hash_verified": 117,
+  "release_refs_hash_verified": 6,
+  "explorer_manifest_hashes_verified": true,
+  "unresolved_pr_review_threads": 0,
+  "artifacts_sha256": {
+    "cube-reviewed-metadata-20261115.zip": "8397696f844f97b42724dcb39ea103d5d78511fee4135088fc96b0b0477fa54e",
+    "one_piece_engineering-0.5.0-py3-none-any.whl": "c571f94ca4c3523a1d74aab9e8709ccb28f50c6c132adc21e3a85eb01b1cade6",
+    "one_piece_engineering-0.5.0.tar.gz": "2ee00029f7126d629d330410571daf5eb5ab8334b3f71cb70684aba5e0d32257",
+    "release_candidate.json": "a7b536cceeaf468937478e489201aaa65a13e57a4857a1d927c16212b48ed54f",
+    "release_notes_en.md": "d071acd21969b12205b968eb0afd0a9d58cd37c4a6a509b1ddadb228716b1738",
+    "release_notes_ja.md": "b8a26f6d26314273b956c6334c10e28e8a4c2644cfc85f412d39d1e2aaee4697",
+    "systems-requirements-explorer-20261115.zip": "49b5839e278e8f790b705c3e0d85ec3b92964fe48d8ea1ab2a3303239878e67a"
+  },
+  "tag_created": false,
+  "release_published": false,
+  "validation_scope": "Software, metadata integrity and packaging; no hardware verification."
+}

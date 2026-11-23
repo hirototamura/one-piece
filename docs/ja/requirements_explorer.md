@@ -1,5 +1,26 @@
 # 要求エクスプローラー
 
+## ウェブアプリの起動
+
+```sh
+python -m pip install -e .
+onepiece --store projects/balancing-cube/store explorer serve \
+  --model-revision requirements-review-20261115-3
+```
+
+`http://127.0.0.1:8791/` を開く。`--port` でポート、`--model-revision` で
+モデルの版を指定できる。Ctrl-Cで終了し、一時生成物も片付ける。
+ソースや正本モデルの変更を読み込むには再起動する。
+
+公開版のレイアウト、要求・KDPのナビゲーション、英日表示、ブラウザ内の改訂案と
+エクスポート機能、最新の文字サイズとパネル構成を引き継ぐ。
+Cubeは起動時に正本から生成する。ECLSSとscrubberは公開版から保持したシナリオ契約の
+サンプルを同梱する。`--engineering-agents-root` を指定すれば、そのチェックアウトを使う。
+Sitesアカウント、Node.js、隣接リポジトリは起動に不要。
+サーバーはlocalhostで生成ビューだけを配信する。改訂案はモデルとローカルのオリジンに
+紐づくブラウザ保存であり、公開版のブラウザ保存とは別になる。
+
+
 要求エクスプローラーのソースとデータ投影処理を One-Piece で管理します。
 ローカル試作のコミット `d5bcc0c70be1f7b190fbe8368c90e5eec4ac75bf` から移行しました。
 画面のソースは `src/onepiece/explorer_assets/` に含まれ、生成した画面とデータは Git 管理外です。
@@ -7,7 +28,7 @@
 ```sh
 python -m pip install -e .
 onepiece --store projects/balancing-cube/store explorer build \
-  projects/balancing-cube/explorer --model-revision reviewed-20261019-1
+  projects/balancing-cube/explorer --model-revision requirements-review-20261115-3
 python -m http.server 8791 --bind 127.0.0.1 \
   --directory projects/balancing-cube/explorer
 ```

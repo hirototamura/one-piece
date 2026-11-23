@@ -20,10 +20,15 @@ The [Cube requirements](balancing_cube_requirements.md) separate test obligation
 
 ## Supporting specifications
 
+- [Requirement scoring](requirement_scoring.md): mandatory gates, capped shortfalls and separate numerical/physical scope.
+
+- [Cube requirement review](cube_requirements_review.md): ten-second operating interval, corner detection, constraints and configuration management.
+
 - [Requirements explorer](requirements_explorer.md): canonical revision selection, graph inspection and browser-local review proposals.
 - [Dataset storage](dataset_storage.md): Git-tracked retrieval catalogs and immutable Release evidence shared across environments.
 - [System model](system_model.md): versioned records, trace relations and evidence scope.
 - [Cube configuration catalogue](cube_configuration_catalogue.md): reviewed, executable, historical and BOM-reference roles with exact revisions.
+- [Cube model refinement](cube_model_refinement.md): required eight-corner mission wording, existing optimization units, duplicate acceptance and KDP reference granularity.
 - [SysML API](sysml_api.md): supported standard services and exchange mapping.
 - [SysML migration experiment](sysml_migration_spike.md): a bounded native Cube example and lossless record recovery.
 - [Verification and diff](verification_and_diff.md): current scope and proposed acceptance criteria.
@@ -34,3 +39,7 @@ The [Cube requirements](balancing_cube_requirements.md) separate test obligation
 Add concrete strategy, specification decisions and current implementation priorities here. Link supporting technical detail from this file. Keep canonical engineering requirements and evidence in versioned JSON. Do not move current implementation scope or milestones into CORE.md.
 
 [Japanese strategy](../ja/strategy.md).
+
+## Release candidate: 2026-11-15
+
+[v0.5.0 release candidate](cube_release_20261115.md) · `requirements-review-20261115-3` · 19 requirements / 3 constraints / 37 KDPs.

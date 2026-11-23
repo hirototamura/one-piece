@@ -5,8 +5,27 @@ from __future__ import annotations
 def project_claims(records, models):
     cube = models["balancing_cube"]
     target_refs = {(r["id"], r["revision"]) for r in cube["requirements"]}
-    previous_revision = cube["model"].get("supersedes", {}).get("revision")
-    visible_refs = target_refs | {(r["id"], previous_revision) for r in cube["requirements"]}
+    # Walk exact model/snapshot and requirement ancestry. A revision label is
+    # not shared by every record in a model, and history spans multiple reviews.
+    visible_refs = set(target_refs)
+    pending = [(cube["model"]["id"], cube["model"]["revision"]), *target_refs]
+    visited = set()
+    while pending:
+        key = pending.pop()
+        if key in visited:
+            continue
+        visited.add(key)
+        record = records.get(key)
+        if not record:
+            continue
+        data = record.get("data", {})
+        if record["kind"] in {"requirement", "constraint"}:
+            visible_refs.add(key)
+        references = [data.get(field) for field in ("supersedes", "source_record", "simulation_snapshot_ref")]
+        for category in ("requirements", "constraints"):
+            references.extend(data.get("context_refs", {}).get(category, []))
+        pending.extend((r["id"], r["revision"]) for r in references
+                       if isinstance(r, dict) and "id" in r and "revision" in r)
     sources = {key: f"{record['project_id']}:{key[0]}@{key[1]}" for key, record in records.items()}
     designs=[];historical=[]
     for key,record in sorted(records.items()):

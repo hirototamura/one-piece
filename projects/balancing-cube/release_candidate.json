@@ -1,0 +1,273 @@
+{
+  "version": "0.5.0",
+  "planned_tag": "v0.5.0",
+  "status": "release_candidate",
+  "reviewed_on": "2026-11-15",
+  "timezone": "Asia/Tokyo",
+  "project_id": "balancing-cube",
+  "refs": [
+    {
+      "id": "cube.system-model.active",
+      "revision": "requirements-review-20261115-3",
+      "sha256": "114d0af3f53739f878be9e405ba1cc857e3e1a2d3df10ee8b6849c6be1c1129f"
+    },
+    {
+      "id": "cube.simulation.snapshot",
+      "revision": "requirements-review-20261115-3",
+      "sha256": "cd6fa2ae9ce2407974d078e6b2361d3dac3fb3f1fba88849a3f9ed1e4107b699"
+    },
+    {
+      "id": "cube.review.requirements",
+      "revision": "requirements-review-20261115-3",
+      "sha256": "6dac8829ab129b9065751823d33a7b1179b9c67cb3864c03f746991e110f1073"
+    },
+    {
+      "id": "cube.baseline.requirement-review",
+      "revision": "requirements-review-20261115-3",
+      "sha256": "941e95a7a662af34c0cbb1e4e2aaefa4fbc4eec25815b33f7d43d83f5fb8caea"
+    },
+    {
+      "id": "cube.configuration.cm-01",
+      "revision": "requirements-review-20261115-3",
+      "sha256": "87672c07f575d619fa885648260c5c650046fee2678ceae5ab0e20a3bdfb4304"
+    },
+    {
+      "id": "cube.configuration.catalogue",
+      "revision": "requirements-review-20261115-3",
+      "sha256": "90bf815cd89910cf68ce3871933b0b74f6161429fda1ae4f9b54a37063125f90"
+    }
+  ],
+  "counts": {
+    "obligations": 19,
+    "groups": 7,
+    "verification_cases": 22,
+    "linked_kdps": 37
+  },
+  "constraints": 3,
+  "functions": 9,
+  "physical_verified": false,
+  "adopted_design_baseline": false,
+  "open_items": [
+    {
+      "id": "C-FIT-INSTALL",
+      "items": [
+        {
+          "description": "Identify printer limits, the material list, component dimensions and required movement clearance.",
+          "id": "C-FIT-INSTALL.TBR.1",
+          "owner": "cube.mechanical"
+        }
+      ]
+    },
+    {
+      "id": "C-PRINT",
+      "items": [
+        {
+          "description": "Confirm the print recipe and demonstrate manufacture on the specified Bambu Lab A1. Material remains a design choice.",
+          "id": "C-PRINT.TBR.1",
+          "owner": "cube.mechanical"
+        }
+      ]
+    },
+    {
+      "id": "M-VERTEX",
+      "items": [
+        {
+          "description": "Define the floor, initial attitude, release method, sample rate and measurement uncertainty in the hardware test procedure.",
+          "id": "M-VERTEX.TBR.1",
+          "owner": "cube.system"
+        }
+      ]
+    },
+    {
+      "id": "R-DETECT",
+      "items": [
+        {
+          "description": "Define the valid initial attitude/sensor conditions and handling of an ambiguous corner. No new numeric tolerance is assumed.",
+          "id": "R-DETECT.TBR.1",
+          "owner": "cube.gnc"
+        }
+      ]
+    },
+    {
+      "id": "R-DRIFT",
+      "items": [
+        {
+          "description": "Define the floor, initial attitude, release method, sample rate and measurement uncertainty in the hardware test procedure.",
+          "id": "R-DRIFT.TBR.1",
+          "owner": "cube.system"
+        }
+      ]
+    },
+    {
+      "id": "R-DRIVE-CURRENT",
+      "items": [
+        {
+          "description": "Identify the component revision, rated limits, test conditions and measurement uncertainty before a pass decision.",
+          "id": "R-DRIVE-CURRENT.TBR.1",
+          "owner": "cube.actuation"
+        },
+        {
+          "description": "Define the bus circuit ratings. Bus current does not show each motor winding current.",
+          "id": "R-DRIVE-CURRENT.TBR.2",
+          "owner": "cube.actuation"
+        }
+      ]
+    },
+    {
+      "id": "R-DRIVE-SPEED",
+      "items": [
+        {
+          "description": "Identify the component revision, rated limits, test conditions and measurement uncertainty before a pass decision.",
+          "id": "R-DRIVE-SPEED.TBR.1",
+          "owner": "cube.actuation"
+        }
+      ]
+    },
+    {
+      "id": "R-DRIVE-TEMP",
+      "items": [
+        {
+          "description": "Identify the component revision, rated limits, test conditions and measurement uncertainty before a pass decision.",
+          "id": "R-DRIVE-TEMP.TBR.1",
+          "owner": "cube.actuation"
+        }
+      ]
+    },
+    {
+      "id": "R-DRIVE-TORQUE",
+      "items": [
+        {
+          "description": "Identify the component revision, rated limits, test conditions and measurement uncertainty before a pass decision.",
+          "id": "R-DRIVE-TORQUE.TBR.1",
+          "owner": "cube.actuation"
+        }
+      ]
+    },
+    {
+      "id": "R-DRIVE-VOLTAGE",
+      "items": [
+        {
+          "description": "Identify the component revision, rated limits, test conditions and measurement uncertainty before a pass decision.",
+          "id": "R-DRIVE-VOLTAGE.TBR.1",
+          "owner": "cube.actuation"
+        }
+      ]
+    },
+    {
+      "id": "R-HOLD",
+      "items": [
+        {
+          "description": "Define the floor, initial attitude, release method, sample rate and measurement uncertainty in the hardware test procedure.",
+          "id": "R-HOLD.TBR.1",
+          "owner": "cube.system"
+        }
+      ]
+    },
+    {
+      "id": "R-MODEL",
+      "items": [
+        {
+          "description": "Define comparison quantities, units, error limits and independent physical data before a pass decision.",
+          "id": "R-MODEL.TBR.1",
+          "owner": "cube.verification"
+        }
+      ]
+    },
+    {
+      "id": "R-REPEAT",
+      "items": [
+        {
+          "description": "Define the floor, initial attitude, release method, sample rate and measurement uncertainty in the hardware test procedure.",
+          "id": "R-REPEAT.TBR.1",
+          "owner": "cube.system"
+        },
+        {
+          "description": "Define trial order, resets and the complete hold-test pass rule before testing.",
+          "id": "R-REPEAT.TBR.2",
+          "owner": "cube.system"
+        }
+      ]
+    },
+    {
+      "id": "R-RMS",
+      "items": [
+        {
+          "description": "Define the floor, initial attitude, release method, sample rate and measurement uncertainty in the hardware test procedure.",
+          "id": "R-RMS.TBR.1",
+          "owner": "cube.system"
+        }
+      ]
+    },
+    {
+      "id": "R-SYNC",
+      "items": [
+        {
+          "description": "Define the time uncertainty and calibration method. A 60 frame/s video alone does not demonstrate 0.005 s.",
+          "id": "R-SYNC.TBR.1",
+          "owner": "cube.verification"
+        }
+      ]
+    },
+    {
+      "id": "R-TILT",
+      "items": [
+        {
+          "description": "Define the floor, initial attitude, release method, sample rate and measurement uncertainty in the hardware test procedure.",
+          "id": "R-TILT.TBR.1",
+          "owner": "cube.system"
+        }
+      ]
+    },
+    {
+      "id": "R-VISION",
+      "items": [
+        {
+          "description": "Define the attitude components, calibration method and uncertainty calculation. This draft uses standard uncertainty.",
+          "id": "R-VISION.TBR.1",
+          "owner": "cube.verification"
+        }
+      ]
+    },
+    {
+      "id": "R-YAW",
+      "items": [
+        {
+          "description": "Decide whether 5 deg/s will become a limit. Define the sample rate and RMS calculation.",
+          "id": "R-YAW.TBR.1",
+          "owner": "cube.gnc"
+        }
+      ]
+    },
+    {
+      "id": "C-BUDGET",
+      "items": [
+        {
+          "description": "Set the budget and cost scope. D-BUDGET has no value.",
+          "id": "C-BUDGET.TBR.1",
+          "owner": "cube.mechanical"
+        }
+      ]
+    },
+    {
+      "id": "C-FIT-PRINT",
+      "items": [
+        {
+          "description": "Check actual part geometry, print orientation and process clearance on Bambu Lab A1.",
+          "id": "C-FIT-PRINT.TBR.1",
+          "owner": "cube.mechanical"
+        }
+      ]
+    },
+    {
+      "id": "C-JAPAN",
+      "items": [
+        {
+          "description": "Define acceptable lead time and supply cost. The source word 'easy' has no numerical limit.",
+          "id": "C-JAPAN.TBR.1",
+          "owner": "cube.mechanical"
+        }
+      ]
+    }
+  ],
+  "horizontal_axes_status": "Explicit engineering convention for review; the user's specified yaw axis is fixed vertical."
+}
